@@ -17,7 +17,7 @@ Also there is some error messages about the deprecation of pretrained tag and fl
 
 Setting up environment:
 ```shell
-conda create -n thesis python=3.7
+conda create -n thesis python=3.7 --yes
 conda activate thesis
 conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch=1.7.1 torchvision=0.8.2 --yes
 pip install gdown pandas
