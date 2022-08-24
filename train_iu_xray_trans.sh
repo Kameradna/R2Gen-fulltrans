@@ -10,7 +10,6 @@ python main_train.py \
 --step_size 50 \
 --gamma 0.1 \
 --seed 9223 \
-#here is my additions
 --visual_extractor vit_b_16 \
 --visual_extractor_pretrained True \
 --n_gpu 4
