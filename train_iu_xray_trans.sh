@@ -1,0 +1,16 @@
+python main_train.py \
+--image_dir data/iu_xray/images/ \
+--ann_path data/iu_xray/annotation.json \
+--dataset_name iu_xray \
+--max_seq_length 60 \
+--threshold 3 \
+--batch_size 16 \
+--epochs 100 \
+--save_dir results/iu_xray \
+--step_size 50 \
+--gamma 0.1 \
+--seed 9223 \
+#here is my additions
+--visual_extractor vit_b_16 \
+--visual_extractor_pretrained True \
+--n_gpu 4
