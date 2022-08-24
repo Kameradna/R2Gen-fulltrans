@@ -15,3 +15,11 @@ We shall see if there is any issues, then we will have some baseline results I h
 The run only uses one GPU. This is a clear avenue for improvement.
 
 Also there is some error messages about the deprecation of pretrained tag and floordiv.
+
+Setting up environment:
+```shell
+conda create -n thesis python=3.7
+conda activate thesis
+conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch scikit-learn --yes
+pip install gdown pandas
+git clone R2Gen
