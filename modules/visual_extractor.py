@@ -10,7 +10,7 @@ class VisualExtractor(nn.Module):
         self.pretrained = args.visual_extractor_pretrained
         model = getattr(models, self.visual_extractor)(pretrained=self.pretrained)
         modules = list(model.children())[:-2]
-        print(list(model.children()[-2:])) #let's see what we are chopping
+        print(list(model.children())[-2:]) #let's see what we are chopping
         self.model = nn.Sequential(*modules)
         self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
 
