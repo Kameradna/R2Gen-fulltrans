@@ -31,3 +31,5 @@ Downloaded resnet101 automatically, this would be helpful for downloading our tr
 There was some issue with the GPUs not responding, so I made a new bash file to run a different feature extractor.
 
 In R2Gen, the code is such that it uses the deprecated 
+
+I added my own bash file to run transformer-specific visual encoders, and set the gpus to 4. There was no increased utilisation by the baseline program and the transformer encoder naive attempt (just altering --visual_encoder to be vit_b_16) gave us some sort of dimension error. We shall study how the original paper resized the dimensions and how we can alter the process to be more agnostic about the dimensions.
