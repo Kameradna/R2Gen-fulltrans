@@ -24,10 +24,14 @@ class R2GenModel(nn.Module):
         return super().__str__() + '\nTrainable parameters: {}'.format(params)
 
     def forward_iu_xray(self, images, targets=None, mode='train'):
+        print(images[:, 0].shape)
         att_feats_0, fc_feats_0 = self.visual_extractor(images[:, 0])
         att_feats_1, fc_feats_1 = self.visual_extractor(images[:, 1])
+        print(f'fc feats 0 = {fc_feats_0}, att_feats 0 = {att_feats_0}')
+        print(f'fc feats 1 = {fc_feats_1}, att_feats 1 = {att_feats_1}')
         fc_feats = torch.cat((fc_feats_0, fc_feats_1), dim=1)
         att_feats = torch.cat((att_feats_0, att_feats_1), dim=1)
+        print(f'fc feats = {fc_feats}, att_feats = {att_feats}')
         if mode == 'train':
             output = self.encoder_decoder(fc_feats, att_feats, targets, mode='forward')
         elif mode == 'sample':
