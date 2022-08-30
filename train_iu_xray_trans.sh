@@ -11,5 +11,4 @@ python main_train.py \
 --gamma 0.1 \
 --seed 9223 \
 --visual_extractor vit_b_16 \
---visual_extractor_pretrained True \
---n_gpu 4
+--visual_extractor_pretrained True
