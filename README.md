@@ -45,7 +45,7 @@ Luping says fc layer will do it in mapping from feature space to token space.
 Also it is apparent from an in-depth reading of the code that the fc features are not used in the encoder and are thus not needed for my ViT interface. Luping also brought up local vs global features in the ViT, I may need to try to find the classification token cls within it somewhere for pretraining goodness.
 
 
-'''shell
+```shell
 images0 shape = torch.Size([16, 3, 224, 224])
 images1 shape = torch.Size([16, 3, 224, 224])
 images shape = torch.Size([16, 2, 3, 224, 224])
@@ -60,4 +60,4 @@ patch_feats.shape() = torch.Size([16, 49, 2048])
 fc feats 0.shape = torch.Size([16, 2048]), att_feats 0.shape = torch.Size([16, 49, 2048])
 fc feats 1.shape = torch.Size([16, 2048]), att_feats 1.shape = torch.Size([16, 49, 2048])
 fc feats.shape = torch.Size([16, 4096]), att_feats.shape = torch.Size([16, 98, 2048])
-'''
+```
