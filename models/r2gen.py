@@ -27,9 +27,9 @@ class R2GenModel(nn.Module):
         print(f'images0 shape = {images[:, 0].shape}')
         print(f'images1 shape = {images[:, 1].shape}')
         print(f'images shape = {images.shape}')
-        att_feats_0, fc_feats_0 = self.visual_extractor(images[:, 0])
+        att_feats_0, fc_feats_0 = self.visual_extractor(images[:, 0])#the frontal and side images must be processed separately
         att_feats_1, fc_feats_1 = self.visual_extractor(images[:, 1])
-        att_feats_1, fc_feats_1 = self.visual_extractor(images)#see what happens
+        # att_feats_1, fc_feats_1 = self.visual_extractor(images)#see what happens
         print(f'fc feats 0 = {fc_feats_0}, att_feats 0 = {att_feats_0}')
         print(f'fc feats 1 = {fc_feats_1}, att_feats 1 = {att_feats_1}')
         fc_feats = torch.cat((fc_feats_0, fc_feats_1), dim=1)
