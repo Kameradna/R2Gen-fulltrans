@@ -39,3 +39,25 @@ I have added my own print debugs and added a weights field to adhere to modern s
 The ViT paper uses 768 while the R2Gen paper uses dim of 512. Likely course of action is to reshape the final layer of the ViT architecture or shape the MLP to 512 before feeding directly. Does this violate the goal of 'purely transformer architecture'?
 
 We shall ask Luping.
+
+Luping says fc layer will do it in mapping from feature space to token space.
+
+Also it is apparent from an in-depth reading of the code that the fc features are not used in the encoder and are thus not needed for my ViT interface. Luping also brought up local vs global features in the ViT, I may need to try to find the classification token cls within it somewhere for pretraining goodness.
+
+
+'''shell
+images0 shape = torch.Size([16, 3, 224, 224])
+images1 shape = torch.Size([16, 3, 224, 224])
+images shape = torch.Size([16, 2, 3, 224, 224])
+patch_feats.shape() = torch.Size([16, 2048, 7, 7])
+avg_feats.shape() = torch.Size([16, 2048])
+batch size = 16, feat_size = 2048
+patch_feats.shape() = torch.Size([16, 49, 2048])
+patch_feats.shape() = torch.Size([16, 2048, 7, 7])
+avg_feats.shape() = torch.Size([16, 2048])
+batch size = 16, feat_size = 2048
+patch_feats.shape() = torch.Size([16, 49, 2048])
+fc feats 0.shape = torch.Size([16, 2048]), att_feats 0.shape = torch.Size([16, 49, 2048])
+fc feats 1.shape = torch.Size([16, 2048]), att_feats 1.shape = torch.Size([16, 49, 2048])
+fc feats.shape = torch.Size([16, 4096]), att_feats.shape = torch.Size([16, 98, 2048])
+'''
