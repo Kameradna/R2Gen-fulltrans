@@ -14,12 +14,12 @@ class VisualExtractor(nn.Module):
         modules = list(model.children())[:-2]
         print(list(model.children())[-2:]) #let's see what we are chopping
         self.model = nn.Sequential(*modules)
-        self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0) #this might be providing the difference between 1536 and 1568?
+        self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
 
     def forward(self, images):
         patch_feats = self.model(images)
         print(f'patch_feats.shape() = {patch_feats.shape}')
-        avg_feats = self.avg_fnt(patch_feats).squeeze().reshape(-1, patch_feats.size(1))
+        avg_feats = self.avg_fnt(patch_feats).squeeze().reshape(-1, patch_feats.size(1))#averages across the patch features
         print(f'avg_feats.shape() = {avg_feats.shape}')
         batch_size, feat_size, _, _ = patch_feats.shape
         print(f'batch size = {batch_size}, feat_size = {feat_size}')
