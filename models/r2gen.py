@@ -30,11 +30,17 @@ class R2GenModel(nn.Module):
         att_feats_0, fc_feats_0 = self.visual_extractor(images[:, 0])#the frontal and side images must be processed separately
         att_feats_1, fc_feats_1 = self.visual_extractor(images[:, 1])
 
-        print(f'att_feats 0.shape = {att_feats_0.shape}')
-        print(f'att_feats 1.shape = {att_feats_1.shape}')
+        print(f'att_feats 0.shape = {att_feats_0.shape}')#att_feats 0.shape = torch.Size([16, 49, 2048])
+        print(f'att_feats 1.shape = {att_feats_1.shape}')#att_feats 1.shape = torch.Size([16, 49, 2048])
         fc_feats = torch.cat((fc_feats_0, fc_feats_1), dim=1)
         att_feats = torch.cat((att_feats_0, att_feats_1), dim=1)
-        print(f'att_feats.shape = {att_feats.shape}')
+        print(f'att_feats.shape = {att_feats.shape}')#att_feats.shape = torch.Size([16, 98, 2048])
+
+        # But for the transformer, we get
+        # att_feats 0.shape = torch.Size([16, 1, 768])
+        # att_feats 1.shape = torch.Size([16, 1, 768])
+        # att_feats.shape = torch.Size([16, 2, 768])
+
         raise(NotImplementedError)
         if mode == 'train':
             output = self.encoder_decoder(fc_feats, att_feats, targets, mode='forward')
