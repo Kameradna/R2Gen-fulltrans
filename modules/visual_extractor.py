@@ -21,7 +21,8 @@ class VisualExtractor(nn.Module):
             print(self.model)
             raise(NotImplementedError)
         elif args.original == False:
-            print(model)
+            print(self.model)
+            print(model.children())
             raise(NotImplementedError)
         else:
             raise(NotImplementedError)
