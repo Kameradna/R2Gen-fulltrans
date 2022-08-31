@@ -11,10 +11,15 @@ class VisualExtractor(nn.Module):
         self.pretrained = args.visual_extractor_pretrained
         model = getattr(models, self.visual_extractor)(pretrained=self.pretrained)#weights
         # model = models.get_model(self.visual_extractor, weights=self.weights)#the modern model registration feature, kameradna
-        modules = list(model.children())[:-2]
-        print(list(model.children())[-2:]) #let's see what we are chopping
-        self.model = nn.Sequential(*modules)
-        self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
+        if args.original == True:
+            modules = list(model.children())[:-2]
+            print(list(model.children())[-2:]) #let's see what we are chopping
+            self.model = nn.Sequential(*modules)
+            self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
+        elif args.original == False:
+            raise(NotImplementedError)
+        else:
+            raise(NotImplementedError)
 
     def forward(self, images):
         patch_feats = self.model(images)
