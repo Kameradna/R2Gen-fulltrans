@@ -41,14 +41,6 @@ class VisualExtractor(nn.Module):
             print(f'patch_feats.shape() = {patch_feats.shape}')#patch_feats.shape() = torch.Size([16, 49, 2048])
 
         elif self.original == False:
-            # patch_feats = self.model(images)
-            # print(f'patch_feats.shape() = {patch_feats.shape}')# patch_feats.shape() = torch.Size([16, 768])
-            # avg_feats = patch_feats.squeeze().reshape(-1, patch_feats.size(1)) #likely does nothing to the shape, to be tested
-            # print(f'avg_feats.shape() = {avg_feats.shape}')# avg_feats.shape() = torch.Size([16, 768]) confirmed does nothing
-            # batch_size, feat_size = patch_feats.shape
-            # print(f'batch size = {batch_size}, feat_size = {feat_size}')#batch size = 16, feat_size = 768 the feature size is much lower
-            # patch_feats = patch_feats.reshape(batch_size, feat_size, -1).permute(0, 2, 1) #likely does nothing at all since patch feats is unused downstream, and the permute step may be internally done
-            # print(f'patch_feats.shape() = {patch_feats.shape}')#patch_feats.shape() = torch.Size([16, 1, 768])
 
             # #edited from the forward process of ViT
             x = images
@@ -86,6 +78,7 @@ class VisualExtractor(nn.Module):
 
 
             avg_feats = patch_feats_star
+            patch_feats = patch_feats_star
 
 
 
