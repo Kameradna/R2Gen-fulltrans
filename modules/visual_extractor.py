@@ -18,6 +18,8 @@ class VisualExtractor(nn.Module):
             print(list(model.children())[-2:]) #let's see what we are chopping
             self.model = nn.Sequential(*modules)
             self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
+            print(model)
+            raise(NotImplementedError)
         elif args.original == False:
             print(model)
             raise(NotImplementedError)
