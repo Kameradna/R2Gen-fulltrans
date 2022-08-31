@@ -17,6 +17,7 @@ class VisualExtractor(nn.Module):
             self.model = nn.Sequential(*modules)
             self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
         elif args.original == False:
+            print(model)
             raise(NotImplementedError)
         else:
             raise(NotImplementedError)
