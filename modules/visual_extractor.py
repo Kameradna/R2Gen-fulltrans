@@ -61,7 +61,7 @@ class VisualExtractor(nn.Module):
 
             ####
             all_feats = x
-            print(f'all_feats.shape() = {all_feats.shape}')
+            print(f'all_feats.shape() = {all_feats.shape}')#all_feats.shape() = torch.Size([16, 197, 768])
             ####
 
             # Classifier "token" as used by standard language architectures

@@ -41,7 +41,13 @@ class R2GenModel(nn.Module):
         # att_feats 1.shape = torch.Size([16, 1, 768])
         # att_feats.shape = torch.Size([16, 2, 768])
 
-        raise(NotImplementedError)
+        # Or for when we extract local features, we get
+        # att_feats 0.shape = torch.Size([16, 197, 768])
+        # att_feats 1.shape = torch.Size([16, 197, 768])
+        # att_feats.shape = torch.Size([16, 394, 768])
+
+
+
         if mode == 'train':
             output = self.encoder_decoder(fc_feats, att_feats, targets, mode='forward')
         elif mode == 'sample':
