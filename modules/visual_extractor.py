@@ -54,7 +54,7 @@ class VisualExtractor(nn.Module):
             x = images
             x = self.model._process_input(x)
             n = x.shape[0]
-
+            print(f'prior to token embed.shape() = {x.shape}')
             # Expand the class token to the full batch
             batch_class_token = self.model.class_token.expand(n, -1, -1)
             x = torch.cat([batch_class_token, x], dim=1)
