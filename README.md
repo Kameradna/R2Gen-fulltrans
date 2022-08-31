@@ -69,3 +69,5 @@ The planned architecture is such; ((drop in different visual extractors)) --> fc
 The special sauce is in the att_model.py file with a linear layer implemented to bridge the gap. You need to work out what the deal is with that, any issues it has with passing the global classification tokens, maybe take those out.
 
 Then, you will need to fix the functioning on multi-gpu so that memory is not an issue.
+
+Of special interest is freezing the training of the visual extractor to limit memory usage.
