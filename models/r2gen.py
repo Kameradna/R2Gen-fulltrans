@@ -24,17 +24,18 @@ class R2GenModel(nn.Module):
         return super().__str__() + '\nTrainable parameters: {}'.format(params)
 
     def forward_iu_xray(self, images, targets=None, mode='train'):
-        print(f'images0 shape = {images[:, 0].shape}')
-        print(f'images1 shape = {images[:, 1].shape}')
-        # print(f'images shape = {images.shape}')
+        print(f'images0 shape = {images[:, 0].shape}')# images0 shape = torch.Size([16, 3, 224, 224])
+        print(f'images1 shape = {images[:, 1].shape}')# images1 shape = torch.Size([16, 3, 224, 224])
+
         att_feats_0, fc_feats_0 = self.visual_extractor(images[:, 0])#the frontal and side images must be processed separately
         att_feats_1, fc_feats_1 = self.visual_extractor(images[:, 1])
-        # att_feats_1, fc_feats_1 = self.visual_extractor(images)#see what happens
+
         print(f'att_feats 0.shape = {att_feats_0.shape}')
         print(f'att_feats 1.shape = {att_feats_1.shape}')
         fc_feats = torch.cat((fc_feats_0, fc_feats_1), dim=1)
         att_feats = torch.cat((att_feats_0, att_feats_1), dim=1)
         print(f'att_feats.shape = {att_feats.shape}')
+        raise(NotImplementedError)
         if mode == 'train':
             output = self.encoder_decoder(fc_feats, att_feats, targets, mode='forward')
         elif mode == 'sample':

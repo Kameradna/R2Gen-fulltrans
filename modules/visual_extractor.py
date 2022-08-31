@@ -29,23 +29,22 @@ class VisualExtractor(nn.Module):
         patch_feats = self.model(images)
 
         if self.original == True:
-            print(f'patch_feats.shape() = {patch_feats.shape}')
+            print(f'patch_feats.shape() = {patch_feats.shape}')# patch_feats.shape() = torch.Size([16, 2048, 7, 7])
             avg_feats = self.avg_fnt(patch_feats).squeeze().reshape(-1, patch_feats.size(1))#averages across the patch features
-            print(f'avg_feats.shape() = {avg_feats.shape}')
+            print(f'avg_feats.shape() = {avg_feats.shape}')# avg_feats.shape() = torch.Size([16, 2048])
             batch_size, feat_size, _, _ = patch_feats.shape
-            print(f'batch size = {batch_size}, feat_size = {feat_size}')
+            print(f'batch size = {batch_size}, feat_size = {feat_size}')# batch size = 16, feat_size = 2048
             patch_feats = patch_feats.reshape(batch_size, feat_size, -1).permute(0, 2, 1)
-            print(f'patch_feats.shape() = {patch_feats.shape}')
-            raise(NotImplementedError)
+            print(f'patch_feats.shape() = {patch_feats.shape}')#patch_feats.shape() = torch.Size([16, 49, 2048])
 
         elif self.original == False:
-            print(f'patch_feats.shape() = {patch_feats.shape}')
+            print(f'patch_feats.shape() = {patch_feats.shape}')# patch_feats.shape() = torch.Size([16, 768])
             avg_feats = patch_feats.squeeze().reshape(-1, patch_feats.size(1)) #likely does nothing to the shape, to be tested
-            print(f'avg_feats.shape() = {avg_feats.shape}')
-            batch_size, feat_size, _, _ = patch_feats.shape
+            print(f'avg_feats.shape() = {avg_feats.shape}')# avg_feats.shape() = torch.Size([16, 768])
+            batch_size, feat_size = patch_feats.shape
             print(f'batch size = {batch_size}, feat_size = {feat_size}')
             patch_feats = patch_feats.reshape(batch_size, feat_size, -1).permute(0, 2, 1) #likely does nothing at all since patch feats is unused downstream, and the permute step may be internally done
             print(f'patch_feats.shape() = {patch_feats.shape}')
-            raise(NotImplementedError)
+
 
         return patch_feats, avg_feats
