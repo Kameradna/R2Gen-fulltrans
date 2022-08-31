@@ -83,7 +83,6 @@ class VisualExtractor(nn.Module):
                 print('correctly split')
             elif not torch.equal(x,x_star):
                 print('split not correct')
-            raise(NotImplementedError)
 
 
 
