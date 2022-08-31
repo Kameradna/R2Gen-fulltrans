@@ -74,6 +74,7 @@ class AttModel(CaptionModel):
         return att_feats, att_masks
 
     def _prepare_feature(self, fc_feats, att_feats, att_masks):
+        print('Running preparing feature forward')
         att_feats, att_masks = self.clip_att(att_feats, att_masks)
 
         # embed fc and att feats
@@ -82,6 +83,8 @@ class AttModel(CaptionModel):
 
         # Project the attention feats first to reduce memory and computation comsumptions.
         p_att_feats = self.ctx2att(att_feats)
+
+        raise(NotImplementedError)
 
         return fc_feats, att_feats, p_att_feats, att_masks
 
