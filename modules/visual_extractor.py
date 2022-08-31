@@ -61,7 +61,7 @@ class VisualExtractor(nn.Module):
 
             ####
             all_feats = x
-            print(f'patch_feats.shape() = {all_feats.shape}')
+            print(f'all_feats.shape() = {all_feats.shape}')
             ####
 
             # Classifier "token" as used by standard language architectures
@@ -73,4 +73,4 @@ class VisualExtractor(nn.Module):
 
 
 
-        return patch_feats, avg_feats
+        return all_feats, avg_feats
