@@ -61,3 +61,6 @@ fc feats 0.shape = torch.Size([16, 2048]), att_feats 0.shape = torch.Size([16, 4
 fc feats 1.shape = torch.Size([16, 2048]), att_feats 1.shape = torch.Size([16, 49, 2048])
 fc feats.shape = torch.Size([16, 4096]), att_feats.shape = torch.Size([16, 98, 2048])
 ```
+
+
+The planned architecture is such; ((drop in different visual extractors)) --> fc layer reshapes the features to 512 --> R2Gen encoder/decoder
