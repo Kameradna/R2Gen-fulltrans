@@ -13,7 +13,7 @@ class BaseTrainer(object):
 
         # setup GPU device if available, move model into configured device
         self.device, device_ids = self._prepare_device(args.n_gpu)
-        self.model = model.to(self.device)
+        self.model = model.to(self.device)#is this breaking multi-gpu?
         if len(device_ids) > 1:
             self.model = torch.nn.DataParallel(model, device_ids=device_ids)
 
@@ -122,7 +122,7 @@ class BaseTrainer(object):
                 "Warning: The number of GPU\'s configured to use is {}, but only {} are available " "on this machine.".format(
                     n_gpu_use, n_gpu))
             n_gpu_use = n_gpu
-        device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')
+        device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')#only 0? so lost here
         list_ids = list(range(n_gpu_use))
         return device, list_ids
 

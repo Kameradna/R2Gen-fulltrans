@@ -17,13 +17,15 @@ class VisualExtractor(nn.Module):
             modules = list(model.children())[:-2]
             self.model = nn.Sequential(*modules)
             self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
-            print(self.model)
+  
         elif args.original == False:
             model.heads = nn.Identity()
             self.model = model
-            print(self.model)
         else:
             raise(NotImplementedError)
+        self.model.conv_proj.requires_grad_(False)
+        self.model.encoder.requires_grad_(False)
+        print(self.model)
 
     def forward(self, images):
         
@@ -62,12 +64,25 @@ class VisualExtractor(nn.Module):
             ####
             patch_feats = x
             print(f'all_feats.shape() = {patch_feats.shape}')#all_feats.shape() = torch.Size([16, 197, 768])
+
+            #we can try to extract the classification token
+            x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,-1],dim=1)
+
+            print(f'x_star.shape() = {x_star.shape}')
+            print(f'patch_feats_star.shape() = {patch_feats_star.shape}')
+
             ####
 
             # Classifier "token" as used by standard language architectures
             x = x[:, 0]
 
-            avg_feats = x
+            avg_feats = x# avg_feats.shape() = torch.Size([16, 768])
+            print(f'avg_feats.shape() = {avg_feats.shape}')
+            if x == x_star:
+                print('correctly split')
+            elif x != x_star:
+                print('split not correct')
+            raise(NotImplementedError)
 
 
 
