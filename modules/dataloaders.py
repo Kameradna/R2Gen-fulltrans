@@ -14,6 +14,7 @@ class R2DataLoader(DataLoader):
         self.num_workers = args.num_workers
         self.tokenizer = tokenizer
         self.split = split
+
         if split == 'train':
             self.transform = transforms.Compose([
                 transforms.Resize(256),

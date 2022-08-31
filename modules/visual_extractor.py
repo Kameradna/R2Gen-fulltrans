@@ -11,7 +11,9 @@ class VisualExtractor(nn.Module):
         self.pretrained = args.visual_extractor_pretrained
         model = getattr(models, self.visual_extractor)(pretrained=self.pretrained)#weights
         # model = models.get_model(self.visual_extractor, weights=self.weights)#the modern model registration feature, kameradna
+        print(args.original)
         if args.original == True:
+            print("wowza")
             modules = list(model.children())[:-2]
             print(list(model.children())[-2:]) #let's see what we are chopping
             self.model = nn.Sequential(*modules)
