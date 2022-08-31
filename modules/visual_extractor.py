@@ -78,9 +78,9 @@ class VisualExtractor(nn.Module):
 
             avg_feats = x# avg_feats.shape() = torch.Size([16, 768])
             print(f'avg_feats.shape() = {avg_feats.shape}')
-            if x == x_star:
+            if torch.equal(x,x_star):
                 print('correctly split')
-            elif x != x_star:
+            elif not torch.equal(x,x_star):
                 print('split not correct')
             raise(NotImplementedError)
 
