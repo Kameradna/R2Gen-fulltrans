@@ -41,6 +41,7 @@ class VisualExtractor(nn.Module):
             print(f'batch size = {batch_size}, feat_size = {feat_size}')
             patch_feats = patch_feats.reshape(batch_size, feat_size, -1).permute(0, 2, 1)
             print(f'patch_feats.shape() = {patch_feats.shape}')
+            raise(NotImplementedError)
 
         elif self.original == False:
             print(f'patch_feats.shape() = {patch_feats.shape}')
