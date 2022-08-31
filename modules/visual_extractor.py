@@ -25,7 +25,7 @@ class VisualExtractor(nn.Module):
             raise(NotImplementedError)
         self.model.conv_proj.requires_grad_(False)
         self.model.encoder.requires_grad_(False)
-        print(self.model)
+        # print(self.model)
 
     def forward(self, images):
         
@@ -67,7 +67,7 @@ class VisualExtractor(nn.Module):
 
             #we can try to extract the classification token
             x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,196],dim=1)
-            print(x_star)
+            # print(x_star)
             x_star = x_star[:, 0]
             print(f'x_star.shape() = {x_star.shape}')
             print(f'patch_feats_star.shape() = {patch_feats_star.shape}')
@@ -83,6 +83,9 @@ class VisualExtractor(nn.Module):
                 print('correctly split')
             elif not torch.equal(x,x_star):
                 print('split not correct')
+
+
+            avg_feats = patch_feats_star
 
 
 
