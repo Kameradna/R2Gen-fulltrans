@@ -14,19 +14,14 @@ class VisualExtractor(nn.Module):
         # model = models.get_model(self.visual_extractor, weights=self.weights)#the modern model registration feature, kameradna
         self.original = args.original
         if args.original == True:
-            print("wowza")
             modules = list(model.children())[:-2]
-            print(list(model.children())[-2:]) #let's see what we are chopping
             self.model = nn.Sequential(*modules)
             self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
             print(self.model)
-            raise(NotImplementedError)
         elif args.original == False:
-            print(model)
             model.heads = nn.Identity()
             self.model = model
             print(self.model)
-            raise(NotImplementedError)
         else:
             raise(NotImplementedError)
 
