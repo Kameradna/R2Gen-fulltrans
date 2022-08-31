@@ -64,3 +64,8 @@ fc feats.shape = torch.Size([16, 4096]), att_feats.shape = torch.Size([16, 98, 2
 
 
 The planned architecture is such; ((drop in different visual extractors)) --> fc layer reshapes the features to 512 --> R2Gen encoder/decoder
+
+
+The special sauce is in the att_model.py file with a linear layer implemented to bridge the gap. You need to work out what the deal is with that, any issues it has with passing the global classification tokens, maybe take those out.
+
+Then, you will need to fix the functioning on multi-gpu so that memory is not an issue.
