@@ -26,15 +26,15 @@ class R2GenModel(nn.Module):
     def forward_iu_xray(self, images, targets=None, mode='train'):
         print(f'images0 shape = {images[:, 0].shape}')
         print(f'images1 shape = {images[:, 1].shape}')
-        print(f'images shape = {images.shape}')
+        # print(f'images shape = {images.shape}')
         att_feats_0, fc_feats_0 = self.visual_extractor(images[:, 0])#the frontal and side images must be processed separately
         att_feats_1, fc_feats_1 = self.visual_extractor(images[:, 1])
         # att_feats_1, fc_feats_1 = self.visual_extractor(images)#see what happens
-        print(f'fc feats 0.shape = {fc_feats_0.shape}, att_feats 0.shape = {att_feats_0.shape}')
-        print(f'fc feats 1.shape = {fc_feats_1.shape}, att_feats 1.shape = {att_feats_1.shape}')
+        print(f'att_feats 0.shape = {att_feats_0.shape}')
+        print(f'att_feats 1.shape = {att_feats_1.shape}')
         fc_feats = torch.cat((fc_feats_0, fc_feats_1), dim=1)
         att_feats = torch.cat((att_feats_0, att_feats_1), dim=1)
-        print(f'fc feats.shape = {fc_feats.shape}, att_feats.shape = {att_feats.shape}')
+        print(f'att_feats.shape = {att_feats.shape}')
         if mode == 'train':
             output = self.encoder_decoder(fc_feats, att_feats, targets, mode='forward')
         elif mode == 'sample':

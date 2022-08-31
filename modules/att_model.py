@@ -66,8 +66,11 @@ class AttModel(CaptionModel):
         # Clip the length of att_masks and att_feats to the maximum length
         if att_masks is not None:
             max_len = att_masks.data.long().sum(1).max()
+            print(f'max_len of attention features is {max_len}')
+            print(f'the size of the attention features prior to clipping is {att_feats.shape}')
             att_feats = att_feats[:, :max_len].contiguous()
             att_masks = att_masks[:, :max_len].contiguous()
+            print(f'the attention features are flattened and clipped with final shape {att_feats.shape}')
         return att_feats, att_masks
 
     def _prepare_feature(self, fc_feats, att_feats, att_masks):

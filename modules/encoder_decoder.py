@@ -349,8 +349,8 @@ class EncoderDecoder(AttModel):
         return fc_feats[..., :1], att_feats[..., :1], memory, att_masks
 
     def _prepare_feature_forward(self, att_feats, att_masks=None, seq=None):
-        att_feats, att_masks = self.clip_att(att_feats, att_masks)
-        att_feats = pack_wrapper(self.att_embed, att_feats, att_masks)
+        att_feats, att_masks = self.clip_att(att_feats, att_masks)#the features are clipped, see att_model.clip_att
+        att_feats = pack_wrapper(self.att_embed, att_feats, att_masks)#pads the sequence somehow
 
         if att_masks is None:
             att_masks = att_feats.new_ones(att_feats.shape[:2], dtype=torch.long)

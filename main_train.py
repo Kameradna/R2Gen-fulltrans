@@ -28,6 +28,7 @@ def parse_agrs():
     parser.add_argument('--visual_extractor', type=str, default='resnet101', help='the visual extractor to be used.')
     parser.add_argument('--visual_extractor_pretrained', type=bool, default=True, help='whether to load the pretrained visual extractor')
     parser.add_argument('--weights',type=str, default='DEFAULT',help='pytorch after 0.15 will require this weights field as opposed to the old pretrained field, so I kameradna added it.')
+    parser.add_argument('--original',type=bool,default=True,help='use the original R2Gen data processing and architectural changes tuned to ResNet? Not compatible with transformer architectures')
 
     # Model settings (for Transformer)
     parser.add_argument('--d_model', type=int, default=512, help='the dimension of Transformer.')
