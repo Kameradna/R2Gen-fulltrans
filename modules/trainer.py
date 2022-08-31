@@ -125,8 +125,7 @@ class BaseTrainer(object):
                 "Warning: The number of GPU\'s configured to use is {}, but only {} are available " "on this machine.".format(
                     n_gpu_use, n_gpu))
             n_gpu_use = n_gpu
-        # device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')#only 0? so lost here
-        device = torch.device('cuda')
+        device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')#only 0? so lost here
         list_ids = list(range(n_gpu_use))
         return device, list_ids
 
