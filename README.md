@@ -71,3 +71,5 @@ The special sauce is in the att_model.py file with a linear layer implemented to
 Then, you will need to fix the functioning on multi-gpu so that memory is not an issue.
 
 Of special interest is freezing the training of the visual extractor to limit memory usage.
+
+Also definitely time to check on Cider metric and clinical eval metrics.
