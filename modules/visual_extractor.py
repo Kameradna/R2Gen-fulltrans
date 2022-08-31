@@ -22,7 +22,9 @@ class VisualExtractor(nn.Module):
             raise(NotImplementedError)
         elif args.original == False:
             print(model)
-            print(model.heads)
+            model.heads = nn.Sequential()
+            self.model = model
+            print(self.model)
             raise(NotImplementedError)
         else:
             raise(NotImplementedError)
