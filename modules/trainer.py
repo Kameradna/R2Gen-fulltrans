@@ -51,6 +51,9 @@ class BaseTrainer(object):
     def train(self):
         not_improved_count = 0
         for epoch in range(self.start_epoch, self.epochs + 1):
+            crt_time = time.asctime(time.localtime(time.time()))
+            print(crt_time)
+            print(f'beginning epoch {epoch}')
             result = self._train_epoch(epoch)
 
             # save logged informations into log dict
@@ -122,7 +125,8 @@ class BaseTrainer(object):
                 "Warning: The number of GPU\'s configured to use is {}, but only {} are available " "on this machine.".format(
                     n_gpu_use, n_gpu))
             n_gpu_use = n_gpu
-        device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')#only 0? so lost here
+        # device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')#only 0? so lost here
+        device = torch.device('cuda')
         list_ids = list(range(n_gpu_use))
         return device, list_ids
 
