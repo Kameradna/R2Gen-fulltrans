@@ -46,7 +46,7 @@ class VisualExtractor(nn.Module):
             x = images
             x = self.model._process_input(x)
             n = x.shape[0]
-            print(f'prior to token embed.shape() = {x.shape}')
+            # print(f'prior to token embed.shape() = {x.shape}')
             # Expand the class token to the full batch
             batch_class_token = self.model.class_token.expand(n, -1, -1)
             x = torch.cat([batch_class_token, x], dim=1)
@@ -55,28 +55,28 @@ class VisualExtractor(nn.Module):
 
             ####
             patch_feats = x
-            print(f'all_feats.shape() = {patch_feats.shape}')#all_feats.shape() = torch.Size([16, 197, 768])
+            # print(f'all_feats.shape() = {patch_feats.shape}')#all_feats.shape() = torch.Size([16, 197, 768])
 
             #we can try to extract the classification token
             x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,196],dim=1)
             # print(x_star)
-            x_star = x_star[:, 0]
-            print(f'x_star.shape() = {x_star.shape}')
-            print(f'patch_feats_star.shape() = {patch_feats_star.shape}')
+            x_star = x_star[:, 0]#this seems to eliminate information
+            # print(f'x_star.shape() = {x_star.shape}')
+            # print(f'patch_feats_star.shape() = {patch_feats_star.shape}')
 
             ####
 
             # Classifier "token" as used by standard language architectures
-            x = x[:, 0]
+            # x = x[:, 0]
 
-            avg_feats = x# avg_feats.shape() = torch.Size([16, 768])
-            print(f'avg_feats.shape() = {avg_feats.shape}')
-            if torch.equal(x,x_star):
-                print('correctly split')
-            elif not torch.equal(x,x_star):
-                print('split not correct')
+            # avg_feats = x# avg_feats.shape() = torch.Size([16, 768])
+            # print(f'avg_feats.shape() = {avg_feats.shape}')
+            # if torch.equal(x,x_star):
+            #     print('correctly split')
+            # elif not torch.equal(x,x_star):
+            #     print('split not correct')
 
-
+            #no difference in the transformer setting since we have no patches
             avg_feats = patch_feats_star
             patch_feats = patch_feats_star
 
