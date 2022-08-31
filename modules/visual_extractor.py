@@ -66,7 +66,7 @@ class VisualExtractor(nn.Module):
             print(f'all_feats.shape() = {patch_feats.shape}')#all_feats.shape() = torch.Size([16, 197, 768])
 
             #we can try to extract the classification token
-            x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,:],dim=1)
+            x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,196],dim=1)
 
             print(f'x_star.shape() = {x_star.shape}')
             print(f'patch_feats_star.shape() = {patch_feats_star.shape}')
