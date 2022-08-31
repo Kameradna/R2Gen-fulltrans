@@ -22,7 +22,7 @@ class VisualExtractor(nn.Module):
             raise(NotImplementedError)
         elif args.original == False:
             print(model)
-            print(model.children.heads)
+            print(model.heads)
             raise(NotImplementedError)
         else:
             raise(NotImplementedError)
