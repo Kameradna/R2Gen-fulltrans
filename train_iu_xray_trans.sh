@@ -13,4 +13,5 @@ python main_train.py \
 --visual_extractor vit_b_16 \
 --visual_extractor_pretrained True \
 --d_vf 768 \
---monitor_metric CIDEr
+--monitor_metric CIDEr \
+--n_gpu 4
