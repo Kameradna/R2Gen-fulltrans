@@ -14,4 +14,4 @@ python main_train.py \
 --visual_extractor_pretrained True \
 --d_vf 768 \
 --monitor_metric CIDEr \
---n_gpu 1
+--n_gpu 4
