@@ -12,15 +12,10 @@ class BaseTrainer(object):
         self.args = args
 
         # setup GPU device if available, move model into configured device
-        # self.device, device_ids = self._prepare_device(args.n_gpu)
-        
-        # if len(device_ids) > 1:
-        #     self.model = torch.nn.DataParallel(model, device_ids=device_ids)
-
-
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = torch.nn.DataParallel(model) #by default just goes for it
-        self.model = model.to(self.device)#is this breaking multi-gpu?
+        self.device, device_ids = self._prepare_device(args.n_gpu)
+        self.model = model.to(self.device)
+        if len(device_ids) > 1:
+            self.model = torch.nn.DataParallel(model, device_ids=device_ids)
 
         self.criterion = criterion
         self.metric_ftns = metric_ftns
