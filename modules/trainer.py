@@ -17,7 +17,7 @@ class BaseTrainer(object):
         # if len(device_ids) > 1:
         #     self.model = torch.nn.DataParallel(model, device_ids=device_ids)
         self.model = torch.nn.DataParallel(model) #by default just goes for it
-        # self.model = model.to(self.device)#is this breaking multi-gpu?
+        self.model = model.to(self.device)#is this breaking multi-gpu?
 
         self.criterion = criterion
         self.metric_ftns = metric_ftns
