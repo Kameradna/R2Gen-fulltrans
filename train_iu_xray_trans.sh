@@ -13,4 +13,4 @@ python main_train.py \
 --visual_extractor vit_b_16 \
 --visual_extractor_pretrained True \
 --d_vf 768 \
---monitor_metric Cider
+--monitor_metric CIDEr
