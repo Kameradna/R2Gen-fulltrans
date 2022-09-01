@@ -18,7 +18,7 @@ class BaseTrainer(object):
         #     self.model = torch.nn.DataParallel(model, device_ids=device_ids)
 
 
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
         self.model = torch.nn.DataParallel(model) #by default just goes for it
         self.model = model.to(self.device)#is this breaking multi-gpu?
 
