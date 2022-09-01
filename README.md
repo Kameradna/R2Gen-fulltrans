@@ -73,3 +73,18 @@ Then, you will need to fix the functioning on multi-gpu so that memory is not an
 Of special interest is freezing the training of the visual extractor to limit memory usage.
 
 Also definitely time to check on Cider metric and clinical eval metrics.
+
+CIDEr implementation fix worked fine it seems; but the learning of the network is weak. With a frozen transformer, it seems unlikely that we will get strong learning.
+
+Tests-
+Baseline
+Baseline frozen visual extractor
+Transformer frozen visual extractor
+Transformer with learning (see ViT paper for finetune settings) (multi-gpu a must?)
+
+To check- is input res a limiting factor for ViT?
+Have I frozen correctly?
+Should I be using a different pretrained model ie. the JFT or other versions?
+Does the R2Gen paper as is scale to multi-gpu?
+Batch size key issue for ViT; normal finetune is at 512bs, using BiT hyperrule.
+Also GAP classifier vs cls token usage has quite different performance based on learning rate.
