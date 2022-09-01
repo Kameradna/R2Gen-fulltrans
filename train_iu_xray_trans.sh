@@ -12,4 +12,5 @@ python main_train.py \
 --seed 9223 \
 --visual_extractor vit_b_16 \
 --visual_extractor_pretrained True \
---d_vf 768
+--d_vf 768 \
+--monitor_metric Cider

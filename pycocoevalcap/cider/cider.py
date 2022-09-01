@@ -11,7 +11,7 @@
 from .cider_scorer import CiderScorer
 import pdb
 
-class Cider:
+class Cider():
     """
     Main Class to compute the CIDEr metric 
 
