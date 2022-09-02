@@ -10,4 +10,9 @@ python main_train.py \
 --step_size 50 \
 --gamma 0.1 \
 --seed 9223 \
+--visual_extractor resnet101 \
+--visual_extractor_pretrained True \
+--d_vf 2048 \
+--monitor_metric CIDEr \
+--n_gpu 4 \
 --original
