@@ -93,10 +93,10 @@ def main():
     args = parse_agrs()
 
     # fix random seeds
-    torch.manual_seed(args.seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-    np.random.seed(args.seed)
+    # torch.manual_seed(args.seed)
+    torch.backends.cudnn.deterministic = False
+    torch.backends.cudnn.benchmark = True
+    # np.random.seed(args.seed)
 
     # create tokenizer
     tokenizer = Tokenizer(args)
