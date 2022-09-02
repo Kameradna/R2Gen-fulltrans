@@ -33,13 +33,13 @@ class VisualExtractor(nn.Module):
 
         if self.original == True:
             patch_feats = self.model(images)
-            print(f'patch_feats.shape() = {patch_feats.shape}')# patch_feats.shape() = torch.Size([16, 2048, 7, 7])
+            # print(f'patch_feats.shape() = {patch_feats.shape}')# patch_feats.shape() = torch.Size([16, 2048, 7, 7])
             avg_feats = self.avg_fnt(patch_feats).squeeze().reshape(-1, patch_feats.size(1))#averages across the patch features
-            print(f'avg_feats.shape() = {avg_feats.shape}')# avg_feats.shape() = torch.Size([16, 2048])
+            # print(f'avg_feats.shape() = {avg_feats.shape}')# avg_feats.shape() = torch.Size([16, 2048])
             batch_size, feat_size, _, _ = patch_feats.shape
-            print(f'batch size = {batch_size}, feat_size = {feat_size}')# batch size = 16, feat_size = 2048
+            # print(f'batch size = {batch_size}, feat_size = {feat_size}')# batch size = 16, feat_size = 2048
             patch_feats = patch_feats.reshape(batch_size, feat_size, -1).permute(0, 2, 1)
-            print(f'patch_feats.shape() = {patch_feats.shape}')#patch_feats.shape() = torch.Size([16, 49, 2048])
+            # print(f'patch_feats.shape() = {patch_feats.shape}')#patch_feats.shape() = torch.Size([16, 49, 2048])
 
         elif self.original == False:
 
