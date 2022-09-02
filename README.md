@@ -86,6 +86,6 @@ To check-
 - is input res a limiting factor for ViT?
 - Have I frozen correctly?
 - Should I be using a different pretrained model ie. the JFT or other versions?
-- the R2Gen paper as is scale to multi-gpu?
+- the R2Gen paper as is scale to multi-gpu?  (no)
 - Batch size key issue for ViT; normal finetune is at 512bs, using BiT hyperrule.
 - Also GAP classifier vs cls token usage has quite different performance based on learning rate.
