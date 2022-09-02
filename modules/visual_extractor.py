@@ -17,14 +17,15 @@ class VisualExtractor(nn.Module):
             modules = list(model.children())[:-2]
             self.model = nn.Sequential(*modules)
             self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
-  
+
         elif args.original == False:
             model.heads = nn.Identity()
             self.model = model
         else:
             raise(NotImplementedError)
-        self.model.conv_proj.requires_grad_(False)
-        self.model.encoder.requires_grad_(False)
+
+        self.model.requires_grad_(False)
+        print('We are freezing the visual extractor.')
         # print(self.model)
 
     def forward(self, images):
