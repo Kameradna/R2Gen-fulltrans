@@ -26,7 +26,7 @@ def parse_agrs():
 
     # Model settings (for visual extractor)
     parser.add_argument('--visual_extractor', type=str, default='resnet101', help='the visual extractor to be used.')
-    parser.add_argument('--weights',type=str, default='DEFAULT',help='pytorch after 0.15 will require this weights field as opposed to the old pretrained field, so I kameradna added it.')
+    parser.add_argument('--weights',type=str, default=None,help='pytorch after 0.15 will require this weights field as opposed to the old pretrained field, so I kameradna added it.')
     parser.add_argument('--original',default=False,action='store_true', help='use the original R2Gen data processing and architectural changes tuned to ResNet? Not compatible with transformer architectures')
     parser.add_argument('--frozen',default=False,action='store_true', help='freeze the feature extractor training?')
 
