@@ -12,7 +12,6 @@ python main_train.py \
 --gamma 0.1 \
 --seed 9223 \
 --visual_extractor resnet101 \
---weights None \
 --d_vf 2048 \
 --monitor_metric CIDEr \
 --n_gpu 1 \
@@ -56,7 +55,7 @@ python main_train.py \
 --seed 9223 \
 --visual_extractor vit_b_16 \
 --weights IMAGENET1K_V1 \
---d_vf 2048 \
+--d_vf 768 \
 --monitor_metric CIDEr \
 --n_gpu 1 \
 --original
