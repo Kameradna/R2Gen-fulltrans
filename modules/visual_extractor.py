@@ -9,7 +9,6 @@ class VisualExtractor(nn.Module):
         super(VisualExtractor, self).__init__()
         self.visual_extractor = args.visual_extractor
         self.weights = args.weights
-        self.pretrained = args.visual_extractor_pretrained
         model = getattr(models, self.visual_extractor)(weights=self.weights)#weights
         # model = models.get_model(self.visual_extractor, weights=self.weights)#the modern model registration feature, kameradna
         self.original = args.original
