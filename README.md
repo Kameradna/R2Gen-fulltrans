@@ -78,8 +78,8 @@ CIDEr implementation fix worked fine it seems; but the learning of the network i
 
 Tests-
 - Baseline
-- Baseline frozen visual extractor
-- Transformer frozen visual extractor
+- Baseline frozen visual extractor (see Frozen Resnet base R2Gen.txt, results and records frozen baseline folders)
+- Transformer frozen visual extractor (see currently training)
 - Transformer with learning (see ViT paper for finetune settings) (multi-gpu a must?)
 
 To check- 
