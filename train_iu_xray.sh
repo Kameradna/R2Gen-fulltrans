@@ -16,3 +16,4 @@ python main_train.py \
 --monitor_metric CIDEr \
 --n_gpu 1 \
 --original
+nvtop

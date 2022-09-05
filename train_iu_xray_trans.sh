@@ -15,3 +15,4 @@ python main_train.py \
 --d_vf 768 \
 --monitor_metric CIDEr \
 --n_gpu 1
+nvtop
