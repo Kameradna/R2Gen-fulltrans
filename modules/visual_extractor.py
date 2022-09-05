@@ -23,9 +23,9 @@ class VisualExtractor(nn.Module):
             self.model = model
         else:
             raise(NotImplementedError)
-
-        self.model.requires_grad_(False)
-        print('We are freezing the visual extractor.')
+        if args.frozen == True:
+            self.model.requires_grad_(False)
+            print('We are freezing the visual extractor.')
         # print(self.model)
 
     def forward(self, images):
