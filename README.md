@@ -89,3 +89,12 @@ To check-
 - the R2Gen paper as is scale to multi-gpu?  (no)
 - Batch size key issue for ViT; normal finetune is at 512bs, using BiT hyperrule.
 - Also GAP classifier vs cls token usage has quite different performance based on learning rate.
+
+
+Ran baselines of resnet101 and vit_b_16 with frozen feature extractors, and we will compare the best performances on CIDEr.
+
+Check for use of checkpoints etc, some of the initial epochs often have unexpectedly high CIDEr.
+
+Thoughts on freezing different parts of the architecture and training them independently with various batch sizes?
+
+Currently we are looking to compare the (frozen baseline) to (frozen vit) and also (baseline) to (frozen baseline) which should tell us how much of the gains in R2Gen are from the visual extractor learning vs improved feature representation/feature representation compatibility.
