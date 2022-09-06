@@ -17,4 +17,5 @@ python main_train.py \
 --n_gpu 1
 mv results resultstrans
 mv records recordstrans
+test
 nvtop
