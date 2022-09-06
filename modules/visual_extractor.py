@@ -14,6 +14,8 @@ class VisualExtractor(nn.Module):
         model = getattr(models, self.visual_extractor)(weights=self.weights)#weights
         # model = models.get_model(self.visual_extractor, weights=self.weights)#the modern model registration feature, kameradna
         self.original = args.original
+        if self.visual_extractor != 'resnet101' and self.original == True:
+            print('Warning: VisualExtractor may not be compatible with original tag choice, expect tensor size mismatch.')
         if args.original == True:
             modules = list(model.children())[:-2]
             self.model = nn.Sequential(*modules)

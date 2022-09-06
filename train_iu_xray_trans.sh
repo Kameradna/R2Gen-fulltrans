@@ -15,4 +15,6 @@ python main_train.py \
 --d_vf 768 \
 --monitor_metric CIDEr \
 --n_gpu 1
+mv results resultstrans
+mv records recordstrans
 nvtop
