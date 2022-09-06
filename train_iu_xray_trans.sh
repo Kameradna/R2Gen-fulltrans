@@ -11,10 +11,10 @@ python main_train.py \
 --gamma 0.1 \
 --seed 9223 \
 --visual_extractor vit_b_16 \
---weights IMAGENET1K_V1 \
 --d_vf 768 \
 --monitor_metric CIDEr \
---n_gpu 1
-mv results resultstrans
-mv records recordstrans
+--n_gpu 1 \
+--frozen
+mv results resultsfrozentransnopretrained
+mv records recordsfrozentransnopretrained
 nvtop
