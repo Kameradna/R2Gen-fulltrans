@@ -8,7 +8,7 @@ from numpy import inf
 
 
 class BaseTrainer(object):
-    def __init__(self, model, criterion, metric_ftns, optimizer, args):
+    def __init__(self, model, criterion, metric_ftns, optimizer, args, device):
         self.args = args
 
         # setup GPU device if available, move model into configured device
@@ -18,6 +18,7 @@ class BaseTrainer(object):
         self.metric_ftns = metric_ftns
         self.optimizer = optimizer
         self.model = model
+        self.device = device
 
         self.epochs = self.args.epochs
         self.save_period = self.args.save_period
@@ -179,8 +180,8 @@ class BaseTrainer(object):
 
 class Trainer(BaseTrainer):
     def __init__(self, model, criterion, metric_ftns, optimizer, args, lr_scheduler, train_dataloader, val_dataloader,
-                 test_dataloader):
-        super(Trainer, self).__init__(model, criterion, metric_ftns, optimizer, args)
+                 test_dataloader, device):
+        super(Trainer, self).__init__(model, criterion, metric_ftns, optimizer, args, device)
         self.lr_scheduler = lr_scheduler
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader

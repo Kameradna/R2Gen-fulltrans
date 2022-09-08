@@ -47,7 +47,14 @@ class VisualExtractor(nn.Module):
         elif self.original == False:
 
             # #edited from the forward process of ViT
+            print(f'images are in device {images.get_device()}')
+            lst = [item.get_device() for item in list(self.model.parameters())]
+            print(f'params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
+
+            #we shall see where the stuff is coming from
+            raise(NotImplementedError)
             x = self.model._process_input(images)
+
             n = x.shape[0]
             # print(f'prior to token embed.shape() = {x.shape}')
             # Expand the class token to the full batch
