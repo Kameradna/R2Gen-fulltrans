@@ -27,14 +27,14 @@ class R2GenModel(nn.Module):
         # print(f'images0 shape = {images[:, 0].shape}')# images0 shape = torch.Size([16, 3, 224, 224])
         # print(f'images1 shape = {images[:, 1].shape}')# images1 shape = torch.Size([16, 3, 224, 224])
 
-        att_feats, fc_feats = self.visual_extractor(images[:, 0])#the frontal and side images must be processed separately
-        # att_feats_1, fc_feats_1 = self.visual_extractor(images[:, 1])
+        att_feats_0, fc_feats_0 = self.visual_extractor(images[:, 0])#the frontal and side images must be processed separately
+        att_feats_1, fc_feats_1 = self.visual_extractor(images[:, 1])
 
-        # # print(f'att_feats 0.shape = {att_feats_0.shape}')#att_feats 0.shape = torch.Size([16, 49, 2048])
-        # # print(f'att_feats 1.shape = {att_feats_1.shape}')#att_feats 1.shape = torch.Size([16, 49, 2048])
-        # fc_feats = torch.cat((fc_feats_0, fc_feats_1), dim=1)
-        # att_feats = torch.cat((att_feats_0, att_feats_1), dim=1)
-        # # print(f'att_feats.shape = {att_feats.shape}')#att_feats.shape = torch.Size([16, 98, 2048])
+        # print(f'att_feats 0.shape = {att_feats_0.shape}')#att_feats 0.shape = torch.Size([16, 49, 2048])
+        # print(f'att_feats 1.shape = {att_feats_1.shape}')#att_feats 1.shape = torch.Size([16, 49, 2048])
+        fc_feats = torch.cat((fc_feats_0, fc_feats_1), dim=1)
+        att_feats = torch.cat((att_feats_0, att_feats_1), dim=1)
+        # print(f'att_feats.shape = {att_feats.shape}')#att_feats.shape = torch.Size([16, 98, 2048])
 
         # But for the transformer, we get
         # att_feats 0.shape = torch.Size([16, 1, 768])
