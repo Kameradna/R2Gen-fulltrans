@@ -15,6 +15,7 @@ python main_train.py \
 --d_vf 2048 \
 --monitor_metric CIDEr \
 --n_gpu 4 \
+--original \
 --frozen 
 
 --record_dir recordsfrozentrans3 \
