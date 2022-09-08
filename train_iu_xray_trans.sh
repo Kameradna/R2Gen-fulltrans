@@ -10,11 +10,12 @@ python main_train.py \
 --step_size 50 \
 --gamma 0.1 \
 --seed 9223 \
---visual_extractor vit_b_16 \
+--visual_extractor resnet101 \
 --weights IMAGENET1K_V1 \
---d_vf 768 \
+--d_vf 2048 \
 --monitor_metric CIDEr \
 --n_gpu 4 \
---frozen \
+--frozen 
+
 --record_dir recordsfrozentrans3 \
 --save_dir resultsfrozentrans3
