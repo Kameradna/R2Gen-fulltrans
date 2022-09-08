@@ -12,16 +12,12 @@ class BaseTrainer(object):
         self.args = args
 
         # setup GPU device if available, move model into configured device
-        self.device, device_ids = self._prepare_device(args.n_gpu)
-        self.model = model.to(self.device)#after the dataparallel?
-        if len(device_ids) > 1:
-            self.model = torch.nn.DataParallel(model, device_ids=device_ids)
-
-
+        # self.device, device_ids = self._prepare_device(args.n_gpu)
 
         self.criterion = criterion
         self.metric_ftns = metric_ftns
         self.optimizer = optimizer
+        self.model = model
 
         self.epochs = self.args.epochs
         self.save_period = self.args.save_period
@@ -117,19 +113,19 @@ class BaseTrainer(object):
         record_table = record_table.append(self.best_recorder['test'], ignore_index=True)
         record_table.to_csv(record_path, index=False)
 
-    def _prepare_device(self, n_gpu_use):
-        n_gpu = torch.cuda.device_count()
-        if n_gpu_use > 0 and n_gpu == 0:
-            print("Warning: There\'s no GPU available on this machine," "training will be performed on CPU.")
-            n_gpu_use = 0
-        if n_gpu_use > n_gpu:
-            print(
-                "Warning: The number of GPU\'s configured to use is {}, but only {} are available " "on this machine.".format(
-                    n_gpu_use, n_gpu))
-            n_gpu_use = n_gpu
-        device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')#only 0? so lost here
-        list_ids = list(range(n_gpu_use))
-        return device, list_ids
+    # def _prepare_device(self, n_gpu_use):
+    #     n_gpu = torch.cuda.device_count()
+    #     if n_gpu_use > 0 and n_gpu == 0:
+    #         print("Warning: There\'s no GPU available on this machine," "training will be performed on CPU.")
+    #         n_gpu_use = 0
+    #     if n_gpu_use > n_gpu:
+    #         print(
+    #             "Warning: The number of GPU\'s configured to use is {}, but only {} are available " "on this machine.".format(
+    #                 n_gpu_use, n_gpu))
+    #         n_gpu_use = n_gpu
+    #     device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')#only 0? so lost here
+    #     list_ids = list(range(n_gpu_use))
+    #     return device, list_ids
 
     def _save_checkpoint(self, epoch, save_best=False):
         state = {
@@ -195,8 +191,8 @@ class Trainer(BaseTrainer):
         train_loss = 0
         self.model.train()
         for batch_idx, (images_id, images, reports_ids, reports_masks) in enumerate(self.train_dataloader):
-            images, reports_ids, reports_masks = images.to(self.device), reports_ids.to(self.device), reports_masks.to(
-                self.device)
+            images, reports_ids, reports_masks = images.to(self.device,non_blocking=True), reports_ids.to(self.device,non_blocking=True), reports_masks.to(
+                self.device,non_blocking=True)
             output = self.model(images, reports_ids, mode='train')
             loss = self.criterion(output, reports_ids, reports_masks)
             train_loss += loss.item()

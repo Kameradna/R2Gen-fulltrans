@@ -47,8 +47,7 @@ class VisualExtractor(nn.Module):
         elif self.original == False:
 
             # #edited from the forward process of ViT
-            x = images
-            x = self.model._process_input(x)
+            x = self.model._process_input(images)
             n = x.shape[0]
             # print(f'prior to token embed.shape() = {x.shape}')
             # Expand the class token to the full batch
