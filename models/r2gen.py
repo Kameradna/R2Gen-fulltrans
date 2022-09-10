@@ -26,10 +26,9 @@ class R2GenModel(nn.Module):
     def forward_iu_xray(self, images, targets=None, mode='train'):
 
 
-        print('in R2Gen')
-        print(f'images are in device {images.get_device()}')
+        print(f'R2Gen images are in device {images.get_device()}')
         lst = [item.get_device() for item in list(self.parameters())]
-        print(f'params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
+        print(f'R2Gen params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
 
 
         # print(f'images0 shape = {images[:, 0].shape}')# images0 shape = torch.Size([16, 3, 224, 224])

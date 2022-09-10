@@ -33,10 +33,9 @@ class VisualExtractor(nn.Module):
 
     def forward(self, images):
         
-        print('in extractor')
-        print(f'images are in device {images.get_device()}')
+        print(f'extractor images are in device {images.get_device()}')
         lst = [item.get_device() for item in list(self.model.parameters())]
-        print(f'params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
+        print(f'extractor params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
         raise(NotImplementedError)
 
 
