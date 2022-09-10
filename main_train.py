@@ -125,6 +125,8 @@ def main():
     model = torch.nn.DataParallel(model)
     model = model.to(device)
 
+    print(model)
+
     lst = [item.get_device() for item in list(model.parameters())]
     print(f'main params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
 
