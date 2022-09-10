@@ -107,11 +107,7 @@ def main():
     val_dataloader = R2DataLoader(args, tokenizer, split='val', shuffle=False)
     test_dataloader = R2DataLoader(args, tokenizer, split='test', shuffle=False)
 
-    # build model architecture
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = R2GenModel(args, tokenizer)
-    model = torch.nn.DataParallel(model)
-
 
     # get function handles of loss and metrics
     criterion = compute_loss
@@ -122,7 +118,7 @@ def main():
     optimizer = build_optimizer(args, model)
     lr_scheduler = build_lr_scheduler(args, optimizer)
 
-    model = model.to(device)
+
 
     # build trainer and start to train
     trainer = Trainer(model, criterion, metrics, optimizer, args, lr_scheduler, train_dataloader, val_dataloader, test_dataloader, device)

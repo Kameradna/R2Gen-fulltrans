@@ -13,6 +13,10 @@ class BaseTrainer(object):
 
         # setup GPU device if available, move model into configured device
         # self.device, device_ids = self._prepare_device(args.n_gpu)
+            # build model architecture
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model = torch.nn.DataParallel(model)
+        self.model = model.to(device)
 
         self.criterion = criterion
         self.metric_ftns = metric_ftns
@@ -47,14 +51,13 @@ class BaseTrainer(object):
     def _train_epoch(self, epoch):
         raise NotImplementedError
 
-    def train(self,model):
-        self.model = model
+    def train(self):
         not_improved_count = 0
         for epoch in range(self.start_epoch, self.epochs + 1):
             crt_time = time.asctime(time.localtime(time.time()))
             print(crt_time)
             print(f'beginning epoch {epoch}')
-            result = self._train_epoch(epoch)
+            result = self._train_epoch(epoch,model)
 
             # save logged informations into log dict
             log = {'epoch': epoch}
