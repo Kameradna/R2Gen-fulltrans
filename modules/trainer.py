@@ -15,7 +15,7 @@ class BaseTrainer(object):
         # self.device, device_ids = self._prepare_device(args.n_gpu)
             # build model architecture
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        model = torch.nn.DataParallel(model)
+        self.model = torch.nn.DataParallel(model)
         # self.model = model.to(device)
 
         self.criterion = criterion
