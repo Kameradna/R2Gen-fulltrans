@@ -4,7 +4,7 @@ python main_train.py \
 --dataset_name iu_xray \
 --max_seq_length 60 \
 --threshold 3 \
---batch_size 32 \
+--batch_size 16 \
 --epochs 100 \
 --save_dir results/iu_xray \
 --step_size 50 \
@@ -15,6 +15,5 @@ python main_train.py \
 --d_vf 768 \
 --monitor_metric CIDEr \
 --n_gpu 4 \
---frozen \
---record_dir recordsfrozentrans4gpu3 \
---save_dir resultsfrozentrans4gpu3
+--record_dir recordstrans \
+--save_dir resultstrans
