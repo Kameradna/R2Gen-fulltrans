@@ -132,7 +132,7 @@ def main():
 
     train_loss = 0
     model.train()
-    for batch_idx, (images_id, images, reports_ids, reports_masks) in enumerate(train_dataloader):
+    for images_id, images, reports_ids, reports_masks in train_dataloader:
         images, reports_ids, reports_masks = images.to(device), reports_ids.to(device), reports_masks.to(device)
         output = model(images, reports_ids, mode='train')
         loss = criterion(output, reports_ids, reports_masks)
