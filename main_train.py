@@ -125,7 +125,7 @@ def main():
     model = model.to(torch.device('cuda:0'))
     model = model.to(torch.device('cuda:1'))
     model = model.to(torch.device('cuda:2'))
-    model = model.to(torch.device('cuda:3'))#after the dataparallel?
+    model = model.to(torch.device('cuda:0'))#after the dataparallel?
 
     # build trainer and start to train
     trainer = Trainer(model, criterion, metrics, optimizer, args, lr_scheduler, train_dataloader, val_dataloader, test_dataloader, device)
