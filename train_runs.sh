@@ -84,4 +84,6 @@ python main_train.py \
 --save_dir resultsfrozenbaseline3
 
 
+
+
 nvtop
