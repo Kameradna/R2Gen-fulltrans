@@ -57,7 +57,7 @@ class BaseTrainer(object):
             crt_time = time.asctime(time.localtime(time.time()))
             print(crt_time)
             print(f'beginning epoch {epoch}')
-            result = self._train_epoch(epoch,model)
+            result = self._train_epoch(epoch)
 
             # save logged informations into log dict
             log = {'epoch': epoch}
