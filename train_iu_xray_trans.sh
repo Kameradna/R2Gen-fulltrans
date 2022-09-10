@@ -16,5 +16,5 @@ python main_train.py \
 --monitor_metric CIDEr \
 --n_gpu 4 \
 --frozen \
---record_dir recordsfrozentrans3 \
---save_dir resultsfrozentrans3
+--record_dir recordsfrozentrans4gpu3 \
+--save_dir resultsfrozentrans4gpu3
