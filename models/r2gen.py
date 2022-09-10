@@ -23,7 +23,7 @@ class R2GenModel(nn.Module):
         params = sum([np.prod(p.size()) for p in model_parameters])
         return super().__str__() + '\nTrainable parameters: {}'.format(params)
 
-    def forward(self, images, targets=None, mode='train'):
+    def forward(self, images, targets=None, mode='train'): #this was the mother********* line of code that held me back for 2 weeks. The nn.parallel broadcast function could not deal with a forward method with an alias.
 
 
         # print(f'images0 shape = {images[:, 0].shape}')# images0 shape = torch.Size([16, 3, 224, 224])
