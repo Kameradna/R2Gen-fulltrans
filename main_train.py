@@ -122,7 +122,7 @@ def main():
     ########################
     #playground
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = torch.nn.DataParallel(model)
+    model = torch.nn.DataParallel(model,device_ids=[0,1,2,3])
     model = model.to(device)
 
     print(model.parameters())
