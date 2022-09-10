@@ -135,7 +135,7 @@ class BaseTrainer(object):
     def _save_checkpoint(self, epoch, save_best=False):
         state = {
             'epoch': epoch,
-            'state_dict': self.model.state_dict(),
+            'state_dict': self.model.module.state_dict(),
             'optimizer': self.optimizer.state_dict(),
             'monitor_best': self.mnt_best
         }
@@ -153,7 +153,7 @@ class BaseTrainer(object):
         checkpoint = torch.load(resume_path)
         self.start_epoch = checkpoint['epoch'] + 1
         self.mnt_best = checkpoint['monitor_best']
-        self.model.load_state_dict(checkpoint['state_dict'])
+        self.model.module.load_state_dict(checkpoint['state_dict'])
         self.optimizer.load_state_dict(checkpoint['optimizer'])
 
         print("Checkpoint loaded. Resume training from epoch {}".format(self.start_epoch))
@@ -213,8 +213,8 @@ class Trainer(BaseTrainer):
                 images, reports_ids, reports_masks = images.to(self.device), reports_ids.to(
                     self.device), reports_masks.to(self.device)
                 output = self.model(images, mode='sample')
-                reports = self.model.tokenizer.decode_batch(output.cpu().numpy())
-                ground_truths = self.model.tokenizer.decode_batch(reports_ids[:, 1:].cpu().numpy())
+                reports = self.model.module.tokenizer.decode_batch(output.cpu().numpy())
+                ground_truths = self.model.module.tokenizer.decode_batch(reports_ids[:, 1:].cpu().numpy())
                 val_res.extend(reports)
                 val_gts.extend(ground_truths)
             val_met = self.metric_ftns({i: [gt] for i, gt in enumerate(val_gts)},
@@ -228,8 +228,8 @@ class Trainer(BaseTrainer):
                 images, reports_ids, reports_masks = images.to(self.device), reports_ids.to(
                     self.device), reports_masks.to(self.device)
                 output = self.model(images, mode='sample')
-                reports = self.model.tokenizer.decode_batch(output.cpu().numpy())
-                ground_truths = self.model.tokenizer.decode_batch(reports_ids[:, 1:].cpu().numpy())
+                reports = self.model.module.tokenizer.decode_batch(output.cpu().numpy())
+                ground_truths = self.model.module.tokenizer.decode_batch(reports_ids[:, 1:].cpu().numpy())
                 test_res.extend(reports)
                 test_gts.extend(ground_truths)
             test_met = self.metric_ftns({i: [gt] for i, gt in enumerate(test_gts)},
