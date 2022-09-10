@@ -17,7 +17,7 @@ class BaseTrainer(object):
         self.criterion = criterion
         self.metric_ftns = metric_ftns
         self.optimizer = optimizer
-        self.model = model
+
         self.device = device
 
         self.epochs = self.args.epochs
@@ -47,7 +47,8 @@ class BaseTrainer(object):
     def _train_epoch(self, epoch):
         raise NotImplementedError
 
-    def train(self):
+    def train(self,model):
+        self.model = model
         not_improved_count = 0
         for epoch in range(self.start_epoch, self.epochs + 1):
             crt_time = time.asctime(time.localtime(time.time()))
@@ -188,6 +189,9 @@ class Trainer(BaseTrainer):
         self.test_dataloader = test_dataloader
 
     def _train_epoch(self, epoch):
+
+        lst = [item.get_device() for item in list(self.model.parameters())]
+        print(f'trainer params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
 
         train_loss = 0
         self.model.train()
