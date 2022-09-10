@@ -16,7 +16,7 @@ class BaseTrainer(object):
             # build model architecture
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = torch.nn.DataParallel(model)
-        # self.model = model.to(device)
+        self.model = model.to(device)
 
         self.criterion = criterion
         self.metric_ftns = metric_ftns
@@ -52,7 +52,6 @@ class BaseTrainer(object):
         raise NotImplementedError
 
     def train(self):
-        self.model = self.model.to(self.device)
         not_improved_count = 0
         for epoch in range(self.start_epoch, self.epochs + 1):
             crt_time = time.asctime(time.localtime(time.time()))
@@ -193,12 +192,6 @@ class Trainer(BaseTrainer):
         self.test_dataloader = test_dataloader
 
     def _train_epoch(self, epoch):
-
-        lst = [item.get_device() for item in list(self.model.parameters())]
-        print(f'trainer params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
-        self.model = self.model.to(self.device)
-        lst = [item.get_device() for item in list(self.model.parameters())]
-        print(f'trainer params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
 
         train_loss = 0
         self.model.train()

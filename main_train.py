@@ -118,6 +118,36 @@ def main():
     optimizer = build_optimizer(args, model)
     lr_scheduler = build_lr_scheduler(args, optimizer)
 
+
+    ########################
+    #playground
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = torch.nn.DataParallel(model)
+    model = model.to(device)
+
+    lst = [item.get_device() for item in list(model.parameters())]
+    print(f'main params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
+
+    train_loss = 0
+    model.train()
+    for batch_idx, (images_id, images, reports_ids, reports_masks) in enumerate(train_dataloader):
+        images, reports_ids, reports_masks = images.to(device), reports_ids.to(device), reports_masks.to(device)
+        output = model(images, reports_ids, mode='train')
+        loss = criterion(output, reports_ids, reports_masks)
+        train_loss += loss.item()
+        optimizer.zero_grad()
+        loss.backward()
+        torch.nn.utils.clip_grad_value_(model.parameters(), 0.1)
+        optimizer.step()
+    log = {'train_loss': train_loss / len(train_dataloader)}
+
+    raise(NotImplementedError)
+    ########################
+
+
+
+
+
     # build trainer and start to train
     trainer = Trainer(model, criterion, metrics, optimizer, args, lr_scheduler, train_dataloader, val_dataloader, test_dataloader)
     trainer.train()
