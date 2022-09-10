@@ -122,10 +122,7 @@ def main():
     optimizer = build_optimizer(args, model)
     lr_scheduler = build_lr_scheduler(args, optimizer)
 
-    model = model.to(torch.device('cuda:0'))
-    model = model.to(torch.device('cuda:1'))
-    model = model.to(torch.device('cuda:2'))
-    model = model.to(torch.device('cuda:0'))#after the dataparallel?
+    model = model.to(device)
 
     # build trainer and start to train
     trainer = Trainer(model, criterion, metrics, optimizer, args, lr_scheduler, train_dataloader, val_dataloader, test_dataloader, device)
