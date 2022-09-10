@@ -25,9 +25,6 @@ class R2GenModel(nn.Module):
 
     def forward_iu_xray(self, images, targets=None, mode='train'):
 
-
-        print(f'R2Gen images are in device {images.get_device()}')
-        lst = [item.get_device() for item in list(self.parameters())]
         print(f'R2Gen params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
 
 
