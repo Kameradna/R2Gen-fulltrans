@@ -15,6 +15,7 @@ python main_train.py \
 --d_vf 768 \
 --monitor_metric CIDEr \
 --n_gpu 4 \
+--early_stop 100 \
 --record_dir recordsnew/recordstrans \
 --save_dir recordsnew/resultstrans
 
@@ -35,6 +36,7 @@ python main_train.py \
 --d_vf 768 \
 --monitor_metric CIDEr \
 --n_gpu 4 \
+--early_stop 100 \
 --record_dir recordsnew/recordstrans \
 --save_dir recordsnew/resultstrans
 
@@ -55,6 +57,7 @@ python main_train.py \
 --d_vf 768 \
 --monitor_metric CIDEr \
 --n_gpu 4 \
+--early_stop 100 \
 --record_dir recordsnew/recordstrans \
 --save_dir recordsnew/resultstrans
 
@@ -75,5 +78,6 @@ python main_train.py \
 --d_vf 768 \
 --monitor_metric CIDEr \
 --n_gpu 4 \
+--early_stop 100 \
 --record_dir recordsnew/recordstrans \
 --save_dir recordsnew/resultstrans
