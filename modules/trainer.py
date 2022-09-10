@@ -48,7 +48,7 @@ class BaseTrainer(object):
         raise NotImplementedError
 
     def train(self,model):
-        # self.model = model
+        self.model = model
         not_improved_count = 0
         for epoch in range(self.start_epoch, self.epochs + 1):
             crt_time = time.asctime(time.localtime(time.time()))
