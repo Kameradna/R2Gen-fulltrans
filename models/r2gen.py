@@ -13,17 +13,17 @@ class R2GenModel(nn.Module):
         self.tokenizer = tokenizer
         self.visual_extractor = VisualExtractor(args)
         self.encoder_decoder = EncoderDecoder(args, tokenizer)
-        if args.dataset_name == 'iu_xray':
-            self.forward = self.forward_iu_xray
-        else:
-            self.forward = self.forward_mimic_cxr
+        # if args.dataset_name == 'iu_xray':
+        #     self.forward = self.forward_iu_xray
+        # else:
+        #     self.forward = self.forward_mimic_cxr
 
     def __str__(self):
         model_parameters = filter(lambda p: p.requires_grad, self.parameters())
         params = sum([np.prod(p.size()) for p in model_parameters])
         return super().__str__() + '\nTrainable parameters: {}'.format(params)
 
-    def forward_iu_xray(self, images, targets=None, mode='train'):
+    def forward(self, images, targets=None, mode='train'):
 
 
         # print(f'images0 shape = {images[:, 0].shape}')# images0 shape = torch.Size([16, 3, 224, 224])
@@ -58,13 +58,13 @@ class R2GenModel(nn.Module):
             raise ValueError
         return output
 
-    def forward_mimic_cxr(self, images, targets=None, mode='train'):
-        att_feats, fc_feats = self.visual_extractor(images)
-        if mode == 'train':
-            output = self.encoder_decoder(fc_feats, att_feats, targets, mode='forward')
-        elif mode == 'sample':
-            output, _ = self.encoder_decoder(fc_feats, att_feats, mode='sample')
-        else:
-            raise ValueError
-        return output
+    # def forward_mimic_cxr(self, images, targets=None, mode='train'):
+    #     att_feats, fc_feats = self.visual_extractor(images)
+    #     if mode == 'train':
+    #         output = self.encoder_decoder(fc_feats, att_feats, targets, mode='forward')
+    #     elif mode == 'sample':
+    #         output, _ = self.encoder_decoder(fc_feats, att_feats, mode='sample')
+    #     else:
+    #         raise ValueError
+    #     return output
 
