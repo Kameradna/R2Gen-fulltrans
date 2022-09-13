@@ -9,13 +9,13 @@ python main_train.py \
 --step_size 50 \
 --gamma 0.1 \
 --seed 9223 \
---visual_extractor resnet101 \
+--visual_extractor swin_b \
 --weights IMAGENET1K_V1 \
---d_vf 768 \
+--d_vf 1024 \
 --monitor_metric CIDEr \
 --n_gpu 1 \
 --frozen \
 --cls \
 --early_stop 100 \
---record_dir recordsnew/recordsfrozentranswithcls \
---save_dir recordsnew/resultsfrozentranswithcls
+--record_dir recordsnew/recordsfrozenswin \
+--save_dir recordsnew/resultsfrozenswin
