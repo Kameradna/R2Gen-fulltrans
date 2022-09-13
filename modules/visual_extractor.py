@@ -16,7 +16,13 @@ class VisualExtractor(nn.Module):
         self.printfirst = True
         print(f"self.visual_extractor = {self.visual_extractor}")
         print(f"weights are {self.weights}")
-        model = getattr(models, self.visual_extractor)(weights=self.weights)#weights
+        try:
+            model = getattr(models, self.visual_extractor)(weights=self.weights)#weights
+        except:
+            try:
+                model = getattr(models, self.visual_extractor)(weights="IMAGENET1K_V2")
+            except:
+                model = getattr(models, self.visual_extractor)(weights="DEFAULT")
         # model = models.get_model(self.visual_extractor, weights=self.weights)#the modern model registration feature, kameradna
 
         if fnmatch.fnmatch(self.visual_extractor,"resnet*"):

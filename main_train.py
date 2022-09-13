@@ -89,9 +89,9 @@ def parse_agrs():
     return args
 
 
-def main():
+def main(args):
     # parse arguments
-    args = parse_agrs()
+
 
     # fix random seeds
     # torch.manual_seed(args.seed)
@@ -156,4 +156,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    args = parse_agrs()
+    main(args)
