@@ -10,6 +10,7 @@ class VisualExtractor(nn.Module):
         self.visual_extractor = args.visual_extractor
         self.weights = args.weights
         self.cls = args.cls
+        self.printfirst = True
         print(f'self.visual_extractor = {self.visual_extractor}')
         print(f'weights are {self.weights}')
         model = getattr(models, self.visual_extractor)(weights=self.weights)#weights
@@ -34,11 +35,6 @@ class VisualExtractor(nn.Module):
 
     def forward(self, images):
         
-        # print(f'extractor images are in device {images.get_device()}')
-        # lst = [item.get_device() for item in list(self.model.parameters())]
-        # print(f'extractor params are in device {lst[0]} and all are same? {all(ele == lst[0] for ele in lst)}')
-
-
         if self.original == True:
             patch_feats = self.model(images)
             # print(f'patch_feats.shape() = {patch_feats.shape}')# patch_feats.shape() = torch.Size([16, 2048, 7, 7])
@@ -68,14 +64,17 @@ class VisualExtractor(nn.Module):
             #we can try to extract the classification token
             if not self.cls:
                 x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,196],dim=1)
+                x_star = x_star[:, 0]
             elif self.cls:
                 patch_feats_star = patch_feats
             else:
                 raise(NotImplementedError)
             # print(x_star)
-            x_star = x_star[:, 0]#this seems to eliminate information
+            #this seems to eliminate information
             # print(f'x_star.shape() = {x_star.shape}')
-            # print(f'patch_feats_star.shape() = {patch_feats_star.shape}')
+            if self.printfirst:
+                print(f'patch_feats_star.shape() = {patch_feats_star.shape}')
+                self.printfirst = False
 
             ####
 
