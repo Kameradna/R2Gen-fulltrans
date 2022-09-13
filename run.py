@@ -6,14 +6,14 @@ import torchvision.models as models
 
 fails = {}
 grid_dict = {
-    'visual_extractor': ['resnet101','resnet152','vit_b_16','swin_b','swin_v2_b','vit_l_16','vit_h_14'] #,'wide_resnet50_2','alexnet','regnet_y_16gf','densenet121','convnext_base','efficientnet_v2_l','regnet_y_128gf','resnext101_64x4d'],
+    'visual_extractor': ['resnet101','vit_b_16','swin_b'], #,'resnet152','swin_v2_b','vit_l_16','vit_h_14'] #,'wide_resnet50_2','alexnet','regnet_y_16gf','densenet121','convnext_base','efficientnet_v2_l','regnet_y_128gf','resnext101_64x4d'],
     #implement the forward methods in visual_extractor.py and feature size here
     'weights': ['IMAGENET1K_SWAG_E2E_V1',None],#will need to try except for when I fetch the weights
     'monitor_metric': ['CIDEr'],
     'n_gpu': [1],
     'frozen': [True],
     'cls': [True],
-    'repetition': range(10)
+    'repetition': range(3)
     }
 
 
@@ -35,14 +35,14 @@ for param in grid:
     args.d_vf = d_vf
 
     try:
-        model = getattr(models, param['visual_extractor'])(weights=param['weights'])#checking for the swag weights
+        getattr(models, param['visual_extractor'])(weights=param['weights'])#checking for the swag weights
         weights = 'IMAGENET1K_SWAG_E2E_V1'
     except:
         try:
-            model = getattr(models, param['visual_extractor'])(weights="IMAGENET1K_V2")
+            getattr(models, param['visual_extractor'])(weights="IMAGENET1K_V2")
             weights = "IMAGENET1K_V2"
         except:
-            model = getattr(models, param['visual_extractor'])(weights="DEFAULT")
+            getattr(models, param['visual_extractor'])(weights="DEFAULT")
             weights="DEFAULT"
 
     name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}"
@@ -66,8 +66,8 @@ for param in grid:
     args.gamma = 0.1
     args.early_stop = 100
 
-    args.record_dir = f"records_{name}"#will have to change these on the fly when I fetch the weights
-    args.save_dir = f"results_{name}"
+    args.record_dir = f"recordsruns/records_{name}"
+    args.save_dir = f"recordsruns/results_{name}"
     try:
         main_train.main(args)
     except RuntimeError:
@@ -76,9 +76,12 @@ for param in grid:
     except NotImplementedError:
         print(f"NotImplemented error: need to provide implementation for {param['visual_extractor']}")
         fails[param['visual_extractor']] = 'Not implemented'
+    except KeyboardInterrupt:
+        print(f"keyboard interrupt {param['visual_extractor']} individually")
     except:
         print(f"some other reason for failure, need to run {param['visual_extractor']} individually")
         fails[param['visual_extractor']] = 'unknown'
+
     print("*********Cumulative FAILS*********")
     print(fails)
     print("*********Cumulative FAILS*********")
