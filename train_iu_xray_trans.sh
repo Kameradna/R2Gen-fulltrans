@@ -4,7 +4,7 @@ python main_train.py \
 --dataset_name iu_xray \
 --max_seq_length 60 \
 --threshold 3 \
---batch_size 32 \
+--batch_size 16 \
 --epochs 100 \
 --save_dir results/iu_xray \
 --step_size 50 \
@@ -14,7 +14,9 @@ python main_train.py \
 --weights IMAGENET1K_V1 \
 --d_vf 768 \
 --monitor_metric CIDEr \
---n_gpu 4 \
+--n_gpu 1 \
+--frozen \
+--cls \
 --early_stop 100 \
 --record_dir recordsnew/recordstrans \
 --save_dir recordsnew/resultstrans

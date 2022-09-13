@@ -9,6 +9,7 @@ class VisualExtractor(nn.Module):
         super(VisualExtractor, self).__init__()
         self.visual_extractor = args.visual_extractor
         self.weights = args.weights
+        self.cls = args.cls
         print(f'self.visual_extractor = {self.visual_extractor}')
         print(f'weights are {self.weights}')
         model = getattr(models, self.visual_extractor)(weights=self.weights)#weights
@@ -65,7 +66,12 @@ class VisualExtractor(nn.Module):
             # print(f'all_feats.shape() = {patch_feats.shape}')#all_feats.shape() = torch.Size([16, 197, 768])
 
             #we can try to extract the classification token
-            x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,196],dim=1)
+            if not self.cls:
+                x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,196],dim=1)
+            elif self.cls:
+                patch_feats_star = patch_feats
+            else:
+                raise(NotImplementedError)
             # print(x_star)
             x_star = x_star[:, 0]#this seems to eliminate information
             # print(f'x_star.shape() = {x_star.shape}')
