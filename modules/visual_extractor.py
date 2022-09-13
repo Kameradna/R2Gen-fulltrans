@@ -43,11 +43,11 @@ class VisualExtractor(nn.Module):
         
         if fnmatch.fnmatch(self.visual_extractor,"resnet*"):
             patch_feats = self.model(images)
-            print(f"feats.shape() = {patch_feats.shape}")
+            # print(f"feats.shape() = {patch_feats.shape}")
             avg_feats = self.avg_fnt(patch_feats).squeeze().reshape(-1, patch_feats.size(1))#averages across the patch features
             batch_size, feat_size, _, _ = patch_feats.shape
             patch_feats = patch_feats.reshape(batch_size, feat_size, -1).permute(0, 2, 1)
-            print(f"feats.shape() = {patch_feats.shape}")
+            # print(f"feats.shape() = {patch_feats.shape}")
 
         elif fnmatch.fnmatch(self.visual_extractor,"vit*"):
 
