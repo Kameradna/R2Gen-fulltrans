@@ -98,3 +98,10 @@ Check for use of checkpoints etc, some of the initial epochs often have unexpect
 Thoughts on freezing different parts of the architecture and training them independently with various batch sizes?
 
 Currently we are looking to compare the (frozen baseline) to (frozen vit) and also (baseline) to (frozen baseline) which should tell us how much of the gains in R2Gen are from the visual extractor learning vs improved feature representation/feature representation compatibility.
+
+```shell
+conda create -n R2Gen-fulltrans python=3.9 pip pandas pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch-nightly -c nvidia
+conda activate thesis
+pip install opencv-python
+pip install gdown
+```
