@@ -23,7 +23,7 @@ class R2DataLoader(DataLoader):
         if split == 'train':
             self.transform = transforms.Compose([
                 self.transform_from_weights,
-                transforms.RandomHorizontalFlip(),])
+                ])#transforms.RandomHorizontalFlip(), wouldn't this destroy semantic information?
         else:
             self.transform = self.transform_from_weights
 
@@ -37,7 +37,8 @@ class R2DataLoader(DataLoader):
             'batch_size': self.batch_size,
             'shuffle': self.shuffle,
             'collate_fn': self.collate_fn,
-            'num_workers': self.num_workers
+            'num_workers': self.num_workers,
+            'drop_last': True
         }
         super().__init__(**self.init_kwargs)
 
