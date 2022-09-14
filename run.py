@@ -80,6 +80,7 @@ for param in grid:
         fails[param['visual_extractor']] = 'Not implemented'
     except KeyboardInterrupt:
         print(f"keyboard interrupt {param['visual_extractor']} individually")
+        break
     except:
         print(f"some other reason for failure, need to run {param['visual_extractor']} individually")
         fails[param['visual_extractor']] = 'unknown'
