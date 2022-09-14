@@ -12,7 +12,7 @@ grid_dict = {
     #also maybe read the papers
     'weights': ['IMAGENET1K_SWAG_E2E_V1'],#will need to try except for when I fetch the weights
     'monitor_metric': ['CIDEr'],
-    'n_gpu': [4],#should I increase batch size in order to speed up training?
+    'n_gpu': [2],#should I increase batch size in order to speed up training?
     'frozen': [True],
     'cls': [True],
     'repetition': range(4)#probably want 5 of each at least to get a feel
