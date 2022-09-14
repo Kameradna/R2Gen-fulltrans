@@ -4,6 +4,13 @@ import argparse
 import torch
 import torchvision.models as models
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--offset', type=int, default=0, help='run offset')
+parser.add_argument('--runs', type=int, default=0, help='runs')
+args = parser.parse_args()
+offset = args.offset
+runs = args.runs
+
 fails = {}
 grid_dict = {
     'visual_extractor': ['vit_b_16','resnet101','swin_b'], #,'resnet152','swin_v2_b','vit_l_16','vit_h_14'] #,'wide_resnet50_2','alexnet','regnet_y_16gf','densenet121','convnext_base','efficientnet_v2_l','regnet_y_128gf','resnext101_64x4d'],
@@ -15,7 +22,7 @@ grid_dict = {
     'n_gpu': [2],#should I increase batch size in order to speed up training?
     'frozen': [True],
     'cls': [True],
-    'repetition': range(4)#probably want 5 of each at least to get a feel
+    'repetition': range(offset,offset+runs)#probably want 5 of each at least to get a feel
     }
 
 
