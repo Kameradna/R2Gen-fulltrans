@@ -48,6 +48,7 @@ for param in grid:
             weights="IMAGENET1K_V1"
 
     name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{param['repetition']}"
+    print(f"saving as {name}")
 
     args.visual_extractor = param['visual_extractor']
     args.weights = weights
