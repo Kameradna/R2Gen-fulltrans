@@ -34,14 +34,12 @@ for param in grid:
     print('here we go')
     args = main_train.parse_agrs() #default args are
 
-    if param['visual_extractor'] == 'resnet101':
-        d_vf = 2048
-    elif param['visual_extractor'] == 'vit_b_16':
-        d_vf = 768
-    elif param['visual_extractor'] == 'swin_b':
-        d_vf = 1024
-    else:
-        print('get ready for an error caught!')
+    visfeats = {
+        'resnet101': 2048,
+        'vit_b_16': 768,
+        'swin_b': 1024,
+        }
+    d_vf = visfeats.get(param['visual_extractor'],1)#default 1 feature
     args.d_vf = d_vf
 
     try:

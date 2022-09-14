@@ -13,6 +13,7 @@ class R2GenModel(nn.Module):
         self.tokenizer = tokenizer
         self.visual_extractor = VisualExtractor(args)
         self.encoder_decoder = EncoderDecoder(args, tokenizer)
+        self.first_batch_for_debug = True
         # if args.dataset_name == 'iu_xray':
         #     self.forward = self.forward_iu_xray
         # else:
@@ -36,8 +37,9 @@ class R2GenModel(nn.Module):
         # print(f'att_feats 1.shape = {att_feats_1.shape}')#att_feats 1.shape = torch.Size([16, 49, 2048])
         fc_feats =torch.cat((fc_feats_0, fc_feats_1), dim=1)
         att_feats = torch.cat((att_feats_0, att_feats_1), dim=1)
-        # print(f'att_feats.shape = {att_feats.shape}')#att_feats.shape = torch.Size([16, 98, 2048])
-
+        if __name__ == '__main__' and self.first_batch_for_debug:
+            print(f'att_feats.shape = {att_feats.shape}')#att_feats.shape = torch.Size([16, 98, 2048])
+            self.first_batch_for_debug = False
         # But for the transformer, we get
         # att_feats 0.shape = torch.Size([16, 1, 768])
         # att_feats 1.shape = torch.Size([16, 1, 768])
