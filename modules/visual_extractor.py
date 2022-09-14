@@ -85,7 +85,7 @@ class VisualExtractor(nn.Module):
             print(f"you should implement the forward method for {self.visual_extractor}")
             raise(NotImplementedError)
 
-        if self.printfirst:
-            self.printfirst = False
-            print(f"feats.shape() = {patch_feats.shape}")
+        # if self.printfirst:
+        #     self.printfirst = False
+        #     print(f"feats.shape() = {patch_feats.shape}")
         return patch_feats, avg_feats
