@@ -10,7 +10,7 @@ grid_dict = {
     #implement the forward methods in visual_extractor.py and feature size here
     #also implement the transforms tuned to the individual models in
     #also maybe read the papers
-    'weights': ['IMAGENET1K_SWAG_E2E_V1',None],#will need to try except for when I fetch the weights
+    'weights': ['IMAGENET1K_SWAG_E2E_V1'],#will need to try except for when I fetch the weights
     'monitor_metric': ['CIDEr'],
     'n_gpu': [1],#should I increase batch size in order to speed up training?
     'frozen': [True],
@@ -38,14 +38,14 @@ for param in grid:
 
     try:
         getattr(models, param['visual_extractor'])(weights=param['weights'])#checking for the swag weights
-        weights = 'IMAGENET1K_SWAG_E2E_V1'
+        weights = param['weights']
     except:
         try:
             getattr(models, param['visual_extractor'])(weights="IMAGENET1K_V2")
             weights = "IMAGENET1K_V2"
         except:
-            getattr(models, param['visual_extractor'])(weights="DEFAULT")
-            weights="DEFAULT"
+            getattr(models, param['visual_extractor'])(weights="IMAGENET1K_V1")
+            weights="IMAGENET1K_V1"
 
     name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{param['repetition']}"
 

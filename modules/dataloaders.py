@@ -14,21 +14,18 @@ class R2DataLoader(DataLoader):
         self.num_workers = args.num_workers
         self.tokenizer = tokenizer
         self.split = split
+        
+        possible_weights = torch.hub.load("pytorch/vision", "get_model_weights", name=args.visual_extractor)#relies on build 0.14 of torchvision, may require an updated environment using nightly releases as recommended
+        for weights in possible_weights:
+            if args.weights == str(weights).split(".")[-1]:#if we are using those weights
+                self.transform_from_weights = weights.transforms()
 
         if split == 'train':
             self.transform = transforms.Compose([
-                transforms.Resize(256),
-                transforms.RandomCrop(224),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                transforms.Normalize((0.485, 0.456, 0.406),
-                                     (0.229, 0.224, 0.225))])
+                self.transform_from_weights,
+                transforms.RandomHorizontalFlip(),])
         else:
-            self.transform = transforms.Compose([
-                transforms.Resize((224, 224)),
-                transforms.ToTensor(),
-                transforms.Normalize((0.485, 0.456, 0.406),
-                                     (0.229, 0.224, 0.225))])
+            self.transform = self.transform_from_weights
 
         if self.dataset_name == 'iu_xray':
             self.dataset = IuxrayMultiImageDataset(self.args, self.tokenizer, self.split, transform=self.transform)

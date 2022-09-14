@@ -9,8 +9,8 @@ python main_train.py \
 --step_size 50 \
 --gamma 0.1 \
 --seed 9223 \
---visual_extractor resnet101 \
---weights IMAGENET1K_V1 \
+--visual_extractor vit_b_16 \
+--weights IMAGENET1K_SWAG_E2E_V1 \
 --d_vf 768 \
 --monitor_metric CIDEr \
 --n_gpu 1 \

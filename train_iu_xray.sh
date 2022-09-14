@@ -12,6 +12,7 @@ python main_train.py \
 --gamma 0.1 \
 --seed 9223 \
 --visual_extractor resnet101 \
+--weights IMAGENET1K_V2 \
 --d_vf 2048 \
 --monitor_metric CIDEr \
 --n_gpu 1 \
