@@ -16,16 +16,17 @@ class VisualExtractor(nn.Module):
         self.printfirst = True
         print(f"self.visual_extractor = {self.visual_extractor}")
         print(f"weights are {self.weights}")
+        print(f"d_vf is {args.d_vf}")
         try:
             model = getattr(models, self.visual_extractor)(weights=self.weights)#weights
         except:
             try:
                 model = getattr(models, self.visual_extractor)(weights="IMAGENET1K_V2")
             except:
-                model = getattr(models, self.visual_extractor)(weights="DEFAULT")
+                model = getattr(models, self.visual_extractor)(weights="IMAGENET1K_V1")
         # model = models.get_model(self.visual_extractor, weights=self.weights)#the modern model registration feature, kameradna
 
-        if fnmatch.fnmatch(self.visual_extractor,"resnet*"):
+        if fnmatch.fnmatch(self.visual_extractor,"*resnet*"):
             modules = list(model.children())[:-2]
             self.model = nn.Sequential(*modules)
             self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
@@ -34,6 +35,14 @@ class VisualExtractor(nn.Module):
             self.model = model
         elif fnmatch.fnmatch(self.visual_extractor,"swin*"):
             model.head = nn.Identity()
+            self.model = model
+        elif fnmatch.fnmatch(self.visual_extractor,"alexnet"):
+            modules = list(model.children())[:-2]
+            self.model = nn.Sequential(*modules)
+        elif fnmatch.fnmatch(self.visual_extractor,"regnet*"):
+            modules = list(model.children())[:-2]
+            self.model = nn.Sequential(*modules)
+        elif fnmatch.fnmatch(self.visual_extractor,"densenet*"):
             self.model = model
         else:
             print(f"we have not implemented the {self.visual_extractor} visual extractor for this paper")
@@ -47,7 +56,7 @@ class VisualExtractor(nn.Module):
 
     def forward(self, images):
         
-        if fnmatch.fnmatch(self.visual_extractor,"resnet*"):
+        if fnmatch.fnmatch(self.visual_extractor,"*resnet*"):
             patch_feats = self.model(images)
             # print(f"feats.shape() = {patch_feats.shape}")
             avg_feats = self.avg_fnt(patch_feats).squeeze().reshape(-1, patch_feats.size(1))#averages across the patch features
@@ -80,7 +89,32 @@ class VisualExtractor(nn.Module):
             x = x.reshape(batch_size, feat_size, -1).permute(0,2,1)
             patch_feats = x
             avg_feats = patch_feats
-            
+        
+        elif fnmatch.fnmatch(self.visual_extractor,"alexnet"):
+            patch_feats = self.model(images)
+            batch_size, feat_size, _, _ = patch_feats.shape
+            patch_feats = patch_feats.reshape(batch_size, feat_size, -1).permute(0, 2, 1)
+            avg_feats = patch_feats
+
+        elif fnmatch.fnmatch(self.visual_extractor,"regnet*"):
+            patch_feats = self.model(images)
+            # print(f"feats.shape() = {patch_feats.shape}")
+            # avg_feats = self.avg_fnt(patch_feats).squeeze().reshape(-1, patch_feats.size(1))#averages across the patch features
+            # print(f"avg.shape() = {avg_feats.shape}")
+            batch_size, feat_size, _, _ = patch_feats.shape
+            patch_feats = patch_feats.reshape(batch_size, feat_size, -1).permute(0, 2, 1)
+            # print(f"feats.shape() = {patch_feats.shape}")
+            avg_feats = patch_feats
+        
+        elif fnmatch.fnmatch(self.visual_extractor,"densenet*"):
+            x = self.model.features(images)
+            # print(f"feats.shape() = {x.shape}")
+
+            batch_size, feat_size, _, _ = x.shape #changed from the vit section
+            x = x.reshape(batch_size, feat_size, -1).permute(0,2,1)
+            patch_feats = x
+            avg_feats = patch_feats
+
         else:
             print(f"you should implement the forward method for {self.visual_extractor}")
             raise(NotImplementedError)

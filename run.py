@@ -5,7 +5,7 @@ import torchvision.models as models
 
 parser2 = argparse.ArgumentParser()
 parser2.add_argument('--offset', type=int, default=0, help='run offset')
-parser2.add_argument('--runs', type=int, default=0, help='runs')
+parser2.add_argument('--runs', type=int, default=1, help='runs')
 args2 = parser2.parse_args()
 offset = args2.offset
 runs = args2.runs
@@ -14,7 +14,9 @@ import main_train
 
 fails = {}
 grid_dict = {
-    'visual_extractor': ['vit_b_16','resnet101','swin_b'], #,'resnet152','swin_v2_b','vit_l_16','vit_h_14'] #,'wide_resnet50_2','alexnet','regnet_y_16gf','densenet121','convnext_base','efficientnet_v2_l','regnet_y_128gf','resnext101_64x4d'],
+    # 'visual_extractor': ['vit_b_16','resnet101','swin_b','resnet152','swin_v2_b','wide_resnet50_2','alexnet',regnet_y_16gf','densenet121',]#these work fine on local systems
+    # 'visual_extractor': ['vit_l_16','vit_h_14','regnet_y_128gf',]#OOM
+    'visual_extractor': ['convnext_base','efficientnet_v2_l','resnext101_64x4d'],
     #implement the forward methods in visual_extractor.py and feature size here
     #also implement the transforms tuned to the individual models in
     #also maybe read the papers
@@ -36,8 +38,20 @@ for param in grid:
 
     visfeats = {
         'resnet101': 2048,
+        'resnet152':2048,
         'vit_b_16': 768,
         'swin_b': 1024,
+        'swin_v2_b': 1024,
+        'vit_l_16': 1024,#better way to handle attention?
+        # 'vit_h_14': 1,
+        'wide_resnet50_2': 2048,#still a big question whether the implementation of forward is correct
+        'alexnet': 256,#big questions about implementation
+        'regnet_y_16gf': 3024,#big questions about the implementation here is okay
+        'regnet_y_128gf': 7392,
+        'densenet121': 1024,
+        # 'convnext_base': 'failed from implement',
+        # 'efficientnet_v2_l': 'failed from implement',
+        # 'resnext101_64x4d': 'failed from implement'
         }
     d_vf = visfeats.get(param['visual_extractor'],1)#default 1 feature
     args.d_vf = d_vf

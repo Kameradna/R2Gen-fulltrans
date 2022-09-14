@@ -110,6 +110,7 @@ def main(args):
     test_dataloader = R2DataLoader(args, tokenizer, split='test', shuffle=False)
 
     model = R2GenModel(args, tokenizer)
+    print(model.visual_extractor)
 
     # get function handles of loss and metrics
     criterion = compute_loss
