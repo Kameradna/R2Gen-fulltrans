@@ -84,8 +84,6 @@ class AttModel(CaptionModel):
         # Project the attention feats first to reduce memory and computation comsumptions.
         p_att_feats = self.ctx2att(att_feats)
 
-        raise(NotImplementedError)
-
         return fc_feats, att_feats, p_att_feats, att_masks
 
     def get_logprobs_state(self, it, fc_feats, att_feats, p_att_feats, att_masks, state, output_logsoftmax=1):
