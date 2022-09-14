@@ -4,12 +4,12 @@ import argparse
 import torch
 import torchvision.models as models
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--offset', type=int, default=0, help='run offset')
-parser.add_argument('--runs', type=int, default=0, help='runs')
-args = parser.parse_args()
-offset = args.offset
-runs = args.runs
+parser2 = argparse.ArgumentParser()
+parser2.add_argument('--offset', type=int, default=0, help='run offset')
+parser2.add_argument('--runs', type=int, default=0, help='runs')
+args2 = parser2.parse_args()
+offset = args2.offset
+runs = args2.runs
 
 fails = {}
 grid_dict = {
