@@ -8,12 +8,14 @@ fails = {}
 grid_dict = {
     'visual_extractor': ['resnet101','vit_b_16','swin_b'], #,'resnet152','swin_v2_b','vit_l_16','vit_h_14'] #,'wide_resnet50_2','alexnet','regnet_y_16gf','densenet121','convnext_base','efficientnet_v2_l','regnet_y_128gf','resnext101_64x4d'],
     #implement the forward methods in visual_extractor.py and feature size here
+    #also implement the transforms tuned to the individual models in
+    #also maybe read the papers
     'weights': ['IMAGENET1K_SWAG_E2E_V1',None],#will need to try except for when I fetch the weights
     'monitor_metric': ['CIDEr'],
-    'n_gpu': [1],
+    'n_gpu': [1],#should I increase batch size in order to speed up training?
     'frozen': [True],
     'cls': [True],
-    'repetition': range(3)
+    'repetition': range(4)#probably want 5 of each at least to get a feel
     }
 
 
@@ -31,7 +33,7 @@ for param in grid:
     elif param['visual_extractor'] == 'swin_b':
         d_vf = 1024
     else:
-        raise(NotImplementedError,f"{param['visual_extractor']} not recognised.")
+        print('get ready for an error caught!')
     args.d_vf = d_vf
 
     try:
@@ -45,7 +47,7 @@ for param in grid:
             getattr(models, param['visual_extractor'])(weights="DEFAULT")
             weights="DEFAULT"
 
-    name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}"
+    name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{param['repetition']}"
 
     args.visual_extractor = param['visual_extractor']
     args.weights = weights
