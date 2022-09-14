@@ -34,7 +34,7 @@ class R2GenModel(nn.Module):
 
         # print(f'att_feats 0.shape = {att_feats_0.shape}')#att_feats 0.shape = torch.Size([16, 49, 2048])
         # print(f'att_feats 1.shape = {att_feats_1.shape}')#att_feats 1.shape = torch.Size([16, 49, 2048])
-        fc_feats = None #torch.cat((fc_feats_0, fc_feats_1), dim=1)
+        fc_feats =torch.cat((fc_feats_0, fc_feats_1), dim=1)
         att_feats = torch.cat((att_feats_0, att_feats_1), dim=1)
         # print(f'att_feats.shape = {att_feats.shape}')#att_feats.shape = torch.Size([16, 98, 2048])
 
