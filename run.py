@@ -6,7 +6,7 @@ import torchvision.models as models
 
 fails = {}
 grid_dict = {
-    'visual_extractor': ['resnet101','vit_b_16','swin_b'], #,'resnet152','swin_v2_b','vit_l_16','vit_h_14'] #,'wide_resnet50_2','alexnet','regnet_y_16gf','densenet121','convnext_base','efficientnet_v2_l','regnet_y_128gf','resnext101_64x4d'],
+    'visual_extractor': ['vit_b_16','resnet101','swin_b'], #,'resnet152','swin_v2_b','vit_l_16','vit_h_14'] #,'wide_resnet50_2','alexnet','regnet_y_16gf','densenet121','convnext_base','efficientnet_v2_l','regnet_y_128gf','resnext101_64x4d'],
     #implement the forward methods in visual_extractor.py and feature size here
     #also implement the transforms tuned to the individual models in
     #also maybe read the papers

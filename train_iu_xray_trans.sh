@@ -13,7 +13,7 @@ python main_train.py \
 --weights IMAGENET1K_SWAG_E2E_V1 \
 --d_vf 768 \
 --monitor_metric CIDEr \
---n_gpu 1 \
+--n_gpu 4 \
 --frozen \
 --cls \
 --early_stop 100 \
