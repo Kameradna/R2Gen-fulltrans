@@ -1,5 +1,4 @@
 from sklearn.model_selection import ParameterGrid
-import main_train
 import argparse
 import torch
 import torchvision.models as models
@@ -10,6 +9,8 @@ parser2.add_argument('--runs', type=int, default=0, help='runs')
 args2 = parser2.parse_args()
 offset = args2.offset
 runs = args2.runs
+
+import main_train
 
 fails = {}
 grid_dict = {
