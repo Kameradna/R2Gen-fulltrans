@@ -71,20 +71,20 @@ for param in grid:
 
     args.record_dir = f"recordsruns/records_{name}"
     args.save_dir = f"recordsruns/results_{name}"
-    try:
-        main_train.main(args)
-    except RuntimeError:
-        print("Runtime error: CUDA probably out of memory")
-        fails[param['visual_extractor']] = 'RuntimeError'
-    except NotImplementedError:
-        print(f"NotImplemented error: need to provide implementation for {param['visual_extractor']}")
-        fails[param['visual_extractor']] = 'Not implemented'
-    except KeyboardInterrupt:
-        print(f"keyboard interrupt {param['visual_extractor']} individually")
-        break
-    except:
-        print(f"some other reason for failure, need to run {param['visual_extractor']} individually")
-        fails[param['visual_extractor']] = 'unknown'
+    # try:
+    main_train.main(args)
+    # except RuntimeError:
+    #     print("Runtime error: CUDA probably out of memory")
+    #     fails[param['visual_extractor']] = 'RuntimeError'
+    # except NotImplementedError:
+    #     print(f"NotImplemented error: need to provide implementation for {param['visual_extractor']}")
+    #     fails[param['visual_extractor']] = 'Not implemented'
+    # except KeyboardInterrupt:
+    #     print(f"keyboard interrupt {param['visual_extractor']} individually")
+    #     break
+    # except:
+    #     print(f"some other reason for failure, need to run {param['visual_extractor']} individually")
+    #     fails[param['visual_extractor']] = 'unknown'
 
     print("*********Cumulative FAILS*********")
     print(fails)
