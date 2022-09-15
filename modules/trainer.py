@@ -15,13 +15,13 @@ class BaseTrainer(object):
         self.device, device_ids = self._prepare_device(args.n_gpu,args.use_gpus)
             # build model architecture
         model = torch.nn.DataParallel(model,device_ids=device_ids)
-        self.model = model.to(device)
+        self.model = model.to(self.device)
 
         self.criterion = criterion
         self.metric_ftns = metric_ftns
         self.optimizer = optimizer
 
-        self.device = device
+        # self.device = device
 
         self.epochs = self.args.epochs
         self.save_period = self.args.save_period
