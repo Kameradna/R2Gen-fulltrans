@@ -67,11 +67,8 @@ if __name__ == '__main__':
                 getattr(models, param['visual_extractor'])(weights="IMAGENET1K_V1")
                 weights="IMAGENET1K_V1"
 
-
-
         args.visual_extractor = param['visual_extractor']
         args.weights = weights
-
         args.monitor_metric = param['monitor_metric']
         # args.n_gpu = n_gpu
         args.frozen = param['frozen']
