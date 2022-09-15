@@ -101,10 +101,13 @@ for param in grid:
             print(f"saving as {name}")
             print(f"defining potential run {potential}")
             potential_runs[potential] = Process(target=main_train.main(args))
-            potential_runs[potential].start()
             print("MADE IT TO HERE!@!!!!!")
 
-    for run in potential_runs:
-        run.join()#wait for all to finish
-        print('Run done!')
+        for run in potential_runs:
+            potential_runs[potential].start()
+            print('run started')
+
+        for run in potential_runs:
+            run.join()#wait for all to finish
+            print('Run done!')
     print("All runs done")
