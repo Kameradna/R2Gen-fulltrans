@@ -95,8 +95,8 @@ for param in grid:
             repetition += 1
             args.record_dir = f"recordsruns/records_{name}"
             args.save_dir = f"recordsruns/results_{name}"
-            indice = potential*4/n_gpu_per_model
-            next_indice = potential*4/n_gpu_per_model
+            indice = int(potential*4/n_gpu_per_model)
+            next_indice = int((potential+1)*4/n_gpu_per_model)
             args.use_gpus = f"{indice},{next_indice-1}" if indice != next_indice else f"{indice}"
             print(f"saving as {name}")
             print(f"defining potential run {potential}")
