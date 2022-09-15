@@ -1,4 +1,5 @@
 from sklearn.model_selection import ParameterGrid
+from multiprocessing import Process
 import argparse
 import torch
 import torchvision.models as models
@@ -23,10 +24,8 @@ grid_dict = {
     #also maybe read the papers
     'weights': ['IMAGENET1K_SWAG_E2E_V1'],#will need to try except for when I fetch the weights
     'monitor_metric': ['CIDEr'],
-    'n_gpu': [2],#should I increase batch size in order to speed up training?
     'frozen': [True],
-    'cls': [True],
-    'repetition': range(offset,offset+runs)#probably want 5 of each at least to get a feel
+    'cls': [True]
     }
 
 
@@ -37,24 +36,24 @@ for param in grid:
     print('here we go')
     args = main_train.parse_agrs() #default args are
 
-    visfeats = {
-        'resnet101': 2048,
-        'resnet152':2048,
-        'vit_b_16': 768,
-        'swin_b': 1024,
-        'swin_v2_b': 1024,
-        'vit_l_16': 1024,#better way to handle attention?
-        # 'vit_h_14': 1,
-        'wide_resnet50_2': 2048,#still a big question whether the implementation of forward is correct
-        'alexnet': 256,#big questions about implementation
-        'regnet_y_16gf': 3024,#big questions about the implementation here is okay
-        'regnet_y_128gf': 7392,
-        'densenet121': 1024,
+    visfeats_gpu = {
+        'resnet101': [2048,1],
+        'resnet152':[2048,1],
+        'vit_b_16': [768,2],
+        'swin_b': [1024,1],
+        'swin_v2_b': [1024,1],
+        'vit_l_16': [1024,2],#better way to handle attention?
+        'vit_h_14': [1280,2],
+        'wide_resnet50_2': [2048,1],#still a big question whether the implementation of forward is correct
+        'alexnet': [256,1],#big questions about implementation
+        'regnet_y_16gf': [3024,1],#big questions about the implementation here is okay
+        'regnet_y_128gf': [7392,2],
+        'densenet121': [1024,1],
         # 'convnext_base': 'failed from implement',
         # 'efficientnet_v2_l': 'failed from implement',
         # 'resnext101_64x4d': 'failed from implement'
         }
-    d_vf = visfeats.get(param['visual_extractor'],1)#default 1 feature
+    d_vf, n_gpu = visfeats_gpu.get(param['visual_extractor'],1)#default 1 feature
     args.d_vf = d_vf
 
     try:
@@ -68,14 +67,13 @@ for param in grid:
             getattr(models, param['visual_extractor'])(weights="IMAGENET1K_V1")
             weights="IMAGENET1K_V1"
 
-    name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{param['repetition']}"
-    print(f"saving as {name}")
+
 
     args.visual_extractor = param['visual_extractor']
     args.weights = weights
 
     args.monitor_metric = param['monitor_metric']
-    args.n_gpu = param['n_gpu']
+    # args.n_gpu = n_gpu
     args.frozen = param['frozen']
     args.cls = param['cls']
 
@@ -90,22 +88,25 @@ for param in grid:
     args.gamma = 0.1
     args.early_stop = 100
 
-    args.record_dir = f"recordsruns/records_{name}"
-    args.save_dir = f"recordsruns/results_{name}"
-    # try:
-    main_train.main(args)
-    # except RuntimeError:
-    #     print("Runtime error: CUDA probably out of memory")
-    #     fails[param['visual_extractor']] = 'RuntimeError'
-    # except NotImplementedError:
-    #     print(f"NotImplemented error: need to provide implementation for {param['visual_extractor']}")
-    #     fails[param['visual_extractor']] = 'Not implemented'
-    # except KeyboardInterrupt:
-    #     print(f"keyboard interrupt {param['visual_extractor']} individually")
-    #     break
-    # except:
-    #     print(f"some other reason for failure, need to run {param['visual_extractor']} individually")
-    #     fails[param['visual_extractor']] = 'unknown'
+    repetition = 0
+    potential_runs = {}
+    while repetition < runs:
+        for potential in range(4/n_gpu):
+            name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{repetition}"
+            repetition += 1
+            args.record_dir = f"recordsruns/records_{name}"
+            args.save_dir = f"recordsruns/results_{name}"
+            indice = potential*4/n_gpu
+            next_indice = potential*4/n_gpu
+            args.use_gpus = f"{indice},{next_indice-1}" if indice != next_indice else f"{indice}"
+            print(f"saving as {name}")
+            print(f"defining potential run {potential}")
+            potential_runs[potential] = Process(target=main_train.main(),args=(args))
+            potential_runs[potential].start()
+
+    for run in potential_runs:
+        run.join()#wait for all to finish
+
 
     print("*********Cumulative FAILS*********")
     print(fails)

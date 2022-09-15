@@ -12,7 +12,7 @@ class BaseTrainer(object):
         self.args = args
 
         # setup GPU device if available, move model into configured device
-        self.device, device_ids = self._prepare_device(args.n_gpu)
+        self.device, device_ids = self._prepare_device(args.n_gpu,args.use_gpus)
             # build model architecture
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model = torch.nn.DataParallel(model,device_ids=device_ids)
@@ -118,18 +118,25 @@ class BaseTrainer(object):
         record_table = record_table.append(self.best_recorder['test'], ignore_index=True)
         record_table.to_csv(record_path, index=False)
 
-    def _prepare_device(self, n_gpu_use):
-        n_gpu = torch.cuda.device_count()
-        if n_gpu_use > 0 and n_gpu == 0:
-            print("Warning: There\'s no GPU available on this machine," "training will be performed on CPU.")
-            n_gpu_use = 0
-        if n_gpu_use > n_gpu:
-            print(
-                "Warning: The number of GPU\'s configured to use is {}, but only {} are available " "on this machine.".format(
-                    n_gpu_use, n_gpu))
-            n_gpu_use = n_gpu
-        device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')#only 0? so lost here
-        list_ids = list(range(n_gpu_use))
+    def _prepare_device(self, n_gpu_use, use_gpus):
+        if use_gpus is None:
+            n_gpu = torch.cuda.device_count()
+            if n_gpu_use > 0 and n_gpu == 0:
+                print("Warning: There\'s no GPU available on this machine," "training will be performed on CPU.")
+                n_gpu_use = 0
+            if n_gpu_use > n_gpu:
+                print(
+                    "Warning: The number of GPU\'s configured to use is {}, but only {} are available " "on this machine.".format(
+                        n_gpu_use, n_gpu))
+                n_gpu_use = n_gpu
+            device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')#only 0? so lost here
+            list_ids = list(range(n_gpu_use))
+        else:#we have specified which to use
+            home_device_index = int(use_gpus.split(',')[0])
+            last_device_index = int(use_gpus.split(',')[1]) if len(use_gpus.split(',')) > 1 else home_device_index + 1
+            device = torch.device(f'cuda:{home_device_index}' if torch.cuda.device_count() > home_device_index else 'cpu')
+            list_ids = list(range(home_device_index,last_device_index))
+
         return device, list_ids
 
     def _save_checkpoint(self, epoch, save_best=False):
