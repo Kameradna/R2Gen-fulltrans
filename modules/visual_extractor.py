@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import torchvision.models as models
 import fnmatch
+from multiprocessing import Lock
 
 
 class VisualExtractor(nn.Module):
@@ -17,8 +18,7 @@ class VisualExtractor(nn.Module):
         print(f"self.visual_extractor = {self.visual_extractor}")
         print(f"weights are {self.weights}")
         print(f"d_vf is {args.d_vf}")
-        # print(models)
-        # model = getattr(models, args.visual_extractor)(weights=args.weights)
+        model = getattr(models, args.visual_extractor)(weights=args.weights)
         print('got to here!')
         if fnmatch.fnmatch(self.visual_extractor,"*resnet*"):
             modules = list(model.children())[:-2]
@@ -26,7 +26,6 @@ class VisualExtractor(nn.Module):
             self.avg_fnt = torch.nn.AvgPool2d(kernel_size=7, stride=1, padding=0)
 
         elif fnmatch.fnmatch(self.visual_extractor,"vit*"):
-            model = models.vit_l_16(models.ViT_L_16_Weights.IMAGENET1K_SWAG_E2E_V1)
             self.model = model
         elif fnmatch.fnmatch(self.visual_extractor,"swin*"):
             model.head = nn.Identity()

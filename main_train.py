@@ -8,6 +8,7 @@ from modules.optimizers import build_optimizer, build_lr_scheduler
 from modules.trainer import Trainer
 from modules.loss import compute_loss
 from models.r2gen import R2GenModel
+# from multiprocessing import Lock
 
 
 def parse_agrs():
@@ -94,7 +95,7 @@ def parse_agrs():
 
 def main(args):
     # parse arguments
-
+    lck = Lock()
 
     # fix random seeds
     # torch.manual_seed(args.seed)
