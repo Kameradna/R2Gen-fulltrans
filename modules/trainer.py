@@ -136,7 +136,7 @@ class BaseTrainer(object):
             last_device_index = int(use_gpus.split(',')[1]) if len(use_gpus.split(',')) > 1 else home_device_index + 1
             device = torch.device(f'cuda:{home_device_index}' if torch.cuda.device_count() > home_device_index else 'cpu')
             list_ids = list(range(home_device_index,last_device_index))
-
+            print(device,list_ids)
         return device, list_ids
 
     def _save_checkpoint(self, epoch, save_best=False):
