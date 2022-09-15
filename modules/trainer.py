@@ -14,7 +14,6 @@ class BaseTrainer(object):
         # setup GPU device if available, move model into configured device
         self.device, device_ids = self._prepare_device(args.n_gpu,args.use_gpus)
             # build model architecture
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model = torch.nn.DataParallel(model,device_ids=device_ids)
         self.model = model.to(device)
 
