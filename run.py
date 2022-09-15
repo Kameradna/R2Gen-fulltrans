@@ -19,10 +19,8 @@ grid_dict = {
     # 'visual_extractor': ['vit_l_16','vit_h_14','regnet_y_128gf',]#OOM
     #to be tested:
     # 'visual_extractor': ['convnext_base','efficientnet_v2_l','resnext101_64x4d'],
-    #implement the forward methods in visual_extractor.py and feature size here
-    #also implement the transforms tuned to the individual models in
     #also maybe read the papers
-    'weights': ['IMAGENET1K_SWAG_E2E_V1'],#will need to try except for when I fetch the weights
+    'weights': ['IMAGENET1K_SWAG_E2E_V1'],
     'monitor_metric': ['CIDEr'],
     'frozen': [True],
     'cls': [True]
@@ -92,7 +90,7 @@ for param in grid:
     potential_runs = {}
     while repetition < runs:
         for potential in range(4/n_gpu):
-            name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{repetition}"
+            name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{repetition+offset}"
             repetition += 1
             args.record_dir = f"recordsruns/records_{name}"
             args.save_dir = f"recordsruns/results_{name}"
