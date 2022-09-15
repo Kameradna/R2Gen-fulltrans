@@ -16,7 +16,7 @@ runs = args2.runs
 import main_train
 
 if __name__ == '__main__':
-    multiprocessing.set_start_method('forkserver')
+    multiprocessing.set_start_method('spawn')
     fails = {}
     grid_dict = {
         'visual_extractor': ['vit_b_16','resnet101','swin_b'], #,'resnet152','swin_v2_b','wide_resnet50_2','alexnet',regnet_y_16gf','densenet121',]#these work fine on local systems
