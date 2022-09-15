@@ -109,6 +109,7 @@ if __name__ == '__main__':
                 print('run started')
 
             for specific_run in potential_runs:
+                print('Now!')
                 potential_runs[specific_run].join()#wait for all to finish
                 print('Run done!')
         print("All runs done")
