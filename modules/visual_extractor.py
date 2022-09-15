@@ -25,7 +25,7 @@ class VisualExtractor(nn.Module):
             except:
                 model = getattr(models, self.visual_extractor)(weights="IMAGENET1K_V1")
         # model = models.get_model(self.visual_extractor, weights=self.weights)#the modern model registration feature, kameradna
-
+        print('got to here!')
         if fnmatch.fnmatch(self.visual_extractor,"*resnet*"):
             modules = list(model.children())[:-2]
             self.model = nn.Sequential(*modules)
@@ -47,7 +47,7 @@ class VisualExtractor(nn.Module):
         else:
             print(f"we have not implemented the {self.visual_extractor} visual extractor for this paper")
             raise(NotImplementedError)
-
+        print('processed model')
         if args.frozen == True:
             self.model.requires_grad_(False)
             print("We are freezing the visual extractor.")
