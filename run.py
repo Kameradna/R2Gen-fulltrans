@@ -107,7 +107,7 @@ for param in grid:
             potential_runs[specific_run].start()
             print('run started')
 
-        for run in potential_runs:
-            run.join()#wait for all to finish
+        for specific_run in potential_runs:
+            potential_runs[specific_run].join()#wait for all to finish
             print('Run done!')
     print("All runs done")
