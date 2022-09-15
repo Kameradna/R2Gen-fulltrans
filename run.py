@@ -103,8 +103,8 @@ if __name__ == '__main__':
                 args.use_gpus = f"{indice},{next_indice-1}" if indice != next_indice else f"{indice}"
                 print(f"saving as {name}, running on {args.use_gpus}")
                 print(f"defining potential run {potential}")
-                potential_runs_args[potential] = args.deepcopy()
-                potential_func[potential] = main_train.main.deepcopy()
+                potential_runs_args[potential] = deepcopy(args)
+                potential_func[potential] = deepcopy(main_train.main)
                 potential_runs[potential] = Process(target=potential_func[potential],args=(args,potential_runs_args[potential]))
                 print("MADE IT TO HERE!@!!!!!")
 
