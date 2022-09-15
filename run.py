@@ -105,7 +105,7 @@ if __name__ == '__main__':
                 print(f"defining potential run {potential}")
                 potential_runs_args[potential] = deepcopy(args)
                 potential_func[potential] = deepcopy(main_train.main)
-                potential_runs[potential] = Process(target=potential_func[potential],args=(args,potential_runs_args[potential]))
+                potential_runs[potential] = Process(target=potential_func[potential],args=(potential_runs_args[potential],))
                 print("MADE IT TO HERE!@!!!!!")
 
             for specific_run in potential_runs:
