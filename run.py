@@ -52,6 +52,7 @@ for param in grid:
         # 'resnext101_64x4d': 'failed from implement'
         }
     d_vf, n_gpu_per_model = visfeats_gpu.get(param['visual_extractor'],1)#default 1 feature
+    print(d_vf, n_gpu_per_model)
     args.d_vf = d_vf
 
     try:
