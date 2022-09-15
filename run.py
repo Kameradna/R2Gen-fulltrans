@@ -93,13 +93,13 @@ if __name__ == '__main__':
         potential_runs_args = {}
         potential_func = {}
         while repetition < runs:
-            for potential in range(int(4/n_gpu_per_model)):
+            for potential in range(int(4/n_gpu_per_model)):#how many can we potentially run right now?
                 name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{repetition+offset}"
                 repetition += 1
                 args.record_dir = f"recordsruns/records_{name}"
                 args.save_dir = f"recordsruns/results_{name}"
-                indice = int(potential*4/n_gpu_per_model)
-                next_indice = int((potential+1)*4/n_gpu_per_model)
+                indice = int(potential*n_gpu_per_model)
+                next_indice = int((potential+1)*n_gpu_per_model)
                 args.use_gpus = f"{indice},{next_indice-1}" if indice != next_indice else f"{indice}"
                 print(f"saving as {name}, running on {args.use_gpus}")
                 print(f"defining potential run {potential}")
