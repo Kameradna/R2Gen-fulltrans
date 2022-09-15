@@ -13,13 +13,11 @@ class VisualExtractor(nn.Module):
         self.weights = args.weights
         if args.cls:
             self.cls = args.cls
-            print("using cls token if available")
+            # print("using cls token if available")
         self.printfirst = True
-        print(f"self.visual_extractor = {self.visual_extractor}")
-        print(f"weights are {self.weights}")
-        print(f"d_vf is {args.d_vf}")
+        # print(f"weights are {self.weights}")
+        # print(f"d_vf is {args.d_vf}")
         model = getattr(models, args.visual_extractor)(weights=args.weights)
-        print('got to here!')
         if fnmatch.fnmatch(self.visual_extractor,"*resnet*"):
             modules = list(model.children())[:-2]
             self.model = nn.Sequential(*modules)
@@ -41,10 +39,9 @@ class VisualExtractor(nn.Module):
         else:
             print(f"we have not implemented the {self.visual_extractor} visual extractor for this paper")
             raise(NotImplementedError)
-        print('processed model')
         if args.frozen == True:
             self.model.requires_grad_(False)
-            print("We are freezing the visual extractor.")
+            # print("We are freezing the visual extractor.")
         # print(self.model)
 
 

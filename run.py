@@ -35,7 +35,6 @@ if __name__ == '__main__':
     print(f'running {len(grid)} trials at ~6 hours each')
 
     for param in grid:
-        print('here we go')
         args = main_train.parse_agrs() #default args are
 
         visfeats_gpu = {
@@ -56,7 +55,6 @@ if __name__ == '__main__':
             # 'resnext101_64x4d': 'failed from implement'
             }
         d_vf, n_gpu_per_model = visfeats_gpu.get(param['visual_extractor'],1)#default 1 feature
-        print(d_vf, n_gpu_per_model)
         args.d_vf = d_vf
 
         try:
@@ -102,18 +100,14 @@ if __name__ == '__main__':
                 next_indice = int((potential+1)*n_gpu_per_model)
                 args.use_gpus = f"{indice},{next_indice-1}" if indice != next_indice else f"{indice}"
                 print(f"saving as {name}, running on {args.use_gpus}")
-                print(f"defining potential run {potential}")
+                # print(f"defining potential run {potential}")
                 potential_runs_args[potential] = deepcopy(args)
                 potential_func[potential] = deepcopy(main_train.main)
                 potential_runs[potential] = Process(target=potential_func[potential],args=(potential_runs_args[potential],))
-                print("MADE IT TO HERE!@!!!!!")
 
             for specific_run in potential_runs:
                 potential_runs[specific_run].start()
-                print('run started')
 
             for specific_run in potential_runs:
-                print('Now!')
                 potential_runs[specific_run].join()#wait for all to finish
-                print('Run done!')
         print("All runs done")
