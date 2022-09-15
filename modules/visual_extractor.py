@@ -18,11 +18,14 @@ class VisualExtractor(nn.Module):
         print(f"weights are {self.weights}")
         print(f"d_vf is {args.d_vf}")
         try:
+            print("Level 1")
             model = getattr(models, self.visual_extractor)(weights=self.weights)#weights
         except:
             try:
+                print("Level 2")
                 model = getattr(models, self.visual_extractor)(weights="IMAGENET1K_V2")
             except:
+                print("Level 3")
                 model = getattr(models, self.visual_extractor)(weights="IMAGENET1K_V1")
         # model = models.get_model(self.visual_extractor, weights=self.weights)#the modern model registration feature, kameradna
         print('got to here!')
