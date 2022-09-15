@@ -4,6 +4,7 @@ from multiprocessing import Process
 import argparse
 import torch
 import torchvision.models as models
+from copy import deepcopy
 
 parser2 = argparse.ArgumentParser()
 parser2.add_argument('--offset', type=int, default=0, help='run offset')
@@ -89,6 +90,8 @@ if __name__ == '__main__':
 
         repetition = 0
         potential_runs = {}
+        potential_runs_args = {}
+        potential_func = {}
         while repetition < runs:
             for potential in range(int(4/n_gpu_per_model)):
                 name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{repetition+offset}"
@@ -100,7 +103,9 @@ if __name__ == '__main__':
                 args.use_gpus = f"{indice},{next_indice-1}" if indice != next_indice else f"{indice}"
                 print(f"saving as {name}, running on {args.use_gpus}")
                 print(f"defining potential run {potential}")
-                potential_runs[potential] = Process(target=main_train.main,args=(args,))
+                potential_runs_args[potential] = args.deepcopy()
+                potential_func[potential] = main_train.main.deepcopy()
+                potential_runs[potential] = Process(target=potential_func[potential],args=(args,potential_runs_args[potential]))
                 print("MADE IT TO HERE!@!!!!!")
 
             for specific_run in potential_runs:
