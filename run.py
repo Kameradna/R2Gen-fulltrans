@@ -19,7 +19,7 @@ if __name__ == '__main__':
     multiprocessing.set_start_method('spawn')
     fails = {}
     grid_dict = {
-        'visual_extractor': ['resnet101','swin_b','vit_b_16'], #,'resnet152','swin_v2_b','wide_resnet50_2','alexnet',regnet_y_16gf','densenet121',]#these work fine on local systems
+        'visual_extractor': ['vit_b_16','resnet101','swin_b'], #,'resnet152','swin_v2_b','wide_resnet50_2','alexnet',regnet_y_16gf','densenet121',]#these work fine on local systems
         # 'visual_extractor': ['vit_l_16','vit_h_14','regnet_y_128gf',]#OOM
         #to be tested:
         # 'visual_extractor': ['convnext_base','efficientnet_v2_l','resnext101_64x4d'],
