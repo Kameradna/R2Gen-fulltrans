@@ -136,7 +136,7 @@ class BaseTrainer(object):
             last_device_index = int(use_gpus.split(',')[1])
             print(use_gpus)
             device = torch.device(f'cuda:{home_device_index}' if torch.cuda.device_count() > home_device_index else 'cpu')
-            list_ids = list(range(home_device_index,last_device_index))
+            list_ids = list(range(home_device_index,last_device_index+1))
             print(device,list_ids)
         return device, list_ids
 
