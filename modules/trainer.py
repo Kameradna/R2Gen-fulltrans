@@ -132,7 +132,7 @@ class BaseTrainer(object):
             device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')#only 0? so lost here
             list_ids = list(range(n_gpu_use))
         else:#we have specified which to use
-            home_device_index = int(use_gpus.split(',')[0])
+            home_device_index = int(use_gpus.split(',')[0].split('.')[0])
             last_device_index = int(use_gpus.split(',')[1]) if len(use_gpus.split(',')) > 1 else home_device_index + 1
             device = torch.device(f'cuda:{home_device_index}' if torch.cuda.device_count() > home_device_index else 'cpu')
             list_ids = list(range(home_device_index,last_device_index))
