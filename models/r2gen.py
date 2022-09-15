@@ -38,9 +38,9 @@ class R2GenModel(nn.Module):
         fc_feats =torch.cat((fc_feats_0, fc_feats_1), dim=1)
         att_feats = torch.cat((att_feats_0, att_feats_1), dim=1)
 
-        if self.first_batch_for_debug:
-            print(f'att_feats.shape = {att_feats.shape}')#att_feats.shape = torch.Size([16, 98, 2048])
-            self.first_batch_for_debug = False
+        # if self.first_batch_for_debug:
+        #     print(f'att_feats.shape = {att_feats.shape}')#att_feats.shape = torch.Size([16, 98, 2048])
+        #     self.first_batch_for_debug = False
         # But for the transformer, we get
         # att_feats 0.shape = torch.Size([16, 1, 768])
         # att_feats 1.shape = torch.Size([16, 1, 768])

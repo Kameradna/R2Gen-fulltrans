@@ -102,6 +102,7 @@ for param in grid:
             print(f"defining potential run {potential}")
             potential_runs[potential] = Process(target=main_train.main(args))
             potential_runs[potential].start()
+            print("MADE IT TO HERE!@!!!!!")
 
     for run in potential_runs:
         run.join()#wait for all to finish
