@@ -99,7 +99,7 @@ for param in grid:
             args.use_gpus = f"{indice},{next_indice-1}" if indice != next_indice else f"{indice}"
             print(f"saving as {name}")
             print(f"defining potential run {potential}")
-            potential_runs[potential] = Process(target=main_train.main(),args=(args))
+            potential_runs[potential] = Process(target=main_train.main(args))
             potential_runs[potential].start()
 
     for run in potential_runs:
