@@ -95,7 +95,7 @@ def parse_agrs():
 
 def main(args):
     # parse arguments
-    lck = Lock()
+    # lck = Lock()
 
     # fix random seeds
     # torch.manual_seed(args.seed)
