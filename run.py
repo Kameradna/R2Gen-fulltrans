@@ -103,8 +103,8 @@ for param in grid:
             potential_runs[potential] = Process(target=main_train.main,args=(args,))
             print("MADE IT TO HERE!@!!!!!")
 
-        for run in potential_runs:
-            potential_runs[potential].start()
+        for specific_run in potential_runs:
+            potential_runs[specific_run].start()
             print('run started')
 
         for run in potential_runs:
