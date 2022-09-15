@@ -51,7 +51,7 @@ for param in grid:
         # 'efficientnet_v2_l': 'failed from implement',
         # 'resnext101_64x4d': 'failed from implement'
         }
-    d_vf, n_gpu = visfeats_gpu.get(param['visual_extractor'],1)#default 1 feature
+    d_vf, n_gpu_per_model = visfeats_gpu.get(param['visual_extractor'],1)#default 1 feature
     args.d_vf = d_vf
 
     try:
@@ -89,13 +89,13 @@ for param in grid:
     repetition = 0
     potential_runs = {}
     while repetition < runs:
-        for potential in range(4/n_gpu):
+        for potential in range(int(4/n_gpu_per_model)):
             name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{repetition+offset}"
             repetition += 1
             args.record_dir = f"recordsruns/records_{name}"
             args.save_dir = f"recordsruns/results_{name}"
-            indice = potential*4/n_gpu
-            next_indice = potential*4/n_gpu
+            indice = potential*4/n_gpu_per_model
+            next_indice = potential*4/n_gpu_per_model
             args.use_gpus = f"{indice},{next_indice-1}" if indice != next_indice else f"{indice}"
             print(f"saving as {name}")
             print(f"defining potential run {potential}")
@@ -104,12 +104,5 @@ for param in grid:
 
     for run in potential_runs:
         run.join()#wait for all to finish
-
-
-    print("*********Cumulative FAILS*********")
-    print(fails)
-    print("*********Cumulative FAILS*********")
-
-print("*********ALL FAILS*********")
-print(fails)
-print("*********ALL FAILS*********")
+        print('Run done!')
+    print("All runs done")
