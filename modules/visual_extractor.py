@@ -66,7 +66,7 @@ class VisualExtractor(nn.Module):
                 # print(patchs_feats.size())
                 feat_len = int(patch_feats.size()[1]-1)
                 x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,feat_len],dim=1)
-                assert x_star[:, 0] == x[:, 0]
+                assert torch.equal(x_star[:, 0],x[:, 0])
             elif self.cls:
                 patch_feats_star = patch_feats
             else:
