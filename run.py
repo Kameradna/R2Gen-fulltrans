@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
 
     grid = ParameterGrid(grid_dict)
-    print(f'running {len(grid)} trials at ~6 hours each')
+    print(f'running {len(grid)*runs} trials at ~6 hours each')
 
     for param in grid:
         args = main_train.parse_agrs() #default args are
