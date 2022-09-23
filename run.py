@@ -45,12 +45,12 @@ if __name__ == '__main__':
             'vit_b_16': [768,2],
             'swin_b': [1024,1],
             'swin_v2_b': [1024,1],
-            'vit_l_16': [1024,2],#better way to handle attention?
-            'vit_h_14': [1280,2],
+            'vit_l_16': [1024,4],#better way to handle attention?
+            'vit_h_14': [1280,4],
             'wide_resnet50_2': [2048,1],#still a big question whether the implementation of forward is correct
             'alexnet': [256,1],#big questions about implementation
             'regnet_y_16gf': [3024,1],#big questions about the implementation here is okay
-            'regnet_y_128gf': [7392,2],
+            'regnet_y_128gf': [7392,4],
             'densenet121': [1024,1],
             # 'convnext_base': 'failed from implement',
             # 'efficientnet_v2_l': 'failed from implement',
