@@ -19,9 +19,9 @@ if __name__ == '__main__':
     multiprocessing.set_start_method('spawn')
     fails = {}
     grid_dict = {
-        #'visual_extractor': ['vit_b_16','resnet101','swin_b'],
+        'visual_extractor': ['vit_b_16'],
         #to be tried later
-        'visual_extractor': ['vit_b_32','resnet152','swin_v2_b','wide_resnet50_2','alexnet','regnet_y_16gf','densenet121'],#these work fine on local systems
+        # 'visual_extractor': ['vit_b_32','resnet152','swin_v2_b','wide_resnet50_2','alexnet','regnet_y_16gf','densenet121'],#these work fine on local systems
         # 'visual_extractor': ['vit_l_16','vit_h_14','regnet_y_128gf'],#OOM
         #to be tested:
         # 'visual_extractor': ['convnext_base','efficientnet_v2_l','resnext101_64x4d'],
@@ -29,7 +29,7 @@ if __name__ == '__main__':
         'weights': ['IMAGENET1K_SWAG_E2E_V1'],
         'monitor_metric': ['CIDEr'],
         'frozen': [True],
-        'cls': [True]
+        'cls': [False]#this is impactful
         }
 
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
         potential_func = {}
         while repetition < runs:
             for potential in range(int(4/n_gpu_per_model)):#how many can we potentially run right now?
-                name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_by_{param['monitor_metric']}_{repetition+offset}"
+                name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_cls{args.cls}_by_{param['monitor_metric']}_{repetition+offset}"
                 repetition += 1
                 args.record_dir = f"recordsruns/records_{name}"
                 args.save_dir = f"recordsruns/results_{name}"
