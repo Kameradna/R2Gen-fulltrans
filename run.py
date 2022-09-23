@@ -21,8 +21,8 @@ if __name__ == '__main__':
     grid_dict = {
         #'visual_extractor': ['vit_b_16','resnet101','swin_b'],
         #to be tried later
-         #,'resnet152','swin_v2_b','wide_resnet50_2','alexnet',regnet_y_16gf','densenet121',]#these work fine on local systems
-        'visual_extractor': ['vit_l_16','vit_h_14','regnet_y_128gf'],#OOM
+        'visual_extractor': ['vit_b_32','resnet152','swin_v2_b','wide_resnet50_2','alexnet','regnet_y_16gf','densenet121'],#these work fine on local systems
+        # 'visual_extractor': ['vit_l_16','vit_h_14','regnet_y_128gf'],#OOM
         #to be tested:
         # 'visual_extractor': ['convnext_base','efficientnet_v2_l','resnext101_64x4d'],
         #also maybe read the papers
@@ -43,14 +43,15 @@ if __name__ == '__main__':
             'resnet101': [2048,1],
             'resnet152':[2048,1],
             'vit_b_16': [768,2],
+            'vit_b_32': [768,1],
             'swin_b': [1024,1],
             'swin_v2_b': [1024,1],
-            'vit_l_16': [1024,4],#better way to handle attention?
-            'vit_h_14': [1280,4],
+            # 'vit_l_16': [1024,4],#better way to handle attention?
+            # 'vit_h_14': [1280,4],
             'wide_resnet50_2': [2048,1],#still a big question whether the implementation of forward is correct
             'alexnet': [256,1],#big questions about implementation
             'regnet_y_16gf': [3024,1],#big questions about the implementation here is okay
-            'regnet_y_128gf': [7392,4],
+            # 'regnet_y_128gf': [7392,4],
             'densenet121': [1024,1],
             # 'convnext_base': 'failed from implement',
             # 'efficientnet_v2_l': 'failed from implement',
