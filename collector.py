@@ -21,3 +21,4 @@ grouped_results = mega_results.groupby(['name']).mean()
 
 
 mega_results.to_csv("all_results.csv",index=False)
+grouped_results.to_csv("grouped_results.csv",index=False)
