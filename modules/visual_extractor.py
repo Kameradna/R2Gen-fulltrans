@@ -64,7 +64,7 @@ class VisualExtractor(nn.Module):
             patch_feats = x
             if not self.cls:
                 print(patch_feats.size())
-                x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,196],dim=1)
+                x_star,patch_feats_star = torch.split(patch_feats,split_size_or_sections=[1,patch_feats.size()[1]-1],dim=1)
                 x_star = x_star[:, 0]
             elif self.cls:
                 patch_feats_star = patch_feats
