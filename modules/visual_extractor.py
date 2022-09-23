@@ -11,8 +11,7 @@ class VisualExtractor(nn.Module):
         super(VisualExtractor, self).__init__()
         self.visual_extractor = args.visual_extractor
         self.weights = args.weights
-        if args.cls:
-            self.cls = args.cls
+        self.cls = args.cls
             # print("using cls token if available")
         self.printfirst = True
         # print(f"weights are {self.weights}")
