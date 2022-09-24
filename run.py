@@ -26,10 +26,10 @@ if __name__ == '__main__':
         #to be tested:
         # 'visual_extractor': ['convnext_base','efficientnet_v2_l','resnext101_64x4d'],
         #also maybe read the papers
-        'weights': ['IMAGENET1K_SWAG_E2E_V1'],
+        'weights': ['IMAGENET1K_V2'],
         'monitor_metric': ['CIDEr'],
         'frozen': [True],
-        'cls': [False]#this is impactful
+        'cls': [False,True]#this is impactful
         }
 
 

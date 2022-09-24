@@ -17,8 +17,8 @@ print(mega_results)
 
 # #find the mean and std deviation for each name
 # mega_results[mega_results['name']]
-grouped_results = mega_results.groupby(['name']).mean()
+grouped_results = mega_results[mega_results['best_model_from']=='val'].groupby(['name']).mean()
 
 
 mega_results.to_csv("all_results.csv",index=False)
-grouped_results.to_csv("grouped_results.csv")
+grouped_results.to_csv("grouped_val_results.csv")
