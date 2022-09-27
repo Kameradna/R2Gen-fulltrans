@@ -28,7 +28,7 @@ if __name__ == '__main__':
         #also maybe read the papers
         'weights': ['IMAGENET1K_V2'],
         'monitor_metric': ['CIDEr'],
-        'frozen': [True],
+        'frozen': [False],
         'cls': [False],
         'lr_ve': [0.03,0.01,0.005,0.003,0.001]#this is impactful
         }
