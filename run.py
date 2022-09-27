@@ -29,7 +29,8 @@ if __name__ == '__main__':
         'weights': ['IMAGENET1K_V2'],
         'monitor_metric': ['CIDEr'],
         'frozen': [True],
-        'cls': [False,True]#this is impactful
+        'cls': [False],
+        'lr_ve': [0.03,0.01,0.005,0.003,0.001]#this is impactful
         }
 
 
@@ -78,6 +79,8 @@ if __name__ == '__main__':
         args.frozen = param['frozen']
         args.cls = param['cls']
 
+        # args.lr_ve = param['lr_ve'] #unimplemented yet
+
         args.image_dir = 'data/iu_xray/images/'
         args.ann_path = 'data/iu_xray/annotation.json'
         args.dataset_name = 'iu_xray'
@@ -95,7 +98,7 @@ if __name__ == '__main__':
         potential_func = {}
         while repetition < runs:
             for potential in range(int(4/n_gpu_per_model)):#how many can we potentially run right now?
-                name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_cls{args.cls}_by_{param['monitor_metric']}_{repetition+offset}"
+                name = f"{param['visual_extractor']}_{weights}_frozen{param['frozen']}_cls{args.cls}_lr{args.lr_ve}_by_{param['monitor_metric']}_{repetition+offset}"
                 repetition += 1
                 args.record_dir = f"recordsruns/records_{name}"
                 args.save_dir = f"recordsruns/results_{name}"

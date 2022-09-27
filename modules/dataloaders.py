@@ -38,7 +38,7 @@ class R2DataLoader(DataLoader):
             'shuffle': self.shuffle,
             'collate_fn': self.collate_fn,
             'num_workers': self.num_workers,
-            'drop_last': True
+            'drop_last': True #important for splitting training across GPUs
         }
         super().__init__(**self.init_kwargs)
 
