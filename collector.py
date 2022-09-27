@@ -31,9 +31,13 @@ for root, dir, file in os.walk(os.path.curdir):
         if file[0] == "iu_xray.csv":
             file_info = pd.read_csv(f"{root}/{file[0]}")
             name_eg = root.split("/")[-1]
+            print(name_eg)
             if name_eg in name_get:
+                print(f'altering {name_eg} to ')
                 name_eg = name_get[name_eg]
+                print(name_eg)
             run_name = "".join([name_eg.split('_')[:-1]])
+            print(f'run name = {run_name}')
             run_name_series = pd.DataFrame((run_name)*len(file_info.index),columns=['name'])#padding to add to df
             file_info = pd.concat([run_name_series,file_info],axis=1)
             mega_results = pd.concat([mega_results,file_info],axis=0)
