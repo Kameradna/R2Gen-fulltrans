@@ -79,7 +79,7 @@ if __name__ == '__main__':
         args.frozen = param['frozen']
         args.cls = param['cls']
 
-        # args.lr_ve = param['lr_ve'] #unimplemented yet
+        args.lr_ve = param['lr_ve'] #unimplemented yet
 
         args.image_dir = 'data/iu_xray/images/'
         args.ann_path = 'data/iu_xray/annotation.json'
