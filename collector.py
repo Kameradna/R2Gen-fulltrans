@@ -22,7 +22,7 @@ name_get={
     'recordsfrozentrans3':'records_vit_b_16_IMAGENET1K_V1_frozenTrue_clsFalse_by_CIDEr_x',
     'recordsfrozentransnopretrained':'records_vit_b_16_None_frozenTrue_clsFalse_by_CIDEr_x',
     'recordsfrozentransnopretrained2':'records_vit_b_16_None_frozenTrue_clsFalse_by_CIDEr_x',
-    'recordsfrozentranswithcls': 'records_resnet101_IMAGENET1K_V1_frozenFalse_clsTrue_by_CIDEr_x',
+    'recordsfrozentranswithcls': 'records_vit_b_16_IMAGENET1K_V1_frozenFalse_clsTrue_by_CIDEr_x',
     'recordstrans':'records_vit_b_16_IMAGENET1K_V1_frozenTrue_clsFalse_by_CIDEr_x'
 }
 
