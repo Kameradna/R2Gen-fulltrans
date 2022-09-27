@@ -38,7 +38,7 @@ for root, dir, file in os.walk(os.path.curdir):
                 print(name_eg)
             run_name = "_".join(name_eg.split('_')[:-1])
             print(f'run name = {run_name}')
-            run_name_series = pd.DataFrame((run_name)*len(file_info.index),columns=['name'])#padding to add to df
+            run_name_series = pd.DataFrame([run_name]*len(file_info.index),columns=['name'])#padding to add to df
             file_info = pd.concat([run_name_series,file_info],axis=1)
             mega_results = pd.concat([mega_results,file_info],axis=0)
 
