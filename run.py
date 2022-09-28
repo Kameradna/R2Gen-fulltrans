@@ -30,7 +30,7 @@ if __name__ == '__main__':
         'monitor_metric': ['CIDEr'],
         'frozen': [False],
         'cls': [False],
-        'lr_ve': [0.03,0.01,0.005,0.003,0.001]#this is impactful
+        'lr_ve': [0.005,0.003,0.001]#this is impactful
         }
 
 

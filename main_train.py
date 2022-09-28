@@ -31,6 +31,15 @@ def parse_agrs():
     parser.add_argument('--frozen',default=False,action='store_true', help='freeze the feature extractor training?')
     parser.add_argument('--cls',default=False,action='store_true', help='use the cls token from the feature extractor?')
 
+    #advanced optimisation schemes
+    parser.add_argument('--sep_optim',type=str,default=None,help='separately optimise the feature extractor? if so, what optimiser?')
+    #we resuse the lr_ve param as the learning rate for the feature extractor
+    parser.add_argument('--sep_optim_decay',type=float,default=0.1,help='separately optimise the feature extractor? if so, what learning rate decay (linear decay)?')
+    parser.add_argument('--sep_optim',type=str,default=None,help='separately optimise the feature extractor? if so, what optimiser?')
+    raise(NotImplementedError, 'hey you should implement sep-optim in the optimiser and rate scheduling sections')
+
+
+
 
     # Model settings (for Transformer)
     parser.add_argument('--d_model', type=int, default=512, help='the dimension of Transformer.')
@@ -119,9 +128,13 @@ def main(args):
     metrics = compute_scores
 
     # build optimizer, learning rate scheduler
-    # print(model)
-    optimizer = build_optimizer(args, model)
-    lr_scheduler = build_lr_scheduler(args, optimizer)
+    # print(model)\
+    if args.sep_optim is None:
+        optimizer = build_optimizer(args, model)
+        lr_scheduler = build_lr_scheduler(args, optimizer)
+    elif args.sep_optim is not None:
+        optimizer, ve_optimizer = build_optimizer(args, model)
+        lr_scheduler = build_lr_scheduler(args, optimizer)
 
     # build trainer and start to train
     trainer = Trainer(model, criterion, metrics, optimizer, args, lr_scheduler, train_dataloader, val_dataloader, test_dataloader)
