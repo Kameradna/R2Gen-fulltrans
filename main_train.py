@@ -35,11 +35,6 @@ def parse_agrs():
     parser.add_argument('--sep_optim',type=str,default=None,help='separately optimise the feature extractor? if so, what optimiser?')
     #we resuse the lr_ve param as the learning rate for the feature extractor
     parser.add_argument('--sep_optim_decay',type=float,default=0.1,help='separately optimise the feature extractor? if so, what learning rate decay (linear decay)?')
-    parser.add_argument('--sep_optim',type=str,default=None,help='separately optimise the feature extractor? if so, what optimiser?')
-    raise(NotImplementedError, 'hey you should implement sep-optim in the optimiser and rate scheduling sections')
-
-
-
 
     # Model settings (for Transformer)
     parser.add_argument('--d_model', type=int, default=512, help='the dimension of Transformer.')
