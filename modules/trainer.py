@@ -20,6 +20,8 @@ class BaseTrainer(object):
         self.criterion = criterion
         self.metric_ftns = metric_ftns
         self.optimizer = optimizer
+        if args.sep_optim is not None:
+            self.sep_optim = args.sep_optim
 
         # self.device = device
 
@@ -208,9 +210,14 @@ class Trainer(BaseTrainer):
             loss = self.criterion(output, reports_ids, reports_masks)
             train_loss += loss.item()
             self.optimizer.zero_grad()
+            if self.sep_optim is not None:
+                self.sep_optim.zero_grad()
             loss.backward()
             torch.nn.utils.clip_grad_value_(self.model.parameters(), 0.1)
             self.optimizer.step()
+            if self.sep_optim is not None:
+                self.sep_optim.step()
+
         log = {'train_loss': train_loss / len(self.train_dataloader)}
 
         self.model.eval()

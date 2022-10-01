@@ -18,7 +18,7 @@ def build_optimizer(args, model):
             weight_decay=args.weight_decay,
             amsgrad=args.amsgrad
         )
-    optimizer_ve_optional = getattr(torch.optim, args.optim)(
+    optimizer_ve_optional = getattr(torch.optim, args.sep_optim)(
             [{'params': model.visual_extractor.parameters(), 'lr': args.lr_ve}]
         )
     return optimizer, optimizer_ve_optional

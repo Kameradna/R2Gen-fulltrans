@@ -116,4 +116,5 @@ if __name__ == '__main__':
 
             for specific_run in potential_runs:
                 potential_runs[specific_run].join()#wait for all to finish
-        print("All runs done")
+        print("All runs done of this param set")
+    print("All runs done")

@@ -31,11 +31,6 @@ def parse_agrs():
     parser.add_argument('--frozen',default=False,action='store_true', help='freeze the feature extractor training?')
     parser.add_argument('--cls',default=False,action='store_true', help='use the cls token from the feature extractor?')
 
-    #advanced optimisation schemes
-    parser.add_argument('--sep_optim',type=str,default=None,help='separately optimise the feature extractor? if so, what optimiser?')
-    #we resuse the lr_ve param as the learning rate for the feature extractor
-    parser.add_argument('--sep_optim_decay',type=float,default=0.1,help='separately optimise the feature extractor? if so, what learning rate decay (linear decay)?')
-
     # Model settings (for Transformer)
     parser.add_argument('--d_model', type=int, default=512, help='the dimension of Transformer.')
     parser.add_argument('--d_ff', type=int, default=512, help='the dimension of FFN.')
@@ -87,6 +82,11 @@ def parse_agrs():
     parser.add_argument('--step_size', type=int, default=50, help='the step size of the learning rate scheduler.')
     parser.add_argument('--gamma', type=float, default=0.1, help='the gamma of the learning rate scheduler.')
 
+     #advanced optimisation schemes
+    parser.add_argument('--sep_optim',type=str,default=None,help='separately optimise the feature extractor? if so, what optimiser?')
+    #we resuse the lr_ve param as the learning rate for the feature extractor
+    parser.add_argument('--sep_optim_decay',type=float,default=0.1,help='separately optimise the feature extractor? if so, what learning rate decay (linear decay)?')
+
     # Others
     parser.add_argument('--seed', type=int, default=9233, help='.')
     parser.add_argument('--resume', type=str, help='whether to resume the training from existing checkpoints.')
@@ -128,7 +128,7 @@ def main(args):
         optimizer = build_optimizer(args, model)
         lr_scheduler = build_lr_scheduler(args, optimizer)
     elif args.sep_optim is not None:
-        optimizer, ve_optimizer = build_optimizer(args, model)
+        optimizer, args.sep_optim = build_optimizer(args, model)
         lr_scheduler = build_lr_scheduler(args, optimizer)
 
     # build trainer and start to train
