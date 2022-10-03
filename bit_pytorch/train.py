@@ -137,13 +137,14 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
                 label[i] = 1
               else:
                 label[i] = 0                    # All U-Zeroes
-            else:
+            else: #0 or blank
               label[i] = 0 #if blank
           else:
             label[i] = 0
           # print(label[i])
           # print(type(label[i]))
           # assert isinstance(label[i],int)
+          print(label)
           label = np.array(label,dtype=int)
           if label[0:13] == list([0]*13):
             logger.info("Cleaned a bad label")
