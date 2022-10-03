@@ -146,7 +146,7 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
           # assert isinstance(label[i],int)
         print(label)
         label = np.array(label,dtype=int)
-        if label[0:13] == list([0]*13):
+        if any(label[0:13]) != True:
           logger.info("Cleaned a bad label")
           label[-1] = 1
                 
