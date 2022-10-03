@@ -103,6 +103,7 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
     """
     image_names = []
     labels = []
+    badlabels = 0
 
     with open(data_PATH, 'r') as f:
       csvReader = csv.reader(f)
@@ -147,12 +148,13 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
         # print(label)
         label = np.array(label,dtype=int)
         if any(label[0:13]) != True:
-          logger.info("Cleaned a bad label")
+          badlabels += 1
           label[-1] = 1
                 
         image_names.append('data/' + image_name)
         labels.append(label)
 
+    logger.info(f"Cleaned {badlabels} labels")
     self.image_names = image_names
     self.labels = labels
     
