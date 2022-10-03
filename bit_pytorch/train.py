@@ -205,13 +205,13 @@ def mktrainval(args, logger):
   micro_batch_size = args.batch // args.batch_split
 
   valid_loader = torch.utils.data.DataLoader(
-      valid_set, batch_size=micro_batch_size, shuffle=False,
-      num_workers=args.workers, pin_memory=True, drop_last=False)
+      valid_set, batch_size=micro_batch_size, shuffle=True,
+      num_workers=args.workers, pin_memory=True, drop_last=True)
 
   if micro_batch_size <= len(train_set):
     train_loader = torch.utils.data.DataLoader(
         train_set, batch_size=micro_batch_size, shuffle=True,
-        num_workers=args.workers, pin_memory=True, drop_last=False)
+        num_workers=args.workers, pin_memory=True, drop_last=True)
   else:
     # In the few-shot cases, the total dataset size might be smaller than the batch-size.
     # In these cases, the default sampler doesn't repeat, so we need to make it do that
