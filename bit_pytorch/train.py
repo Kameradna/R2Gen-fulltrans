@@ -175,7 +175,6 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
 def recycle(iterable):
   """Variant of itertools.cycle that does not save iterates."""
   while True:
-    print(iterable)
     for i in iterable:
       yield i
 
@@ -246,7 +245,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
         logger.info(f"Validation loss is {c_num:.4f}")
         # groundtruth = torch.ge(y,0.5)#translates y to tensor
         # y_true = groundtruth.cpu().numpy() if isinstance(y_true, type(None)) else np.concatenate((y_true,groundtruth.cpu().numpy()))
-        # y_logits = logits.cpu().numpy() if isinstance(y_logits, type(None)) else np.concatenate((y_logits,logits.cpu().numpy()))
+        # y_logits = y_logits.cpu().numpy() if isinstance(y_logits, type(None)) else np.concatenate((y_logits,logits.cpu().numpy()))
         # # print(type(c_num))
         # loss = c_num if isinstance(loss, type(None)) else np.append(loss,c_num)
 
@@ -298,7 +297,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
               f"Naive_accuracy={1-label_density:.2%},"
               f"Hamming_loss={hamming_mean_loss:.2%}, "
               f"Jaccard_index={jaccard_index:.2%}, "
-              f"Support={np.mean(support):.2f}\n"
+              f"Support={np.mean(support):.2f}"
               )
   logger.flush()
   model.train()
@@ -343,8 +342,8 @@ def main(args):
       raise(NotImplementedError)
 
 
-  # logger.info("Moving model onto all GPUs")
-  # model = torch.nn.DataParallel(model)
+  logger.info("Moving model onto all GPUs")
+  model = torch.nn.DataParallel(model)
 
   step = 0
   best_mean_auc = 0
