@@ -144,11 +144,11 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
           # print(label[i])
           # print(type(label[i]))
           # assert isinstance(label[i],int)
-          print(label)
-          label = np.array(label,dtype=int)
-          if label[0:13] == list([0]*13):
-            logger.info("Cleaned a bad label")
-            label[-1] = 1
+        print(label)
+        label = np.array(label,dtype=int)
+        if label[0:13] == list([0]*13):
+          logger.info("Cleaned a bad label")
+          label[-1] = 1
                 
         image_names.append('data/' + image_name)
         labels.append(label)
