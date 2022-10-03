@@ -260,6 +260,8 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   auroc,precision_, recall_, f1_, support_ = [],[],[],[],[]
   for i in range(args.nnClassCount):
+    print(y_true[i])
+    print(y_logits[i])
     auroc.append(metrics.roc_auc_score(y_true[i],y_logits[i]))#should we pass in labels?
     precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[i],y_pred[i],zero_division=0)
     precision_.append(precision)
