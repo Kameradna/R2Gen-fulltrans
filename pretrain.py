@@ -14,7 +14,7 @@ print("Finished imports, did anything parse?")
 
 def main(args):
     fails = []
-    list_vis_ext = ['swin_v2_b', 'vit_b_16', 'resnet101']
+    list_vis_ext = ['vit_b_16', 'resnet101', 'swin_v2_b']
     for visual_extractor in list_vis_ext:
         args.name = visual_extractor
         args.visual_extractor = visual_extractor
