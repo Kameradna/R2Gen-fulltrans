@@ -96,7 +96,7 @@ class IUXrayDataset(Dataset):#Adapted from NUSdataset and my own work
       return len(self.imgs)
 
 class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpert/blob/master/materials.py
-  def __init__(self, data_PATH, nnClassCount, policy, split, transform_from_weights):#but what images am I selecting?
+  def __init__(self, data_PATH, nnClassCount, policy, split, transform_from_weights, logger):#but what images am I selecting?
     """
     data_PATH: path to the file containing images with corresponding labels.
     Upolicy: name the policy with regard to the uncertain labels.
@@ -144,8 +144,8 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
           # print(label[i])
           # print(type(label[i]))
           # assert isinstance(label[i],int)
-          label = np.array(label)
-          if sum(label) == 0:
+          label = np.array(label,dtype=int)
+          if label[0:13] == list([0]*13):
             logger.info("Cleaned a bad label")
             label[-1] = 1
                 
@@ -191,8 +191,8 @@ def mktrainval(args, logger):
           transform_from_weights = weights.transforms()
   if args.dataset == "CheXpert":
     logger.info("Setting up datasets")
-    train_set = CheXpertDataset(f"{args.datadir}/train.csv", args.nnClassCount, args.policy, "train", transform_from_weights)
-    valid_set = CheXpertDataset(f"{args.datadir}/valid.csv", args.nnClassCount, args.policy, "val", transform_from_weights)
+    train_set = CheXpertDataset(f"{args.datadir}/train.csv", args.nnClassCount, args.policy, "train", transform_from_weights, logger)
+    valid_set = CheXpertDataset(f"{args.datadir}/valid.csv", args.nnClassCount, args.policy, "val", transform_from_weights, logger)
   else:
     raise ValueError(f"Sorry, we have not spent time implementing the "
                      f"{args.dataset} dataset in the PyTorch codebase. "
