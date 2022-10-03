@@ -15,6 +15,7 @@
 # Lint as: python3
 #!/usr/bin/env python3
 # coding: utf-8
+from math import floor
 from os.path import join as pjoin  # pylint: disable=g-importing-member
 import time
 import copy
@@ -39,6 +40,10 @@ from torchvision.io import read_image
 import os
 import json
 import csv
+import fnmatch
+
+
+from tqdm import tqdm
 
 class IUXrayDataset(Dataset):#Adapted from NUSdataset and my own work
   #we need init and getitem procedures for a given image
@@ -91,7 +96,7 @@ class IUXrayDataset(Dataset):#Adapted from NUSdataset and my own work
       return len(self.imgs)
 
 class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpert/blob/master/materials.py
-  def __init__(self, data_PATH, nnClassCount, policy, args, split):#but what images am I selecting?
+  def __init__(self, data_PATH, nnClassCount, policy, split, transform_from_weights):#but what images am I selecting?
     """
     data_PATH: path to the file containing images with corresponding labels.
     Upolicy: name the policy with regard to the uncertain labels.
@@ -101,18 +106,23 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
 
     with open(data_PATH, 'r') as f:
       csvReader = csv.reader(f)
-      next(csvReader, None) # skip the header
-      for line in csvReader: #really hardcore need to work out the policy we will have, it would be sick to report performance on CheXpert in a comparable way to the original
+      npline = np.array(next(csvReader, None)) #skip first col
+      idx = [7, 10, 11, 13, 15, 6, 8, 9, 12, 14, 16, 17, 18, 5] #the key items from the original CheXpertidx = [7, 10, 11, 13, 15]
+      label = list(npline[idx])
+      self.classes = label
+      
+      # for idx, item in enumerate(next(csvReader, None)):
+      #   print(f"Item {idx} is {item}.")
+      for line in tqdm(csvReader): #really hardcore need to work out the policy we will have, it would be sick to report performance on CheXpert in a comparable way to the original
         image_name = line[0] #would be okay to set policy on the ones we know to help, and leave the others, does this code do this?
         npline = np.array(line) #compare to stompers implementation in the rest, especially his lovely AUROC plotting
-        idx = [7, 10, 11, 13, 15] #the key items from the original CheXpert
+        # assert len(idx) == len(list(set(idx))) #assert we have not doubled up values
         label = list(npline[idx])
-        print("label")
-        raise(NotImplementedError, "What was the output? We want it to include all the different disease markers")
+        # raise(NotImplementedError, "What was the output? We want it to include all the different disease markers")
         for i in range(nnClassCount):
-          print(f"in: {label[i]}")
-          if label[i]:#what does this mean?
+          if label[i] != "":
             a = float(label[i])
+            # print(a)
             if a == 1:
               label[i] = 1
             elif a == -1:
@@ -120,34 +130,33 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
                 if i == 1 or i == 3 or i == 4:  # Atelectasis, Edema, Pleural Effusion
                   label[i] = 1                    # U-Ones
                 elif i == 0 or i == 2:          # Cardiomegaly, Consolidation
-                  label[i] = 0                    # U-Zeroes
+                  label[i] = 0                 # U-Zeroes
+                else:
+                  label[i] = 1   #for the remaining conditions, uncertain mentions are treated as positive mentions
               elif policy == 'ones':              # All U-Ones
                 label[i] = 1
               else:
                 label[i] = 0                    # All U-Zeroes
             else:
-              label[i] = 0
+              label[i] = 0 #if blank
           else:
             label[i] = 0
-          print(f"out: {label[i]}")
+          # print(label[i])
+          # print(type(label[i]))
+          # assert isinstance(label[i],int)
                 
-        image_names.append('./' + image_name)
+        image_names.append('data/' + image_name)
         labels.append(label)
 
     self.image_names = image_names
     self.labels = labels
-    #obviously wildly inefficient if you don't have lots of stuff already cached, deal with it?
-    possible_weights = torch.hub.load("pytorch/vision", "get_model_weights", name=args.visual_extractor)#relies on build 0.14 of torchvision, may require an updated environment using nightly releases as recommended
-    for weights in possible_weights:
-        if args.weights == str(weights).split(".")[-1]:#if we are using those weights
-            self.transform_from_weights = weights.transforms()
-
+    
     if split == 'train':
         self.transform = transforms.Compose([
-            self.transform_from_weights,
+          transform_from_weights,
             ])#transforms.RandomHorizontalFlip(), wouldn't this destroy semantic information?
     else:
-        self.transform = self.transform_from_weights
+        self.transform = transform_from_weights
 
   def __getitem__(self, index):
     '''Take the index of item and returns the image and its labels'''
@@ -155,6 +164,7 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
     image = Image.open(image_name).convert('RGB')
     label = self.labels[index]
     image = self.transform(image)
+    # print(label)
     return image, torch.FloatTensor(label)
 
   def __len__(self):
@@ -165,14 +175,21 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
 def recycle(iterable):
   """Variant of itertools.cycle that does not save iterates."""
   while True:
+    print(iterable)
     for i in iterable:
       yield i
 
 def mktrainval(args, logger):
   """Returns train and validation datasets."""
+  #obviously wildly inefficient if you don't have lots of stuff already cached, deal with it?
+  possible_weights = torch.hub.load("pytorch/vision", "get_model_weights", name=args.visual_extractor)#relies on build 0.14 of torchvision, may require an updated environment using nightly releases as recommended
+  for weights in possible_weights:
+      if args.weights == str(weights).split(".")[-1]:#if we are using those weights
+          transform_from_weights = weights.transforms()
   if args.dataset == "CheXpert":
-    train_set = CheXpertDataset(f"{args.datadir}/train.csv", args.nnClassCount, args.policy, args, "train")
-    valid_set = CheXpertDataset(f"{args.datadir}/valid.csv", args.nnClassCount, args.policy, args, "val")
+    logger.info("Setting up datasets")
+    train_set = CheXpertDataset(f"{args.datadir}/train.csv", args.nnClassCount, args.policy, "train", transform_from_weights)
+    valid_set = CheXpertDataset(f"{args.datadir}/valid.csv", args.nnClassCount, args.policy, "val", transform_from_weights)
   else:
     raise ValueError(f"Sorry, we have not spent time implementing the "
                      f"{args.dataset} dataset in the PyTorch codebase. "
@@ -212,41 +229,51 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   logger.info("Running validation...")
   logger.flush()
-  end = time.time()
+  end = time.perf_counter()
 
   y_true, y_logits, loss = None, None, None
   for b, (x, y) in enumerate(data_loader):#should be elements of size 1,len(tags)
     with torch.no_grad():
       x = x.to(device, non_blocking=True)
-      y = y.to(device, non_blocking=True)
-
+      y_true = y.to(device, non_blocking=True)
       # measure data loading time
-      chrono._done("eval load", time.time() - end)
+      chrono._done("eval load", time.perf_counter() - end)
       with chrono.measure("eval fprop"):
-        logits = model(x)
-        logits.clamp_(0,1)
-        c = torch.nn.BCELoss()(logits, y)
-        c_num = float(c.data.cpu().numpy())
-
-        groundtruth = torch.ge(y,0.5)#translates y to tensor
-        y_true = groundtruth.cpu().numpy() if isinstance(y_true, type(None)) else np.concatenate((y_true,groundtruth.cpu().numpy()))
-        y_logits = logits.cpu().numpy() if isinstance(y_logits, type(None)) else np.concatenate((y_logits,logits.cpu().numpy()))
-        # print(type(c_num))
-        loss = c_num if isinstance(loss, type(None)) else np.append(loss,c_num)
+        y_logits = model(x)
+        y_logits.clamp_(0,1)
+        c = torch.nn.BCELoss()(y_logits, y_true)
+        c_num = c.data.cpu().numpy()
+        logger.info(f"Validation loss is {c_num:.4f}")
+        # groundtruth = torch.ge(y,0.5)#translates y to tensor
+        # y_true = groundtruth.cpu().numpy() if isinstance(y_true, type(None)) else np.concatenate((y_true,groundtruth.cpu().numpy()))
+        # y_logits = logits.cpu().numpy() if isinstance(y_logits, type(None)) else np.concatenate((y_logits,logits.cpu().numpy()))
+        # # print(type(c_num))
+        # loss = c_num if isinstance(loss, type(None)) else np.append(loss,c_num)
 
     # measure elapsed time
-    end = time.time()
-  
-  loss = np.mean(loss)
-  auroc = metrics.roc_auc_score(y_true,y_logits,average=None,labels=dataset.classes)#should we pass in labels?
-  
-  #the arrays are not autopromoted?
+    end = time.perf_counter()
+  y_true = y_true.cpu().numpy()
+  y_logits = y_logits.cpu().numpy()
+
   y_pred = y_logits > 0.5
   y_pred = y_pred.astype(int)
   y_true = y_true.astype(int)
 
+  auroc,precision_, recall_, f1_, support_ = [],[],[],[],[]
+  for i in range(args.nnClassCount):
+    auroc.append(metrics.roc_auc_score(y_true[i],y_logits[i]))#should we pass in labels?
+    precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[i],y_pred[i],zero_division=0)
+    precision_.append(precision)
+    recall_.append(recall)
+    f1_.append(f1)
+    support_.append(support)
+
+  logger.info(f"AUROC = {auroc}")
+  #the arrays are not autopromoted?
+  
+
   accuracy = metrics.accuracy_score(y_true,y_pred)#I think this is exact matches
-  precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true,y_pred)  #,labels=dataset.classes,average='macro' #this will raise warnings, if you want to turn off, add zero_division=0 or 1
+  # precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true,y_pred)  #,labels=dataset.classes,average='macro' #this will raise warnings, if you want to turn off, add zero_division=0 or 1
   hamming_mean_loss = metrics.hamming_loss(y_true,y_pred)
   jaccard_index = metrics.jaccard_score(y_true,y_pred,average='macro')
   average_precision = metrics.average_precision_score(y_true,y_pred,average='macro')
@@ -258,7 +285,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   label_density = np.sum(support)/len(dataset)/len(dataset.classes)
 
   logger.info(f"Validation@{step}, "
-              f"Mean_loss={np.mean(loss)}, "
+              f"Mean_loss={c_num}, "
               f"Mean_precision={np.mean(precision):.2%}, "
               f"Mean_recall={np.mean(recall):.2%}, "
               f"Mean_accuracy={np.mean(accuracy):.2%}, "
@@ -290,21 +317,44 @@ def main(args):
 
   train_set, valid_set, train_loader, valid_loader = mktrainval(args, logger)
   
-  model = getattr(models, args.visual_extractor)(weights=args.weights)
-  raise(NotImplementedError,"Work out the classifier vs heads vs whatever for the different models.")
-  num_features = model.classifier.in_features
-  model.classifier = nn.Linear(num_features, len(valid_set.classes))#a contentious one for sure
+  model = getattr(pymodels, args.visual_extractor)(weights=args.weights)
 
-  logger.info("Moving model onto all GPUs")
-  model = torch.nn.DataParallel(model)
+  if fnmatch.fnmatch(args.visual_extractor,"*resnet*"):
+      num_features = model.fc.in_features
+      model.fc = nn.Linear(num_features, len(valid_set.classes),bias=True)
+  elif fnmatch.fnmatch(args.visual_extractor,"vit*"):
+      args.model = model
+      raise(NotImplementedError)
+  elif fnmatch.fnmatch(args.visual_extractor,"swin*"):
+      model.head = nn.Identity()
+      args.model = model
+      raise(NotImplementedError)
+  # elif fnmatch.fnmatch(args.visual_extractor,"alexnet"):
+  #     modules = list(model.children())[:-2]
+  #     args.model = nn.Sequential(*modules)
+  # elif fnmatch.fnmatch(args.visual_extractor,"regnet*"):
+  #     modules = list(model.children())[:-2]
+  #     args.model = nn.Sequential(*modules)
+  # elif fnmatch.fnmatch(args.visual_extractor,"densenet*"): #inspiration from stomper time
+  #     args.model = model
+  #     raise(NotImplementedError)
+  else:
+      print(f"we have not implemented the {args.visual_extractor} visual extractor for this paper")
+      raise(NotImplementedError)
+
+
+  # logger.info("Moving model onto all GPUs")
+  # model = torch.nn.DataParallel(model)
 
   step = 0
   best_mean_auc = 0
 
   # Note: no weight-decay!
   if args.optim == "Adam":
+    logger.info("Using Adam")
     optim = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9,0.999)) #*maybe lr is wrong*"
   elif args.optim == "SGD":  
+    logger.info("Using SGD")
     optim = torch.optim.SGD(model.parameters(), lr=0.003, momentum=0.9)
   else:
     raise(NotImplementedError, "Optimiser you chose was not found")
@@ -333,7 +383,7 @@ def main(args):
   chrono = lb.Chrono()
   accum_steps = 0
   # mixup_l = np.random.beta(mixup, mixup) if mixup > 0 else 1
-  end = time.time()
+  end = time.perf_counter()
 
   step_name = '0'
   run_eval(model, valid_loader, device, chrono, logger, args, step_name, valid_set)
@@ -342,7 +392,7 @@ def main(args):
   with lb.Uninterrupt() as u:
     for x, y in recycle(train_loader):
       # measure data loading time, which is spent in the `for` statement.
-      chrono._done("load", time.time() - end)
+      chrono._done("load", time.perf_counter() - end)
 
       if u.interrupted:
         break
@@ -409,7 +459,7 @@ def main(args):
             model.load_state_dict(quicksave_model)
           best_mean_auc = 0
 
-      end = time.time()
+      end = time.perf_counter()
 
     # Final eval at end of training.
     step_name = 'end'
