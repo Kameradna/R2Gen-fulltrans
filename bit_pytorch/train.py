@@ -13,7 +13,6 @@
 # limitations under the License.
 
 # Lint as: python3
-"""Fine-tune a BiT model on some downstream dataset."""
 #!/usr/bin/env python3
 # coding: utf-8
 from os.path import join as pjoin  # pylint: disable=g-importing-member
@@ -25,6 +24,7 @@ import torch
 import torch.nn as nn
 import torchvision as tv
 import torchvision.models as pymodels
+from torchvision import transforms
 from torch.utils.data import Dataset
 
 import bit_pytorch.fewshot as fs
@@ -38,6 +38,7 @@ import PIL.Image as Image
 from torchvision.io import read_image
 import os
 import json
+import csv
 
 class IUXrayDataset(Dataset):#Adapted from NUSdataset and my own work
   #we need init and getitem procedures for a given image
@@ -89,6 +90,78 @@ class IUXrayDataset(Dataset):#Adapted from NUSdataset and my own work
   def __len__(self):
       return len(self.imgs)
 
+class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpert/blob/master/materials.py
+  def __init__(self, data_PATH, nnClassCount, policy, args, split):#but what images am I selecting?
+    """
+    data_PATH: path to the file containing images with corresponding labels.
+    Upolicy: name the policy with regard to the uncertain labels.
+    """
+    image_names = []
+    labels = []
+
+    with open(data_PATH, 'r') as f:
+      csvReader = csv.reader(f)
+      next(csvReader, None) # skip the header
+      for line in csvReader: #really hardcore need to work out the policy we will have, it would be sick to report performance on CheXpert in a comparable way to the original
+        image_name = line[0] #would be okay to set policy on the ones we know to help, and leave the others, does this code do this?
+        npline = np.array(line) #compare to stompers implementation in the rest, especially his lovely AUROC plotting
+        idx = [7, 10, 11, 13, 15] #the key items from the original CheXpert
+        label = list(npline[idx])
+        print("label")
+        raise(NotImplementedError, "What was the output? We want it to include all the different disease markers")
+        for i in range(nnClassCount):
+          print(f"in: {label[i]}")
+          if label[i]:#what does this mean?
+            a = float(label[i])
+            if a == 1:
+              label[i] = 1
+            elif a == -1:
+              if policy == 'diff':
+                if i == 1 or i == 3 or i == 4:  # Atelectasis, Edema, Pleural Effusion
+                  label[i] = 1                    # U-Ones
+                elif i == 0 or i == 2:          # Cardiomegaly, Consolidation
+                  label[i] = 0                    # U-Zeroes
+              elif policy == 'ones':              # All U-Ones
+                label[i] = 1
+              else:
+                label[i] = 0                    # All U-Zeroes
+            else:
+              label[i] = 0
+          else:
+            label[i] = 0
+          print(f"out: {label[i]}")
+                
+        image_names.append('./' + image_name)
+        labels.append(label)
+
+    self.image_names = image_names
+    self.labels = labels
+    #obviously wildly inefficient if you don't have lots of stuff already cached, deal with it?
+    possible_weights = torch.hub.load("pytorch/vision", "get_model_weights", name=args.visual_extractor)#relies on build 0.14 of torchvision, may require an updated environment using nightly releases as recommended
+    for weights in possible_weights:
+        if args.weights == str(weights).split(".")[-1]:#if we are using those weights
+            self.transform_from_weights = weights.transforms()
+
+    if split == 'train':
+        self.transform = transforms.Compose([
+            self.transform_from_weights,
+            ])#transforms.RandomHorizontalFlip(), wouldn't this destroy semantic information?
+    else:
+        self.transform = self.transform_from_weights
+
+  def __getitem__(self, index):
+    '''Take the index of item and returns the image and its labels'''
+    image_name = self.image_names[index]
+    image = Image.open(image_name).convert('RGB')
+    label = self.labels[index]
+    image = self.transform(image)
+    return image, torch.FloatTensor(label)
+
+  def __len__(self):
+    return len(self.image_names)
+
+    #thank you Stomper10 for your awesome code
+
 def recycle(iterable):
   """Variant of itertools.cycle that does not save iterates."""
   while True:
@@ -97,43 +170,9 @@ def recycle(iterable):
 
 def mktrainval(args, logger):
   """Returns train and validation datasets."""
-  if args.chexpert:
-    precrop, crop = (320, 320)#vaguely approximating the ratio from bit
-  else:
-    precrop, crop = bit_hyperrule.get_resolution_from_dataset(args.dataset)
-
-  if args.pretrained == True:
-    mean=(0.485, 0.456, 0.406)
-    std=(0.229, 0.224, 0.225) #for any pretrained pytorch zoo models
-  else:
-    mean=(0.5, 0.5, 0.5)
-    std=(0.5, 0.5, 0.5)
-  
-  train_tx = tv.transforms.Compose([
-      tv.transforms.Resize((precrop, precrop)),
-      # tv.transforms.RandomCrop((crop, crop)),
-      # tv.transforms.RandomHorizontalFlip(), #destroys semantic information
-      tv.transforms.ToTensor(),
-      tv.transforms.Normalize(mean,std),
-  ])
-  val_tx = tv.transforms.Compose([
-      tv.transforms.Resize((crop, crop)),
-      tv.transforms.ToTensor(),
-      tv.transforms.Normalize(mean,std),
-  ])
-
-  if args.dataset == "cifar10":
-    train_set = tv.datasets.CIFAR10(args.datadir, transform=train_tx, train=True, download=True)
-    valid_set = tv.datasets.CIFAR10(args.datadir, transform=val_tx, train=False, download=True)
-  elif args.dataset == "cifar100":
-    train_set = tv.datasets.CIFAR100(args.datadir, transform=train_tx, train=True, download=True)
-    valid_set = tv.datasets.CIFAR100(args.datadir, transform=val_tx, train=False, download=True)
-  elif args.dataset == "imagenet2012":
-    train_set = tv.datasets.ImageFolder(pjoin(args.datadir, "train"), train_tx)
-    valid_set = tv.datasets.ImageFolder(pjoin(args.datadir, "val"), val_tx)
-  elif args.dataset == "iu-xray":
-    train_set = IUXrayDataset(args.datadir, args.annodir, True, train_tx)
-    valid_set = IUXrayDataset(args.datadir, args.annodir, False, val_tx)
+  if args.dataset == "CheXpert":
+    train_set = CheXpertDataset(f"{args.datadir}/train.csv", args.nnClassCount, args.policy, args, "train")
+    valid_set = CheXpertDataset(f"{args.datadir}/valid.csv", args.nnClassCount, args.policy, args, "val")
   else:
     raise ValueError(f"Sorry, we have not spent time implementing the "
                      f"{args.dataset} dataset in the PyTorch codebase. "
@@ -167,7 +206,7 @@ def mktrainval(args, logger):
 
   return train_set, valid_set, train_loader, valid_loader
 
-def run_eval(model, data_loader, device, chrono, logger, args, step, dataset):
+def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #consider redoing with Stomper10 in mind
   # switch to evaluate mode
   model.eval()
 
@@ -251,36 +290,24 @@ def main(args):
 
   train_set, valid_set, train_loader, valid_loader = mktrainval(args, logger)
   
-
-  if args.chexpert:
-    if args.pretrained == True:
-      model = pymodels.densenet121(pretrained=True)
-    elif args.pretrained == False:
-      model = pymodels.densenet121(pretrained=False)
-    # Here the size of each output sample is set to 2.
-    # Alternatively, it can be generalized to nn.Linear(num_ftrs, len(class_names)).
-    num_features = model.classifier.in_features
-    model.classifier = nn.Linear(num_features, len(valid_set.classes))
-    
-  elif args.chexpert == False:
-    logger.info(f"Loading model from {args.model}.npz")
-    model = models.KNOWN_MODELS[args.model](head_size=len(valid_set.classes), zero_head=True)
-    model.load_from(np.load(f"{args.model}.npz"))
+  model = getattr(models, args.visual_extractor)(weights=args.weights)
+  raise(NotImplementedError,"Work out the classifier vs heads vs whatever for the different models.")
+  num_features = model.classifier.in_features
+  model.classifier = nn.Linear(num_features, len(valid_set.classes))#a contentious one for sure
 
   logger.info("Moving model onto all GPUs")
   model = torch.nn.DataParallel(model)
 
-  # Optionally resume from a checkpoint.
-  # Load it to CPU first as we'll move the model to GPU later.
-  # This way, we save a little bit of GPU memory when loading.
   step = 0
   best_mean_auc = 0
 
   # Note: no weight-decay!
-  if args.chexpert:
+  if args.optim == "Adam":
     optim = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9,0.999)) #*maybe lr is wrong*"
-  else:  
+  elif args.optim == "SGD":  
     optim = torch.optim.SGD(model.parameters(), lr=0.003, momentum=0.9)
+  else:
+    raise(NotImplementedError, "Optimiser you chose was not found")
 
   # Resume fine-tuning if we find a saved model.
   savename = pjoin(args.logdir, args.name, "bit.pth.tar")
@@ -327,16 +354,11 @@ def main(args):
       y = y.to(device, non_blocking=True)
 
       # Update learning-rate, including stop training if over.
-      if args.chexpert == False:#chexpert does not update the learning rate
-        lr = bit_hyperrule.get_lr(step, len(train_set), args.base_lr)
-        if lr is None:
-          break
-        for param_group in optim.param_groups:
-          param_group["lr"] = lr
-      elif args.chexpert:
-        lr = args.base_lr
-        if step > 30*len(train_set)/args.batch:
-          break
+      lr = bit_hyperrule.get_lr(step, len(train_set), args.base_lr)
+      if lr is None:
+        break
+      for param_group in optim.param_groups:
+        param_group["lr"] = lr
 
       with chrono.measure("fprop"):
         logits = model(x)
@@ -406,6 +428,6 @@ if __name__ == "__main__":
   # parser.add_argument("--use_amp", dest="use_amp",action="store_true",
   #                    help="Use Automated Mixed Precision to save potential memory and compute?")
   parser.add_argument("--annodir", required=True, help="Where are the annotation files to load?")
-  parser.add_argument("--chexpert", dest="chexpert", action="store_true",help="Run as the chexpert paper?")
+  # parser.add_argument("--chexpert", dest="chexpert", action="store_true",help="Run as the chexpert paper?")
   parser.add_argument("--pretrained", dest="pretrained", action="store_true",help="Do you want a pretrained network?")
   main(parser.parse_args())

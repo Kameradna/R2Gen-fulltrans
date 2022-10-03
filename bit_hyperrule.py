@@ -24,7 +24,8 @@ known_dataset_sizes = {
   'oxford_iiit_pet': (224, 224),
   'oxford_flowers102': (224, 224),
   'imagenet2012': (224, 224),
-  'iu-xray': (2048,2048)
+  'iu-xray': (2048,2048),
+  'CheXpert': (320,320)
 }
 
 

@@ -143,6 +143,7 @@ cython_debug/
 # Data
 data/iu_xray/
 data/mimic_cxr/
+data/CheXpert*
 records*
 results*
 iu_xray.zip
