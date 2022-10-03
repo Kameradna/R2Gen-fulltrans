@@ -144,6 +144,7 @@ class CheXpertDataset(Dataset):#Adapted from https://github.com/Stomper10/CheXpe
           # print(label[i])
           # print(type(label[i]))
           # assert isinstance(label[i],int)
+          label = np.array(label)
           if sum(label) == 0:
             logger.info("Cleaned a bad label")
             label[-1] = 1
