@@ -25,16 +25,16 @@ import bit_hyperrule
 
 def argparser(known_models):
   parser = argparse.ArgumentParser(description="Fine-tune BiT-M model.")
-  parser.add_argument("--name", required=True,
+  parser.add_argument("--name",
                       help="Name of this run. Used for monitoring and checkpointing.")
   parser.add_argument("--model", choices=list(known_models),
                       help="Which variant to use; BiT-M gives best results.")
-  parser.add_argument("--logdir", required=True,
+  parser.add_argument("--logdir", default='bit_results',
                       help="Where to log training info (small).")
   parser.add_argument("--bit_pretrained_dir", default='.',
                       help="Where to search for pretrained BiT models.")
 
-  parser.add_argument("--dataset", choices=list(bit_hyperrule.known_dataset_sizes.keys()),
+  parser.add_argument("--dataset", choices=list(bit_hyperrule.known_dataset_sizes.keys()), required=True,
                       help="Choose the dataset. It should be easy to add your own! "
                       "Don't forget to set --datadir if necessary.")
   parser.add_argument("--examples_per_class", type=int, default=None,

@@ -322,12 +322,12 @@ def main(args):
       num_features = model.fc.in_features
       model.fc = nn.Linear(num_features, len(valid_set.classes),bias=True)
   elif fnmatch.fnmatch(args.visual_extractor,"vit*"):
-      args.model = model
-      raise(NotImplementedError)
+      num_features = model.heads.head.in_features
+      model.heads.head = nn.Linear(num_features, len(valid_set.classes),bias=True)
   elif fnmatch.fnmatch(args.visual_extractor,"swin*"):
-      model.head = nn.Identity()
-      args.model = model
-      raise(NotImplementedError)
+      num_features = model.head.in_features
+      model.head = nn.Linear(num_features, len(valid_set.classes),bias=True)
+      # print(model)
   # elif fnmatch.fnmatch(args.visual_extractor,"alexnet"):
   #     modules = list(model.children())[:-2]
   #     args.model = nn.Sequential(*modules)

@@ -13,15 +13,23 @@ import bit_common
 print("Finished imports, did anything parse?")
 
 def main(args):
-    args.name == args.visual_extractor
-    train.main(args)
+    fails = []
+    list_vis_ext = ['swin_v2_b', 'vit_b_16', 'resnet101']
+    for visual_extractor in list_vis_ext:
+        args.name = visual_extractor
+        args.visual_extractor = visual_extractor
+        train.main(args)
+        # print(f"Will need to rerun {visual_extractor}")
+        # fails.append(visual_extractor)
+    for fail in fails:
+        print(f"Need to rerun {fail}")
 
 if __name__ == '__main__':
     parser = bit_common.argparser(models.KNOWN_MODELS.keys())
     parser.add_argument("--datadir", required=True,
                         help="Path to the data folder, preprocessed for torchvision.")
     # parser.add_argument("--annodir", required=True, help="Where are the annotation files to load?")
-    parser.add_argument("--visual_extractor", type=str, default='resnet101', help="Which visual extractor would you like to train?")
+    # parser.add_argument("--visual_extractor", type=str, required = True, help="Which visual extractor would you like to train?")
     parser.add_argument("--weights", type=str, default='IMAGENET1K_V1', help="Which initial weights would you like to use?")
     parser.add_argument("--optim", type=str, default='SGD', help="Which optimser to use?")
 
