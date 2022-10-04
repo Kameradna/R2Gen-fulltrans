@@ -254,7 +254,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
         y_true = groundtruth.cpu().numpy() if isinstance(y_true, type(None)) else np.concatenate((y_true,groundtruth.cpu().numpy()))
         y_logits = logits.cpu().numpy() if isinstance(y_logits, type(None)) else np.concatenate((y_logits,logits.cpu().numpy()))
         loss = c_num if isinstance(loss, type(None)) else np.append(loss,c_num)
-        print(y_true.shape)
+        # print(y_true.shape)
 
     # measure elapsed time
     end = time.perf_counter()
@@ -297,6 +297,9 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   # label_density = np.sum(support)/len(dataset)/len(dataset.classes)
 
   print(step)
+  print(np.mean(loss):.4f)
+  print(np.mean(precision_))
+  print(np.mean(accuracy_))
   logger.info(f"Validation@{step}, "
               f"Mean_loss={np.mean(loss):.4f}, "
               f"Mean_precision={np.mean(precision_):.2%}, "
