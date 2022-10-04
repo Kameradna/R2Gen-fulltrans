@@ -286,7 +286,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   logger.info(f"AUROC = {auroc}")
   logger.info(f"mean AUROC = {np.mean(auroc):.4f}")
-  print(auroc.shape)
+  print(len(auroc))
 
   # hamming_mean_loss = metrics.hamming_loss(y_true,y_pred)
   # jaccard_index = metrics.jaccard_score(y_true,y_pred,average='macro')
