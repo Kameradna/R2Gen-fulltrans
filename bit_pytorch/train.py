@@ -452,16 +452,15 @@ def main(args):
             #delete last best save or use deepcopy()
             savename = pjoin(args.logdir, args.name, f"{best_mean_auc}_{step}bit.pth.tar")
             best_model_wts = copy.deepcopy(model.state_dict())
-          if args.save:
-            quicksave_model = copy.deepcopy(model.state_dict())
-            model.load_state_dict(best_model_wts)
-            torch.save({
-                "step": step,
-                "model": model.state_dict(),
-                "optim" : optim.state_dict(),
-            }, savename)
-            model.load_state_dict(quicksave_model)
-          best_mean_auc = 0
+            if args.save:
+              quicksave_model = copy.deepcopy(model.state_dict())
+              model.load_state_dict(best_model_wts)
+              torch.save({
+                  "step": step,
+                  "model": model.state_dict(),
+                  "optim" : optim.state_dict(),
+              }, savename)
+              model.load_state_dict(quicksave_model)
 
       end = time.perf_counter()
 
