@@ -267,10 +267,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   auroc,precision_, recall_, f1_, support_,accuracy_ = [],[],[],[],[],[]
   for i in range(y_true.shape[1]):
     if any(y_true[:,i]):#if we have positive examples
-      print(y_true[:,i].shape)
-      print(y_true[:,i])
       auroc.append(metrics.roc_auc_score(y_true[:,i],y_logits[:,i]))
-      print(metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i],average='binary'))#this batches metrics
       precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i],average='binary')#this batches metrics
       accuracy = metrics.accuracy_score(y_true[:,i],y_pred[:,i])#I think this is exact matches
       precision_.append(precision)
@@ -289,6 +286,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   logger.info(f"AUROC = {auroc}")
   logger.info(f"mean AUROC = {np.mean(auroc):.4f}")
+  print(auroc.shape)
 
   # hamming_mean_loss = metrics.hamming_loss(y_true,y_pred)
   # jaccard_index = metrics.jaccard_score(y_true,y_pred,average='macro')
