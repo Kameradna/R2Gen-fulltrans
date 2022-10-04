@@ -268,16 +268,20 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   auroc,precision_, recall_, f1_, support_ = [],[],[],[],[]
   for i in range(args.nnClassCount):
-    if any(y_true[:,i]):
-      print("Ayo we got values!")
+    if any(y_true[:,i]):#if we have positive examples
+      auroc.append(metrics.roc_auc_score(y_true[:,i],y_logits[:,i]))
+      precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[i],y_pred[i],zero_division=0)#this batches metrics
+      precision_.append(precision)
+      recall_.append(recall)
+      f1_.append(f1)
+      support_.append(support)
     else:
-      print(y_true[:,i])
-    auroc.append(metrics.roc_auc_score(y_true[:,i],y_logits[:,i]))#should we pass in labels?
-    precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[i],y_pred[i],zero_division=0)#this batches metrics
-    precision_.append(precision)
-    recall_.append(recall)
-    f1_.append(f1)
-    support_.append(support)
+      logger.info("No pos values for this class, setting metrics to 1") #causes errors if we do not handle this case, since ROC does not really exist for no positive examples
+      auroc.append(1.0)
+      precision_.append(1.0)
+      recall_.append(1.0)
+      f1_.append(1.0)
+      support_.append(1.0)
 
   logger.info(f"AUROC = {auroc}")
   logger.info(f"mean AUROC = {np.mean(auroc):.4f}")
