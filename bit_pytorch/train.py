@@ -289,7 +289,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   # hamming_mean_loss = metrics.hamming_loss(y_true,y_pred)
   # jaccard_index = metrics.jaccard_score(y_true,y_pred,average='macro')
-  average_precision = metrics.average_precision_score(y_true,y_pred,average='macro')
+  # average_precision = metrics.average_precision_score(y_true,y_pred,average='macro')
 
   #RocCurveDisplay.from_predictions(y_true,y_pred)
   # metrics.PrecisionRecallDisplay(precision,recall,pos_label=[what have you]
