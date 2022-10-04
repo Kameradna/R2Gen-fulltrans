@@ -241,19 +241,20 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   for b, (x, y) in enumerate(data_loader):#should be elements of shape (batch size,len(tags))
     with torch.no_grad():
       x = x.to(device, non_blocking=True)
-      y_true = y.to(device, non_blocking=True)
+      y = y.to(device, non_blocking=True)
       # measure data loading time
       chrono._done("eval load", time.perf_counter() - end)
       with chrono.measure("eval fprop"):
         logits = model(x)
         logits.clamp_(0,1)
-        c = torch.nn.BCELoss()(logits, y_true)
+        c = torch.nn.BCELoss()(logits, y)
         c_num = c.data.cpu().numpy()
 
         groundtruth = torch.ge(y,0.5)#translates y to tensor
         y_true = groundtruth.cpu().numpy() if isinstance(y_true, type(None)) else np.concatenate((y_true,groundtruth.cpu().numpy()))
         y_logits = y_logits.cpu().numpy() if isinstance(y_logits, type(None)) else np.concatenate((y_logits,logits.cpu().numpy()))
         loss = c_num if isinstance(loss, type(None)) else np.append(loss,c_num)
+        print(y_true.shape)
 
     # measure elapsed time
     end = time.perf_counter()
