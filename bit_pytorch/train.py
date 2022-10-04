@@ -270,7 +270,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
       print(y_true[:,i].shape)
       print(y_true[:,i])
       auroc.append(metrics.roc_auc_score(y_true[:,i],y_logits[:,i]))
-      print(metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i]))#this batches metrics
+      print(metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i],average='binary'))#this batches metrics
       precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i],zero_division=0)#this batches metrics
       accuracy = metrics.accuracy_score(y_true[:,i],y_pred[:,i])#I think this is exact matches
       precision_.append(precision)
