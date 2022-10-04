@@ -271,7 +271,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
       print(y_true[:,i])
       auroc.append(metrics.roc_auc_score(y_true[:,i],y_logits[:,i]))
       print(metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i],average='binary'))#this batches metrics
-      precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i],zero_division=0)#this batches metrics
+      precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i],average='binary')#this batches metrics
       accuracy = metrics.accuracy_score(y_true[:,i],y_pred[:,i])#I think this is exact matches
       precision_.append(precision)
       recall_.append(recall)
@@ -284,7 +284,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
       precision_.append(1.0)
       recall_.append(1.0)
       f1_.append(1.0)
-      support_.append(1.0)
+      support_.append(None)
     # print(auroc)
 
   logger.info(f"AUROC = {auroc}")
