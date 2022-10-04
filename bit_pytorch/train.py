@@ -314,6 +314,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
               )
   logger.flush()
   model.train()
+  raise(NotImplementedError)
   return np.mean(auroc)
 
 def main(args):
