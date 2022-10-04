@@ -264,15 +264,17 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   y_pred = y_pred.astype(int)
   y_true = y_true.astype(int)
 
-  auroc,precision_, recall_, f1_, support_ = [],[],[],[],[]
+  auroc,precision_, recall_, f1_, support_,accuracy_ = [],[],[],[],[]
   for i in range(args.nnClassCount):
     if any(y_true[:,i]):#if we have positive examples
       auroc.append(metrics.roc_auc_score(y_true[:,i],y_logits[:,i]))
-      precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[i],y_pred[i],zero_division=0)#this batches metrics
+      precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i],zero_division=0)#this batches metrics
+      accuracy = metrics.accuracy_score(y_true[:,i],y_pred[:,i])#I think this is exact matches
       precision_.append(precision)
       recall_.append(recall)
       f1_.append(f1)
       support_.append(support)
+      accuracy_.append(accuracy)
     else:
       logger.info("No pos values for this class, setting metrics to 1") #causes errors if we do not handle this case, since ROC does not really exist for no positive examples
       auroc.append(1.0)
@@ -284,12 +286,9 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   logger.info(f"AUROC = {auroc}")
   logger.info(f"mean AUROC = {np.mean(auroc):.4f}")
 
-  accuracy = metrics.accuracy_score(y_true,y_pred)#I think this is exact matches
-  # precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true,y_pred)  #,labels=dataset.classes,average='macro' #this will raise warnings, if you want to turn off, add zero_division=0 or 1
   hamming_mean_loss = metrics.hamming_loss(y_true,y_pred)
   jaccard_index = metrics.jaccard_score(y_true,y_pred,average='macro')
   average_precision = metrics.average_precision_score(y_true,y_pred,average='macro')
-  #Area under precision recall curve
 
   #RocCurveDisplay.from_predictions(y_true,y_pred)
   # metrics.PrecisionRecallDisplay(precision,recall,pos_label=[what have you]
@@ -297,11 +296,11 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   label_density = np.sum(support)/len(dataset)/len(dataset.classes)
 
   logger.info(f"Validation@{step}, "
-              f"Mean_loss={c_num}, "
-              f"Mean_precision={np.mean(precision):.2%}, "
-              f"Mean_recall={np.mean(recall):.2%}, "
-              f"Mean_accuracy={np.mean(accuracy):.2%}, "
-              f"Mean_F1 score={np.mean(f1):.2%}, "
+              f"Mean_loss={np.mean(loss):.4f}, "
+              f"Mean_precision={np.mean(precision_):.2%}, "
+              f"Mean_recall={np.mean(recall_):.2%}, "
+              f"Mean_accuracy={np.mean(accuracy_):.2%}, "
+              f"Mean_F1 score={np.mean(f1_):.2%}, "
 
               f"AUROC={np.mean(auroc):.5f}, "
               f"AUPRC={average_precision:.5f}, "
@@ -310,7 +309,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
               f"Naive_accuracy={1-label_density:.2%},"
               f"Hamming_loss={hamming_mean_loss:.2%}, "
               f"Jaccard_index={jaccard_index:.2%}, "
-              f"Support={np.mean(support):.2f}"
+              f"Support={np.mean(support_):.2f}"
               )
   logger.flush()
   model.train()
