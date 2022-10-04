@@ -213,7 +213,7 @@ def mktrainval(args, logger):
 
   valid_loader = torch.utils.data.DataLoader(
       valid_set, batch_size=micro_batch_size, shuffle=True,
-      num_workers=args.workers, pin_memory=True, drop_last=True)
+      num_workers=args.workers, pin_memory=True, drop_last=False)
 
   if micro_batch_size <= len(train_set):
     train_loader = torch.utils.data.DataLoader(
