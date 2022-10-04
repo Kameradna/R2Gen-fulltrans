@@ -282,6 +282,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
       recall_.append(1.0)
       f1_.append(1.0)
       support_.append(1.0)
+    print(auroc)
 
   logger.info(f"AUROC = {auroc}")
   logger.info(f"mean AUROC = {np.mean(auroc):.4f}")
