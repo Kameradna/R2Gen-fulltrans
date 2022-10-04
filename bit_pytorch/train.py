@@ -296,6 +296,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   # label_cardinality = np.sum(support)/len(dataset)
   # label_density = np.sum(support)/len(dataset)/len(dataset.classes)
 
+  print(step)
   logger.info(f"Validation@{step}, "
               f"Mean_loss={np.mean(loss):.4f}, "
               f"Mean_precision={np.mean(precision_):.2%}, "
