@@ -238,7 +238,6 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   end = time.perf_counter()
 
   y_true, y_logits, loss = None, None, None
-  c_num = []
   for b, (x, y) in enumerate(data_loader):#should be elements of shape (batch size,len(tags))
     with torch.no_grad():
       x = x.to(device, non_blocking=True)
@@ -246,21 +245,19 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
       # measure data loading time
       chrono._done("eval load", time.perf_counter() - end)
       with chrono.measure("eval fprop"):
-        y_logits = model(x)
-        y_logits.clamp_(0,1)
+        logits = model(x)
+        logits.clamp_(0,1)
         c = torch.nn.BCELoss()(y_logits, y_true)
-        c_num.append(c.data.cpu().numpy())
-        # groundtruth = torch.ge(y,0.5)#translates y to tensor
-        # y_true = groundtruth.cpu().numpy() if isinstance(y_true, type(None)) else np.concatenate((y_true,groundtruth.cpu().numpy()))
-        # y_logits = y_logits.cpu().numpy() if isinstance(y_logits, type(None)) else np.concatenate((y_logits,logits.cpu().numpy()))
-        # # print(type(c_num))
-        # loss = c_num if isinstance(loss, type(None)) else np.append(loss,c_num)
+        c_num = c.data.cpu().numpy()
+
+        groundtruth = torch.ge(y,0.5)#translates y to tensor
+        y_true = groundtruth.cpu().numpy() if isinstance(y_true, type(None)) else np.concatenate((y_true,groundtruth.cpu().numpy()))
+        y_logits = y_logits.cpu().numpy() if isinstance(y_logits, type(None)) else np.concatenate((y_logits,logits.cpu().numpy()))
+        loss = c_num if isinstance(loss, type(None)) else np.append(loss,c_num)
 
     # measure elapsed time
     end = time.perf_counter()
-  logger.info(f"Validation loss is {np.mean(c_num):.4f}")
-  y_true = y_true.cpu().numpy()
-  y_logits = y_logits.cpu().numpy()
+  logger.info(f"Validation loss is {np.mean(loss):.4f}")
 
   y_pred = y_logits > 0.5
   y_pred = y_pred.astype(int)
@@ -285,9 +282,6 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   logger.info(f"AUROC = {auroc}")
   logger.info(f"mean AUROC = {np.mean(auroc):.4f}")
-  raise(NotImplementedError)
-  #the arrays are not autopromoted?
-  
 
   accuracy = metrics.accuracy_score(y_true,y_pred)#I think this is exact matches
   # precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true,y_pred)  #,labels=dataset.classes,average='macro' #this will raise warnings, if you want to turn off, add zero_division=0 or 1
