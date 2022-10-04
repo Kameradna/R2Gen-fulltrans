@@ -264,7 +264,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   y_pred = y_pred.astype(int)
   y_true = y_true.astype(int)
 
-  auroc,precision_, recall_, f1_, support_,accuracy_ = [],[],[],[],[]
+  auroc,precision_, recall_, f1_, support_,accuracy_ = [],[],[],[],[],[]
   for i in range(args.nnClassCount):
     if any(y_true[:,i]):#if we have positive examples
       auroc.append(metrics.roc_auc_score(y_true[:,i],y_logits[:,i]))
