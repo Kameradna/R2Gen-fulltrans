@@ -287,14 +287,14 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   logger.info(f"AUROC = {auroc}")
   logger.info(f"mean AUROC = {np.mean(auroc):.4f}")
 
-  hamming_mean_loss = metrics.hamming_loss(y_true,y_pred)
-  jaccard_index = metrics.jaccard_score(y_true,y_pred,average='macro')
+  # hamming_mean_loss = metrics.hamming_loss(y_true,y_pred)
+  # jaccard_index = metrics.jaccard_score(y_true,y_pred,average='macro')
   average_precision = metrics.average_precision_score(y_true,y_pred,average='macro')
 
   #RocCurveDisplay.from_predictions(y_true,y_pred)
   # metrics.PrecisionRecallDisplay(precision,recall,pos_label=[what have you]
-  label_cardinality = np.sum(support)/len(dataset)
-  label_density = np.sum(support)/len(dataset)/len(dataset.classes)
+  # label_cardinality = np.sum(support)/len(dataset)
+  # label_density = np.sum(support)/len(dataset)/len(dataset.classes)
 
   logger.info(f"Validation@{step}, "
               f"Mean_loss={np.mean(loss):.4f}, "
@@ -305,12 +305,6 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
               f"AUROC={np.mean(auroc):.5f}, "
               f"AUPRC={average_precision:.5f}, "
-              f"Label_cardinality={label_cardinality:.2f}, "
-              f"Label_density={label_density:.2%}, "
-              f"Naive_accuracy={1-label_density:.2%},"
-              f"Hamming_loss={hamming_mean_loss:.2%}, "
-              f"Jaccard_index={jaccard_index:.2%}, "
-              f"Support={np.mean(support_):.2f}"
               )
   logger.flush()
   model.train()
