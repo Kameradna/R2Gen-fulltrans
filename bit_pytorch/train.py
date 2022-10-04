@@ -238,6 +238,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   end = time.perf_counter()
 
   y_true, y_logits, loss = None, None, None
+  c_num = []
   for b, (x, y) in enumerate(data_loader):#should be elements of shape (batch size,len(tags))
     with torch.no_grad():
       x = x.to(device, non_blocking=True)
@@ -248,8 +249,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
         y_logits = model(x)
         y_logits.clamp_(0,1)
         c = torch.nn.BCELoss()(y_logits, y_true)
-        c_num = c.data.cpu().numpy()
-        logger.info(f"Validation loss is {c_num:.4f}")
+        c_num.append(c.data.cpu().numpy())
         # groundtruth = torch.ge(y,0.5)#translates y to tensor
         # y_true = groundtruth.cpu().numpy() if isinstance(y_true, type(None)) else np.concatenate((y_true,groundtruth.cpu().numpy()))
         # y_logits = y_logits.cpu().numpy() if isinstance(y_logits, type(None)) else np.concatenate((y_logits,logits.cpu().numpy()))
@@ -258,6 +258,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
     # measure elapsed time
     end = time.perf_counter()
+  logger.info(f"Validation loss is {np.mean(c_num):.4f}")
   y_true = y_true.cpu().numpy()
   y_logits = y_logits.cpu().numpy()
 
@@ -267,16 +268,16 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   auroc,precision_, recall_, f1_, support_ = [],[],[],[],[]
   for i in range(args.nnClassCount):
-    print(len(y_true[:,i]))
-    print(len(y_logits[:,i]))
-    # auroc.append(metrics.roc_auc_score(y_true[i],y_logits[i]))#should we pass in labels?
-    # precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[i],y_pred[i],zero_division=0)
-    # precision_.append(precision)
-    # recall_.append(recall)
-    # f1_.append(f1)
-    # support_.append(support)
-  raise(NotImplementedError)
+    auroc.append(metrics.roc_auc_score(y_true[:,i],y_logits[:,i]))#should we pass in labels?
+    precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[i],y_pred[i],zero_division=0)#this batches metrics
+    precision_.append(precision)
+    recall_.append(recall)
+    f1_.append(f1)
+    support_.append(support)
+
   logger.info(f"AUROC = {auroc}")
+  logger.info(f"mean AUROC = {np.mean(auroc):.4f}")
+  raise(NotImplementedError)
   #the arrays are not autopromoted?
   
 
