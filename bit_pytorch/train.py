@@ -298,7 +298,9 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   print(step)
   print(f"{np.mean(loss):.4f}")
+  print(precision_)
   print(np.mean(precision_))
+  print(accuracy_)
   print(np.mean(accuracy_))
   logger.info(f"Validation@{step}, "
               f"Mean_loss={np.mean(loss):.4f}, "
