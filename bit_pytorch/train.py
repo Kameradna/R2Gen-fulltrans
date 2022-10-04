@@ -268,6 +268,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   for i in range(y_true.shape[1]):
     if any(y_true[:,i]):#if we have positive examples
       print(y_true[:,i].shape)
+      print(y_true[:,i])
       auroc.append(metrics.roc_auc_score(y_true[:,i],y_logits[:,i]))
       print(metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i]))#this batches metrics
       precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i],zero_division=0)#this batches metrics
@@ -297,17 +298,17 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   # metrics.PrecisionRecallDisplay(precision,recall,pos_label=[what have you]
   # label_cardinality = np.sum(support)/len(dataset)
   # label_density = np.sum(support)/len(dataset)/len(dataset.classes)
-  print("step")
-  print(step)
-  print(f"{np.mean(loss):.4f}")
-  print("precision_")
-  print(precision_)
-  print(np.mean(precision_))
-  print("accuracy")
-  print(accuracy_)
-  print(np.mean(accuracy_))
-  print("recall")
-  print(recall_)
+  # print("step")
+  # print(step)
+  # print(f"{np.mean(loss):.4f}")
+  # print("precision_")
+  # print(precision_)
+  # print(np.mean(precision_))
+  # print("accuracy")
+  # print(accuracy_)
+  # print(np.mean(accuracy_))
+  # print("recall")
+  # print(recall_)
   logger.info(f"Validation@{step}, "
               f"Mean_loss={np.mean(loss):.4f}, "
               f"Mean_precision={np.mean(precision_):.2%}, "
@@ -316,7 +317,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
               f"Mean_F1 score={np.mean(f1_):.2%}, "
 
               f"AUROC={np.mean(auroc):.5f}, "
-              f"AUPRC={average_precision:.5f}, "
+              # f"AUPRC={average_precision:.5f}, "
               )
   logger.flush()
   model.train()
