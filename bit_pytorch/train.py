@@ -238,7 +238,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   end = time.perf_counter()
 
   y_true, y_logits, loss = None, None, None
-  for b, (x, y) in enumerate(data_loader):#should be elements of size 1,len(tags)
+  for b, (x, y) in enumerate(data_loader):#should be elements of shape (batch size,len(tags))
     with torch.no_grad():
       x = x.to(device, non_blocking=True)
       y_true = y.to(device, non_blocking=True)
@@ -267,15 +267,15 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   auroc,precision_, recall_, f1_, support_ = [],[],[],[],[]
   for i in range(args.nnClassCount):
-    # print(y_true[i])
-    # print(y_logits[i])
-    auroc.append(metrics.roc_auc_score(y_true[i],y_logits[i]))#should we pass in labels?
-    precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[i],y_pred[i],zero_division=0)
-    precision_.append(precision)
-    recall_.append(recall)
-    f1_.append(f1)
-    support_.append(support)
-
+    print(len(y_true[:,i]))
+    print(len(y_logits[:,i]))
+    # auroc.append(metrics.roc_auc_score(y_true[i],y_logits[i]))#should we pass in labels?
+    # precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[i],y_pred[i],zero_division=0)
+    # precision_.append(precision)
+    # recall_.append(recall)
+    # f1_.append(f1)
+    # support_.append(support)
+  raise(NotImplementedError)
   logger.info(f"AUROC = {auroc}")
   #the arrays are not autopromoted?
   
