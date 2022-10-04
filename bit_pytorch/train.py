@@ -247,7 +247,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
       with chrono.measure("eval fprop"):
         logits = model(x)
         logits.clamp_(0,1)
-        c = torch.nn.BCELoss()(y_logits, y_true)
+        c = torch.nn.BCELoss()(logits, y_true)
         c_num = c.data.cpu().numpy()
 
         groundtruth = torch.ge(y,0.5)#translates y to tensor
