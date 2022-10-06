@@ -28,9 +28,9 @@ if __name__ == '__main__':
         #also maybe read the papers
         'weights': ['IMAGENET1K_V2'],
         'monitor_metric': ['CIDEr'],
-        'frozen': [False],
+        'frozen': [True],
         'cls': [False],
-        'lr_ve': [0.005,0.003,0.001]#this is impactful
+        'lr_ve': []#this is impactful
         }
 
 
@@ -91,6 +91,8 @@ if __name__ == '__main__':
         args.step_size = 50
         args.gamma = 0.1
         args.early_stop = 100
+
+        args.load_visual_extractor = "bit_results_proper/vit_b_16/0.6798918645828945_0.22594534613194003_500bit.pth.tar"
 
         repetition = 0
         potential_runs = {}
