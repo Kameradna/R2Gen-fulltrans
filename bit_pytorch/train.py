@@ -393,7 +393,6 @@ def main(args):
   step_name = '0'
   run_eval(model, valid_loader, device, chrono, logger, args, step_name, valid_set)
 
-
   with lb.Uninterrupt() as u:
     for x, y in recycle(train_loader):
       # measure data loading time, which is spent in the `for` statement.

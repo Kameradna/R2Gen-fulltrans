@@ -27,6 +27,7 @@ def parse_agrs():
 
     # Model settings (for visual extractor)
     parser.add_argument('--visual_extractor', type=str, default='resnet101', help='the visual extractor to be used.')
+    parser.add_argument('--load_visual_extractor', type=str, default='fill', help='relative path to visual extractor to fine-tune')
     parser.add_argument('--weights',type=str, default=None,help='pytorch after 0.15 will require this weights field as opposed to the old pretrained field, so I kameradna added it.')
     parser.add_argument('--frozen',default=False,action='store_true', help='freeze the feature extractor training?')
     parser.add_argument('--cls',default=False,action='store_true', help='use the cls token from the feature extractor?')
