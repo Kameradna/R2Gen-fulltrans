@@ -23,8 +23,7 @@ class VisualExtractor(nn.Module):
             checkpoint = torch.load(args.load_visual_extractor, map_location="cpu")
             print(f"Found saved model to resume from at '{args.load_visual_extractor}'")
 
-            weights = torch.load(checkpoint["model"])
-            model.load_state_dict(weights)
+            model = torch.load_state_dict(checkpoint["model"])
 
         except FileNotFoundError:
             print("Fine-tuning from ImageNet1k pretrained weights")
