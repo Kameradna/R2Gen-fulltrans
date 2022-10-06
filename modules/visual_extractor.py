@@ -17,7 +17,7 @@ class VisualExtractor(nn.Module):
         # print(f"weights are {self.weights}")
         # print(f"d_vf is {args.d_vf}")
         model = getattr(models, args.visual_extractor)(weights=args.weights)
-
+        print(model.state_dict())
         try:
             print(f"Trying to load from '{args.load_visual_extractor}'")
             checkpoint = torch.load(args.load_visual_extractor, map_location="cpu")
