@@ -460,7 +460,7 @@ def main(args):
                   "step": step,
                   "model": model.state_dict(),
                   "optim" : optim.state_dict(),
-              }, savename)
+              }, savename, map_location='cpu')
               model.load_state_dict(quicksave_model)
 
       end = time.perf_counter()
