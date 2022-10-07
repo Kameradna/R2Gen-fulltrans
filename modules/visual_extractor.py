@@ -38,13 +38,6 @@ class VisualExtractor(nn.Module):
             print(f"Fine-tuning from {args.weights} weights")
             model = getattr(models, args.visual_extractor)(weights=args.weights)
 
-        try:
-            state_dict = model.module.state_dict()
-        except AttributeError:
-            state_dict = model.state_dict()
-
-
-
         if fnmatch.fnmatch(self.visual_extractor,"*resnet*"):
             modules = list(model.children())[:-2]
             self.model = nn.Sequential(*modules)
