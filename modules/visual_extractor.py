@@ -16,8 +16,35 @@ class VisualExtractor(nn.Module):
         self.printfirst = True
         # print(f"weights are {self.weights}")
         # print(f"d_vf is {args.d_vf}")
-        model = getattr(models, args.visual_extractor)(weights=args.weights)
         
+        try:
+            model = getattr(models, args.visual_extractor)(weights=None)
+
+            print(f"Loading model will be attempted from '{args.load_visual_extractor}'")
+            checkpoint = torch.load(args.load_visual_extractor, map_location="cpu")
+            print(f"Found saved model to resume from at '{args.load_visual_extractor}'")
+
+            module_model = torch.load_state_dict(checkpoint["model"])
+
+            try:
+                state_dict = module_model.module.state_dict()
+            except AttributeError:
+                raise(NotImplementedError)
+                state_dict = model.state_dict()
+            
+            model.load_state_dict(state_dict)
+
+        except FileNotFoundError:
+            print(f"Fine-tuning from {args.weights} weights")
+            model = getattr(models, args.visual_extractor)(weights=args.weights)
+
+        try:
+            state_dict = model.module.state_dict()
+        except AttributeError:
+            state_dict = model.state_dict()
+
+
+
         if fnmatch.fnmatch(self.visual_extractor,"*resnet*"):
             modules = list(model.children())[:-2]
             self.model = nn.Sequential(*modules)
