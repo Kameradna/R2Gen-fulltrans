@@ -368,7 +368,7 @@ def main(args):
   savename = pjoin(args.logdir, args.name, "bit.pth.tar")
   try:
     logger.info(f"Model will be saved in '{savename}'")
-    checkpoint = torch.load(savename, map_location="cpu")
+    checkpoint = torch.load(savename)
     logger.info(f"Found saved model to resume from at '{savename}'")
 
     step = checkpoint["step"]
