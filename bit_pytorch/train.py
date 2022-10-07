@@ -368,7 +368,7 @@ def main(args):
   savename = pjoin(args.logdir, args.name, "bit.pth.tar")
   try:
     logger.info(f"Model will be saved in '{savename}'")
-    checkpoint = torch.load(savename)
+    checkpoint = torch.load(savename, map_location="cpu")
     logger.info(f"Found saved model to resume from at '{savename}'")
 
     step = checkpoint["step"]
@@ -460,7 +460,7 @@ def main(args):
                   "step": step,
                   "model": model.state_dict(),
                   "optim" : optim.state_dict(),
-              }, savename, map_location='cpu')
+              }, savename)
               model.load_state_dict(quicksave_model)
 
       end = time.perf_counter()

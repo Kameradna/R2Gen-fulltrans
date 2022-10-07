@@ -12,6 +12,8 @@ import bit_common
 
 print("Finished imports, did anything parse?")
 
+# python pretrain.py --name bit_proper_lr0.0005 --datadir data/CheXpert-v1.0-small --dataset CheXpert --eval_every 5 --logdir bit_proper_lr0.0005 --batch_split 4  
+
 def main(args):
     fails = []
     list_vis_ext = ['vit_b_16', 'resnet101', 'swin_v2_b']
