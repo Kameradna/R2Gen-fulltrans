@@ -18,6 +18,7 @@ def main(args):
     for visual_extractor in list_vis_ext:
         args.name = visual_extractor
         args.visual_extractor = visual_extractor
+        args.base_lr = 0.0005
         train.main(args)
         # print(f"Will need to rerun {visual_extractor}")
         # fails.append(visual_extractor)
