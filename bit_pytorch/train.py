@@ -360,7 +360,7 @@ def main(args):
     optim = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9,0.999)) #*maybe lr is wrong*"
   elif args.optim == "SGD":  
     logger.info("Using SGD")
-    optim = torch.optim.SGD(model.parameters(), lr=0.003, momentum=0.9)
+    optim = torch.optim.SGD(model.parameters(), lr=0.0005, momentum=0.9)
   else:
     raise(NotImplementedError, "Optimiser you chose was not found")
 
