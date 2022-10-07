@@ -21,8 +21,7 @@ class BaseTrainer(object):
         self.criterion = criterion
         self.metric_ftns = metric_ftns
         self.optimizer = optimizer
-        if args.sep_optim is not None:
-            self.sep_optim = args.sep_optim
+        self.sep_optim = args.sep_optim
 
         # self.device = device
 
