@@ -19,7 +19,18 @@ class VisualExtractor(nn.Module):
         
         try:
             model = getattr(models, args.visual_extractor)(weights=None)
-            module_model = nn.DataParallel(model) #hopefully clean
+            #### copy from train.py to set up model the same as pretraining so weights can be loaded ####
+            if fnmatch.fnmatch(args.visual_extractor,"*resnet*"):
+                num_features = model.fc.in_features
+                model.fc = nn.Linear(num_features, 14,bias=True)
+            elif fnmatch.fnmatch(args.visual_extractor,"vit*"):
+                num_features = model.heads.head.in_features
+                model.heads.head = nn.Linear(num_features, 14,bias=True)
+            elif fnmatch.fnmatch(args.visual_extractor,"swin*"):
+                num_features = model.head.in_features
+                model.head = nn.Linear(num_features, 14,bias=True)
+            
+            module_model = nn.DataParallel(model) #put the pretrained model in dataparallel as before
             
             print(f"Loading model will be attempted from '{args.load_visual_extractor}'")
             checkpoint = torch.load(args.load_visual_extractor, map_location="cpu")
