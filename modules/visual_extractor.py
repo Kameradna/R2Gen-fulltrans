@@ -75,7 +75,7 @@ class VisualExtractor(nn.Module):
             raise(NotImplementedError)
         if args.frozen == True:
             self.model.requires_grad_(False)
-            # print("We are freezing the visual extractor.")
+            print("We are freezing the visual extractor.")
         # print(self.model)
 
 
