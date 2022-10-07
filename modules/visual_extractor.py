@@ -19,23 +19,23 @@ class VisualExtractor(nn.Module):
         
         try:
             model = getattr(models, args.visual_extractor)(weights=None)
-            with nn.DataParallel(model) as module_model:
+            module_model = nn.DataParallel(model) #hopefully clean
             
-                print(f"Loading model will be attempted from '{args.load_visual_extractor}'")
-                checkpoint = torch.load(args.load_visual_extractor, map_location="cpu")
-                print(f"Found saved model to resume from at '{args.load_visual_extractor}'")
+            print(f"Loading model will be attempted from '{args.load_visual_extractor}'")
+            checkpoint = torch.load(args.load_visual_extractor, map_location="cpu")
+            print(f"Found saved model to resume from at '{args.load_visual_extractor}'")
 
-                module_model.load_state_dict(checkpoint["model"])
+            module_model.load_state_dict(checkpoint["model"])
 
-                try:
-                    state_dict = module_model.module.state_dict()
-                except AttributeError:
-                    raise(NotImplementedError)
-                    state_dict = model.state_dict()
-                
-                model.load_state_dict(state_dict)
+            try:
+                state_dict = module_model.module.state_dict()
+            except AttributeError:
+                raise(NotImplementedError)
+                state_dict = model.state_dict()
+            
+            model.load_state_dict(state_dict)
 
-                print(f"successfully loaded model to resume from '{args.load_visual_extractor}'")
+            print(f"successfully loaded model to resume from '{args.load_visual_extractor}'")
 
         except FileNotFoundError:
             print(f"Fine-tuning from {args.weights} weights")
