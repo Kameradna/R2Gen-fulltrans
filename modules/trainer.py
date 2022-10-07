@@ -15,6 +15,16 @@ class BaseTrainer(object):
         self.device, device_ids = self._prepare_device(args.n_gpu,args.use_gpus)
             # build model architecture
         model = torch.nn.DataParallel(model,device_ids=device_ids)
+        try:
+            print(f"Trying to load from '{args.load_visual_extractor}'")
+            checkpoint = torch.load(args.load_visual_extractor, map_location="cpu")
+            print(f"Found saved model to resume from at '{args.load_visual_extractor}'")
+
+            model.load_state_dict(checkpoint["model"])
+
+        except FileNotFoundError:
+            print("Fine-tuning from ImageNet1k pretrained weights")
+            
         self.model = model.to(self.device)
 
         self.criterion = criterion
