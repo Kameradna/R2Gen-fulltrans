@@ -20,7 +20,7 @@ if __name__ == '__main__':
                     f1 = float(fileinfo[1])
                     ledger['auroc'].append(roc)
                     ledger['f1'].append(f1)
-                except KeyError:
+                except ValueError:
                     print(f"{root}/{file} does not adhere to naming convention")
         
                 
