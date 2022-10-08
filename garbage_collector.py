@@ -13,7 +13,7 @@ if __name__ == '__main__':
         ledger = {'auroc': [], 'f1': []}
 
         for root, dir, files in os.walk('.'):
-            if len(files) > 10:
+            if len(files) > 50:
                 for file in files:
                     if fnmatch.fnmatch(file,"*bit.pth.tar"):
                         if root != this_dir:
