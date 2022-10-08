@@ -5,7 +5,7 @@ import fnmatch
 
 if __name__ == '__main__':
     this_dir = None
-
+    ledger = "Not here yet"
     for root, dir, files in os.walk('.'):
         for file in files:
             if fnmatch.fnmatch(file,"*bit.pth.tar"):
