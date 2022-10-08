@@ -5,6 +5,7 @@ import fnmatch
 
 if __name__ == '__main__':
     this_dir = None
+    this_dir_files = []
     ledger = {'auroc': [], 'f1': []}
 
     for root, dir, files in os.walk('.'):
@@ -15,7 +16,7 @@ if __name__ == '__main__':
                         #sort the ledger values and delete the lower 50% of cases
                         ledger['auroc'].sort()
                         centre_value = ledger['auroc'][len(ledger['auroc'])//2]
-                        for deletion_candidate in files:
+                        for deletion_candidate in this_dir_files:
                             if float(deletion_candidate.split("_")[0]) < centre_value:
                                 print(f"would remove {deletion_candidate}")
                                 #os.remove(f"{this_dir}/{deletion_candidate}")
@@ -23,8 +24,11 @@ if __name__ == '__main__':
 
 
                     print(f"Entering {root}")
+                    this_dir = root
+                    this_dir_files = []
                     ledger = {'auroc': [], 'f1': []}
-                this_dir = root
+
+                this_dir_files.append(file)
                 fileinfo = f"{file}".split("_")
                 try:
                     roc = float(fileinfo[0])
