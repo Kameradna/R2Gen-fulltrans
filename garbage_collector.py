@@ -16,6 +16,7 @@ if __name__ == '__main__':
                         #sort the ledger values and delete the lower 50% of cases
                         ledger['auroc'].sort()
                         centre_value = ledger['auroc'][len(ledger['auroc'])//2]
+                        print(f"centre is at {centre_value}")
                         for deletion_candidate in this_dir_files:
                             if float(deletion_candidate.split("_")[0]) < centre_value:
                                 print(f"would remove {deletion_candidate}")
