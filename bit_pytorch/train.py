@@ -267,7 +267,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
 
   auroc,precision_, recall_, f1_, support_,accuracy_ = [],[],[],[],[],[]
   for i in range(y_true.shape[1]):
-    print(data_loader.classes[i])
+    print(data_loader.dataset.classes[i])
     print(y_true[:,i])
     print(len(y_true[:,i]))
     if any(y_true[:,i]):#if we have positive examples
