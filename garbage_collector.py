@@ -2,7 +2,7 @@
 """This file chops all the lower quarter files until there is < 10 files left in each directory"""
 
 
-import time
+import tqdm
 import os
 import fnmatch
 
@@ -52,4 +52,5 @@ if __name__ == '__main__':
                             ledger['f1'].append(f1)
                         except ValueError:
                             print(f"{root}/{file} does not adhere to naming convention")
-        time.sleep(20*60)
+        
+        tqdm.sleep(60)
