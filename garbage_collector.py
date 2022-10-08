@@ -11,7 +11,8 @@ if __name__ == '__main__':
             if fnmatch.fnmatch(file,"*bit.pth.tar"):
                 if root != this_dir:
                     print(f"Entering {root}")
-                    ledger = []
+                    ledger = {'auroc': [], 'f1': []}
                 this_dir = root
-                print(f"{file}")
-                # print("\\\\"+f"{root}/{file}")
+                print(f"{file}".split("_"))
+                
+                
