@@ -345,9 +345,9 @@ def main(args):
   # elif fnmatch.fnmatch(args.visual_extractor,"regnet*"):
   #     modules = list(model.children())[:-2]
   #     args.model = nn.Sequential(*modules)
-  # elif fnmatch.fnmatch(args.visual_extractor,"densenet*"): #inspiration from stomper time
-  #     args.model = model
-  #     raise(NotImplementedError)
+  elif fnmatch.fnmatch(args.visual_extractor,"densenet*"): #inspiration from stomper time
+      num_features = model.classifier.in_features
+      model.head = nn.Linear(num_features, len(valid_set.classes),bias=True)
   else:
       print(model)
       print(f"we have not implemented the {args.visual_extractor} visual extractor for this paper")
@@ -364,10 +364,10 @@ def main(args):
   # Note: no weight-decay!
   if args.optim == "Adam":
     logger.info("Using Adam")
-    optim = torch.optim.Adam(model.parameters(),lr=0.0001,betas=(0.9,0.999)) #*maybe lr is wrong*"
+    optim = torch.optim.Adam(model.parameters(),lr=args.base_lr,betas=(0.9,0.999)) #*maybe lr is wrong*"
   elif args.optim == "SGD":  
     logger.info("Using SGD")
-    optim = torch.optim.SGD(model.parameters(), lr=0.0005, momentum=0.9)
+    optim = torch.optim.SGD(model.parameters(), lr=args.base_lr, momentum=0.9)
   else:
     raise(NotImplementedError, "Optimiser you chose was not found")
 

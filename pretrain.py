@@ -12,17 +12,19 @@ import bit_common
 
 print("Finished imports, did anything parse?")
 
-# python pretrain.py --name bit_proper_lr0.00005 --datadir data/CheXpert-v1.0-small --dataset CheXpert --eval_every 5 --logdir bit_proper_lr0.00005 --batch_split 4
+# python pretrain.py --name bit_proper_lr0.003 --datadir data/CheXpert-v1.0-small --dataset CheXpert --eval_every 1 --logdir bit_proper_lr0.003 --batch_split 4 --base_lr 0.003
 
 def main(args):
     fails = []
-    list_vis_ext = ['densenet121', 'vit_b_16', 'resnet101', 'swin_v2_b']
+    list_vis_ext = ['densenet121', 'vit_b_16', 'resnet101']
     for visual_extractor in list_vis_ext:
         args.name = visual_extractor
         args.visual_extractor = visual_extractor
-        train.main(args)
-        # print(f"Will need to rerun {visual_extractor}")
-        # fails.append(visual_extractor)
+        try:
+            train.main(args)
+        except:
+            print(f"Will need to rerun {visual_extractor}")
+            fails.append(visual_extractor)
     for fail in fails:
         print(f"Need to rerun {fail}")
 
@@ -33,7 +35,7 @@ if __name__ == '__main__':
     # parser.add_argument("--annodir", required=True, help="Where are the annotation files to load?")
     # parser.add_argument("--visual_extractor", type=str, required = True, help="Which visual extractor would you like to train?")
     parser.add_argument("--weights", type=str, default='IMAGENET1K_V1', help="Which initial weights would you like to use?")
-    parser.add_argument("--optim", type=str, default='SGD', help="Which optimser to use?")
+    parser.add_argument("--optim", type=str, default='SGD', help="Which optimiser to use?")
 
     parser.add_argument("--workers", type=int, default=8,
                         help="Number of background threads used to load data.")
