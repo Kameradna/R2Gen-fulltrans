@@ -29,6 +29,9 @@ class VisualExtractor(nn.Module):
             elif fnmatch.fnmatch(args.visual_extractor,"swin*"):
                 num_features = model.head.in_features
                 model.head = nn.Linear(num_features, 14,bias=True)
+            else:
+                print(model)
+                raise(NotImplementedError)
             
             module_model = nn.DataParallel(model) #put the pretrained model in dataparallel as before
             
@@ -69,7 +72,9 @@ class VisualExtractor(nn.Module):
             modules = list(model.children())[:-2]
             self.model = nn.Sequential(*modules)
         elif fnmatch.fnmatch(self.visual_extractor,"densenet*"):
+            print(model)
             self.model = model
+            raise(NotImplementedError)
         else:
             print(f"we have not implemented the {self.visual_extractor} visual extractor for this paper")
             raise(NotImplementedError)
@@ -135,7 +140,6 @@ class VisualExtractor(nn.Module):
         
         elif fnmatch.fnmatch(self.visual_extractor,"densenet*"):
             x = self.model.features(images)
-            # print(f"feats.shape() = {x.shape}")
 
             batch_size, feat_size, _, _ = x.shape #changed from the vit section
             x = x.reshape(batch_size, feat_size, -1).permute(0,2,1)

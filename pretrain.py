@@ -16,11 +16,10 @@ print("Finished imports, did anything parse?")
 
 def main(args):
     fails = []
-    list_vis_ext = ['vit_b_16', 'resnet101', 'swin_v2_b']
+    list_vis_ext = ['densenet121', 'vit_b_16', 'resnet101', 'swin_v2_b']
     for visual_extractor in list_vis_ext:
         args.name = visual_extractor
         args.visual_extractor = visual_extractor
-        args.base_lr = 0.00005
         train.main(args)
         # print(f"Will need to rerun {visual_extractor}")
         # fails.append(visual_extractor)

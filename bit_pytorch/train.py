@@ -349,6 +349,7 @@ def main(args):
   #     args.model = model
   #     raise(NotImplementedError)
   else:
+      print(model)
       print(f"we have not implemented the {args.visual_extractor} visual extractor for this paper")
       raise(NotImplementedError)
 
