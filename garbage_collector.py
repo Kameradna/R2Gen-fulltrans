@@ -25,7 +25,7 @@ if __name__ == '__main__':
                                 for deletion_candidate in this_dir_files:
                                     if float(deletion_candidate.split("_")[0]) < centre_value:
                                         print(f"Deleting {deletion_candidate}")
-                                        # os.remove(f"{this_dir}/{deletion_candidate}")
+                                        os.remove(f"{this_dir}/{deletion_candidate}")
                                 
                                 ledger['f1'].sort()
                                 centre_value = ledger['f1'][len(ledger['f1'])//4]
@@ -34,7 +34,7 @@ if __name__ == '__main__':
                                     try:
                                         if float(deletion_candidate.split("_")[1]) < centre_value:
                                             print(f"Deleting {deletion_candidate}")
-                                            # os.remove(f"{this_dir}/{deletion_candidate}")
+                                            os.remove(f"{this_dir}/{deletion_candidate}")
                                     except:
                                         pass
 
@@ -53,4 +53,4 @@ if __name__ == '__main__':
                         except ValueError:
                             print(f"{root}/{file} does not adhere to naming convention")
         print("Sleeping for 1 minute")
-        time.sleep(1)
+        time.sleep(60)
