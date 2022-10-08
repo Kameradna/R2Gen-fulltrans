@@ -1,5 +1,5 @@
 
-"""This file chops all the lower quarter files until there is < 10 files left in each directory"""
+"""This file chops all the lower files until there is < 10 files left in each directory"""
 
 
 import time
@@ -18,9 +18,9 @@ if __name__ == '__main__':
                     if fnmatch.fnmatch(file,"*bit.pth.tar"):
                         if root != this_dir:
                             if len(ledger['auroc']) > 0:
-                                #sort the ledger values and delete the lower 50% of cases
+                                #sort the ledger values and delete the lower extreme of cases
                                 ledger['auroc'].sort()
-                                centre_value = ledger['auroc'][len(ledger['auroc'])//4]
+                                centre_value = ledger['auroc'][len(ledger['auroc'])//10]
                                 print(f"roc centre is at {centre_value}")
                                 for deletion_candidate in this_dir_files:
                                     if float(deletion_candidate.split("_")[0]) < centre_value:
@@ -28,7 +28,7 @@ if __name__ == '__main__':
                                         os.remove(f"{this_dir}/{deletion_candidate}")
                                 
                                 ledger['f1'].sort()
-                                centre_value = ledger['f1'][len(ledger['f1'])//4]
+                                centre_value = ledger['f1'][len(ledger['f1'])//10]
                                 print(f"f1 centre is at {centre_value}")
                                 for deletion_candidate in this_dir_files:
                                     try:
