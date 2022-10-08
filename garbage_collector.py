@@ -53,4 +53,4 @@ if __name__ == '__main__':
                         except ValueError:
                             print(f"{root}/{file} does not adhere to naming convention")
         
-        tqdm.sleep(60)
+        tqdm(60)
