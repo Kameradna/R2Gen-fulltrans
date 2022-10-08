@@ -259,6 +259,8 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
     end = time.perf_counter()
   logger.info(f"Validation loss is {np.mean(loss):.4f}")
 
+  print(f"stats len is {y_true.shape}")
+
   y_pred = y_logits > 0.5
   y_pred = y_pred.astype(int)
   y_true = y_true.astype(int)
