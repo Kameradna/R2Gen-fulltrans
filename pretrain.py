@@ -12,7 +12,7 @@ import bit_common
 
 print("Finished imports, did anything parse?")
 
-# python pretrain.py --name bit_proper_lr0.0005 --datadir data/CheXpert-v1.0-small --dataset CheXpert --eval_every 5 --logdir bit_proper_lr0.0005 --batch_split 4
+# python pretrain.py --name bit_proper_lr0.00005 --datadir data/CheXpert-v1.0-small --dataset CheXpert --eval_every 5 --logdir bit_proper_lr0.00005 --batch_split 4
 
 def main(args):
     fails = []
@@ -20,7 +20,7 @@ def main(args):
     for visual_extractor in list_vis_ext:
         args.name = visual_extractor
         args.visual_extractor = visual_extractor
-        args.base_lr = 0.0005
+        args.base_lr = 0.00005
         train.main(args)
         # print(f"Will need to rerun {visual_extractor}")
         # fails.append(visual_extractor)
