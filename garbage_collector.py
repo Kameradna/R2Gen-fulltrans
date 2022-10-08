@@ -4,4 +4,5 @@ import fnmatch
 if __name__ == '__main__':
     for root, dir, files in os.walk('.'):
         if fnmatch.fnmatch(files,".pth"):
-            print(file for file in files)
+            for file in files:
+                print(file)
