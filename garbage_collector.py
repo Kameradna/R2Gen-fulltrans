@@ -10,6 +10,7 @@ if __name__ == '__main__':
         for file in files:
             if fnmatch.fnmatch(file,"*bit.pth.tar"):
                 if root != this_dir:
+                    print(ledger)
                     print(f"Entering {root}")
                     ledger = {'auroc': [], 'f1': []}
                 this_dir = root
@@ -21,6 +22,6 @@ if __name__ == '__main__':
                     ledger['f1'].append(f1)
                 except KeyError:
                     print(f"{root}/{file} does not adhere to naming convention")
-        print(ledger)
+        
                 
                 
