@@ -53,4 +53,4 @@ if __name__ == '__main__':
                         except ValueError:
                             print(f"{root}/{file} does not adhere to naming convention")
         print("Sleeping for 1 minute")
-        time.sleep(60)
+        time.sleep(1)
