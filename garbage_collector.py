@@ -7,9 +7,9 @@ if __name__ == '__main__':
     this_dir = None
 
     for root, dir, files in os.walk('.'):
-        if thisdir != root:
+        if this_dir != root:
             ledger = []
-        thisdir = root
+        this_dir = root
         for file in files:
             if fnmatch.fnmatch(file,"*bit.pth.tar"):
                     print(f"{root}/{file}")
