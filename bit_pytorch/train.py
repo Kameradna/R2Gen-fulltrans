@@ -347,7 +347,7 @@ def main(args):
   #     args.model = nn.Sequential(*modules)
   elif fnmatch.fnmatch(args.visual_extractor,"densenet*"): #inspiration from stomper time
       num_features = model.classifier.in_features
-      model.head = nn.Linear(num_features, len(valid_set.classes),bias=True)
+      model.classifier = nn.Linear(num_features, len(valid_set.classes),bias=True)
   else:
       print(model)
       print(f"we have not implemented the {args.visual_extractor} visual extractor for this paper")
