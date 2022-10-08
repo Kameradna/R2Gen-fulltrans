@@ -13,6 +13,14 @@ if __name__ == '__main__':
                     print(f"Entering {root}")
                     ledger = {'auroc': [], 'f1': []}
                 this_dir = root
-                print(f"{file}".split("_"))
+                fileinfo = f"{file}".split("_")
+                try:
+                    roc = float(fileinfo[0])
+                    f1 = float(fileinfo[1])
+                    ledger['auroc'].append(roc)
+                    ledger['f1'].append(f1)
+                except KeyError:
+                    print(f"{root}/{file} does not adhere to naming convention")
+        print(ledger)
                 
                 
