@@ -268,6 +268,7 @@ def run_eval(model, data_loader, device, chrono, logger, args, step, dataset): #
   auroc,precision_, recall_, f1_, support_,accuracy_ = [],[],[],[],[],[]
   for i in range(y_true.shape[1]):
     print(y_true[:,i])
+    print(len(y_true[:,i]))
     if any(y_true[:,i]):#if we have positive examples
       auroc.append(metrics.roc_auc_score(y_true[:,i],y_logits[:,i]))
       precision, recall, f1, support = metrics.precision_recall_fscore_support(y_true[:,i],y_pred[:,i],average='binary',zero_division=0)#this batches metrics
