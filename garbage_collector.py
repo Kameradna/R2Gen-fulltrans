@@ -13,4 +13,5 @@ if __name__ == '__main__':
                     print(f"Entering {root}")
                     ledger = []
                 this_dir = root
-                print("\\\\"+f"{root}/{file}")
+                print(f"{file}")
+                # print("\\\\"+f"{root}/{file}")
