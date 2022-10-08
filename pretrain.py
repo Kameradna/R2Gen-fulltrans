@@ -23,11 +23,11 @@ def main(args):
             args.name = visual_extractor
             args.visual_extractor = visual_extractor
             args.base_lr = lr
-            try:
-                train.main(args)
-            except:
-                print(f"Will need to rerun {visual_extractor}")
-                fails.append(visual_extractor)
+            # try:
+            train.main(args)
+            # except:
+            #     print(f"Will need to rerun {visual_extractor}")
+            #     fails.append(visual_extractor)
     for fail in fails:
         print(f"Need to rerun {fail}")
 
