@@ -88,6 +88,7 @@ if __name__ == '__main__':
         args.monitor_metric = param['monitor_metric']
         # args.n_gpu = n_gpu
         args.frozen = param['frozen']
+        print(f"args.frozen is {args.frozen}")
         args.cls = param['cls']
 
         args.lr_ve = param['lr_ve'] #unimplemented yet
@@ -111,7 +112,7 @@ if __name__ == '__main__':
         potential_func = {}
         while repetition < runs:
             for potential in range(int(4/n_gpu_per_model)):#how many can we potentially run right now?
-                name = f"{param['visual_extractor']}_{args.load_visual_extractor}_frozen{param['frozen']}_cls{args.cls}_lr{args.lr_ve}_by_{param['monitor_metric']}_{repetition+offset}"
+                name = f"{param['visual_extractor']}_{args.load_visual_extractor}_frozen{args.frozen}_cls{args.cls}_lr{args.lr_ve}_by_{args.monitor_metric}_{repetition+offset}"
                 repetition += 1
                 args.record_dir = f"recordsruns/records_{name}"
                 args.save_dir = f"recordsruns/results_{name}"
