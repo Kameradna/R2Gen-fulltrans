@@ -1,3 +1,9 @@
+"""This file aggregates pretraining runs, just edit the grid_dict to select hyperparams or other factors, then run the
+
+python run.py
+"""
+
+
 from sklearn.model_selection import ParameterGrid
 import multiprocessing
 from multiprocessing import Process
@@ -28,7 +34,7 @@ if __name__ == '__main__':
         #also maybe read the papers
         'weights': ['IMAGENET1K_V2'],
         'monitor_metric': ['CIDEr'],
-        'frozen': [True],
+        'frozen': [False],
         'cls': [False],
         'lr_ve': [5e-5],#this is impactful?
         }
