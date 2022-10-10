@@ -1,5 +1,5 @@
 
-"""This file chops all the lower files until there is < 10 files left in each directory"""
+"""This file chops all the lower files until there is < len(files) files left in each directory"""
 
 
 import time
@@ -14,7 +14,7 @@ if __name__ == '__main__':
         ledger = {'auroc': [], 'f1': []}
 
         for root, dir, files in os.walk('.'):
-            if len(files) > 5:
+            if len(files) > 5: ######################change this line please
                 for file in files:
                     if fnmatch.fnmatch(file,"*bit.pth.tar"):
                         if root != this_dir:
@@ -56,6 +56,7 @@ if __name__ == '__main__':
                             ledger['auroc'].append(roc)
                             ledger['f1'].append(f1)
                         except ValueError:
-                            print(f"{root}/{file} does not adhere to naming convention")
+                            # print(f"{root}/{file} does not adhere to naming convention")
+                            pass
         print("Sleeping for 1 minute")
         time.sleep(60)
