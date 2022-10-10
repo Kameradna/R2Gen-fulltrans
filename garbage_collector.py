@@ -23,7 +23,7 @@ if __name__ == '__main__':
                                 ledger['auroc'].sort()
                                 for deletion_candidate in this_dir_files:
                                         if float(deletion_candidate.split("_")[0]) == ledger['auroc'][-1]:
-                                            print(f"The best roc in {root} is {deletion_candidate}")
+                                            print(f"The best roc in {this_dir} is {deletion_candidate}")
                                 if garbage_collect:
                                     centre_value = ledger['auroc'][len(ledger['auroc'])//10]
                                     print(f"roc centre is at {centre_value}")
