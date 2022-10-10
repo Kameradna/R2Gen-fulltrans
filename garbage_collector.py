@@ -7,6 +7,7 @@ import os
 import fnmatch
 
 if __name__ == '__main__':
+    garbage_collect = False
     while True:
         this_dir = None
         this_dir_files = []
@@ -20,23 +21,27 @@ if __name__ == '__main__':
                             if len(ledger['auroc']) > 0:
                                 #sort the ledger values and delete the lower extreme of cases
                                 ledger['auroc'].sort()
-                                centre_value = ledger['auroc'][len(ledger['auroc'])//10]
-                                print(f"roc centre is at {centre_value}")
                                 for deletion_candidate in this_dir_files:
-                                    if float(deletion_candidate.split("_")[0]) < centre_value:
-                                        print(f"Deleting {deletion_candidate}")
-                                        os.remove(f"{this_dir}/{deletion_candidate}")
-                                
-                                ledger['f1'].sort()
-                                centre_value = ledger['f1'][len(ledger['f1'])//10]
-                                print(f"f1 centre is at {centre_value}")
-                                for deletion_candidate in this_dir_files:
-                                    try:
-                                        if float(deletion_candidate.split("_")[1]) < centre_value:
+                                        if float(deletion_candidate.split("_")[0]) == ledger['auroc'][-1]:
+                                            print(f"The best roc in {root} is {deletion_candidate}")
+                                if garbage_collect:
+                                    centre_value = ledger['auroc'][len(ledger['auroc'])//10]
+                                    print(f"roc centre is at {centre_value}")
+                                    for deletion_candidate in this_dir_files:
+                                        if float(deletion_candidate.split("_")[0]) < centre_value:
                                             print(f"Deleting {deletion_candidate}")
                                             os.remove(f"{this_dir}/{deletion_candidate}")
-                                    except:
-                                        pass
+                                    
+                                    ledger['f1'].sort()
+                                    centre_value = ledger['f1'][len(ledger['f1'])//10]
+                                    print(f"f1 centre is at {centre_value}")
+                                    for deletion_candidate in this_dir_files:
+                                        try:
+                                            if float(deletion_candidate.split("_")[1]) < centre_value:
+                                                print(f"Deleting {deletion_candidate}")
+                                                os.remove(f"{this_dir}/{deletion_candidate}")
+                                        except:
+                                            pass
 
                             print(f"Entering {root}")
                             this_dir = root
