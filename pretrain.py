@@ -17,7 +17,7 @@ print("Finished imports, did anything parse?")
 def main(args):
     fails = []
     list_vis_ext = ['densenet121', 'vit_b_16', 'resnet101']
-    learning_rate = [0.003,0.0005,0.0001]
+    learning_rate = [0.001]
     for lr in learning_rate:
         for visual_extractor in list_vis_ext:
             args.name = visual_extractor
