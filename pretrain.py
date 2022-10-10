@@ -13,6 +13,9 @@ import bit_common
 print("Finished imports, did anything parse?")
 
 # python pretrain.py --name bit_proper_lr0.003 --datadir data/CheXpert-v1.0-small --dataset CheXpert --eval_every 1 --logdir bit_proper_lr0.003 --batch_split 4 --base_lr 0.003
+# python pretrain.py --datadir data/CheXpert-v1.0-small --dataset CheXpert --eval_every 1 --logdir bit_proper_densenet --batch_split 4
+
+# best results come from runs at 0.003 after only <1000 iterations, eval every
 
 def main(args):
     fails = []

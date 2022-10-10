@@ -19,7 +19,7 @@ if __name__ == '__main__':
     multiprocessing.set_start_method('spawn')
     fails = {}
     grid_dict = {
-        'visual_extractor': ['vit_b_16'],
+        'visual_extractor': ['vit_b_16', 'resnet101'],
         #to be tried later
         # 'visual_extractor': ['vit_b_32','resnet152','swin_v2_b','wide_resnet50_2','alexnet','regnet_y_16gf','densenet121'],#these work fine on local systems
         # 'visual_extractor': ['vit_l_16','vit_h_14','regnet_y_128gf'],#OOM
@@ -30,7 +30,12 @@ if __name__ == '__main__':
         'monitor_metric': ['CIDEr'],
         'frozen': [True],
         'cls': [False],
-        'lr_ve': [5e-5]#this is impactful
+        'lr_ve': [5e-5],#this is impactful?
+        }
+
+    which_load_visual_extractor = {
+            'vit_b_16': 'bit_results_proper/vit_b_16/0.6798918645828945_0.22594534613194003_500bit.pth.tar',
+            'resnet101': 'bit_results_proper/resnet101/0.6459725471004509_0.24615514122542928_130bit.pth.tar'
         }
 
 
@@ -92,7 +97,7 @@ if __name__ == '__main__':
         args.gamma = 0.1
         args.early_stop = 100
 
-        args.load_visual_extractor = "bit_results_proper/vit_b_16/0.6798918645828945_0.22594534613194003_500bit.pth.tar"
+        args.load_visual_extractor = which_load_visual_extractor[args.visual_extractor]
 
         repetition = 0
         potential_runs = {}

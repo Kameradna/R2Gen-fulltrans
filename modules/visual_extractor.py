@@ -33,7 +33,7 @@ class VisualExtractor(nn.Module):
                 print(model)
                 raise(NotImplementedError)
             
-            module_model = nn.DataParallel(model) #put the pretrained model in dataparallel as before
+            module_model = nn.DataParallel(model) #put the pretrained model in dataparallel as before so weights correspond
             
             print(f"Loading model will be attempted from '{args.load_visual_extractor}'")
             checkpoint = torch.load(args.load_visual_extractor, map_location="cpu")
