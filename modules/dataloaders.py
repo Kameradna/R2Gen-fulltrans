@@ -14,11 +14,16 @@ class R2DataLoader(DataLoader):
         self.num_workers = args.num_workers
         self.tokenizer = tokenizer
         self.split = split
+        self.transform_from_weights = None
         
         possible_weights = torch.hub.load("pytorch/vision", "get_model_weights", name=args.visual_extractor)#relies on build 0.14 of torchvision, may require an updated environment using nightly releases as recommended
         for weights in possible_weights:
             if args.weights == str(weights).split(".")[-1]:#if we are using those weights
                 self.transform_from_weights = weights.transforms()
+        if self.transform_from_weights == None:
+            for weights in possible_weights:
+                if 'IMAGENET1K_V1' == str(weights).split(".")[-1]:#if we have no set weights, use IMAGENET1K transforms by default
+                    self.transform_from_weights = weights.transforms()
 
         if split == 'train':
             self.transform = transforms.Compose([
