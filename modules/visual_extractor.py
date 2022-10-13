@@ -12,48 +12,50 @@ class VisualExtractor(nn.Module):
         self.visual_extractor = args.visual_extractor
         self.weights = args.weights
         self.cls = args.cls
-            # print("using cls token if available")
+        print("using cls token if available" if self.cls else "not using cls token")
         self.printfirst = True
         # print(f"weights are {self.weights}")
         # print(f"d_vf is {args.d_vf}")
         
-        try:
-            model = getattr(models, args.visual_extractor)(weights=None)
-            #### copy from train.py to set up model the same as pretraining so weights can be loaded ####
-            if fnmatch.fnmatch(args.visual_extractor,"*resnet*"):
-                num_features = model.fc.in_features
-                model.fc = nn.Linear(num_features, 14,bias=True)
-            elif fnmatch.fnmatch(args.visual_extractor,"vit*"):
-                num_features = model.heads.head.in_features
-                model.heads.head = nn.Linear(num_features, 14,bias=True)
-            elif fnmatch.fnmatch(args.visual_extractor,"swin*"):
-                num_features = model.head.in_features
-                model.head = nn.Linear(num_features, 14,bias=True)
-            else:
-                print(model)
-                raise(NotImplementedError)
-            
-            module_model = nn.DataParallel(model) #put the pretrained model in dataparallel as before so weights correspond
-            
-            print(f"Loading model will be attempted from '{args.load_visual_extractor}'")
-            checkpoint = torch.load(args.load_visual_extractor, map_location="cpu")
-            print(f"Found saved model to resume from at '{args.load_visual_extractor}'")
-
-            module_model.load_state_dict(checkpoint["model"])
-
+        if args.load_visual_extractor != 'fill':
             try:
-                state_dict = module_model.module.state_dict()
-            except AttributeError:
-                raise(NotImplementedError)
-                state_dict = model.state_dict()
-            
-            model.load_state_dict(state_dict)
+                model = getattr(models, args.visual_extractor)(weights=None)
+                #### copy from train.py to set up model the same as pretraining so weights can be loaded ####
+                if fnmatch.fnmatch(args.visual_extractor,"*resnet*"):
+                    num_features = model.fc.in_features
+                    model.fc = nn.Linear(num_features, 14,bias=True)
+                elif fnmatch.fnmatch(args.visual_extractor,"vit*"):
+                    num_features = model.heads.head.in_features
+                    model.heads.head = nn.Linear(num_features, 14,bias=True)
+                elif fnmatch.fnmatch(args.visual_extractor,"swin*"):
+                    num_features = model.head.in_features
+                    model.head = nn.Linear(num_features, 14,bias=True)
+                else:
+                    print(model)
+                    raise(NotImplementedError)
+                
+                module_model = nn.DataParallel(model) #put the pretrained model in dataparallel as before so weights correspond
+                
+                print(f"Loading model will be attempted from '{args.load_visual_extractor}'")
+                checkpoint = torch.load(args.load_visual_extractor, map_location="cpu")
+                print(f"Found saved model to resume from at '{args.load_visual_extractor}'")
 
-            print(f"successfully loaded model to resume from '{args.load_visual_extractor}'")
+                module_model.load_state_dict(checkpoint["model"])
 
-        except FileNotFoundError:
-            print(f"Fine-tuning from {args.weights} weights")
-            model = getattr(models, args.visual_extractor)(weights=args.weights)
+                try:
+                    state_dict = module_model.module.state_dict()
+                except AttributeError:
+                    raise(NotImplementedError)
+                    state_dict = model.state_dict()
+                
+                model.load_state_dict(state_dict)
+
+                print(f"successfully loaded model to resume from '{args.load_visual_extractor}'")
+
+            except FileNotFoundError:
+                print("no file found")
+        print(f"Fine-tuning from {args.weights} weights")
+        model = getattr(models, args.visual_extractor)(weights=args.weights)
 
         if fnmatch.fnmatch(self.visual_extractor,"*resnet*"):
             modules = list(model.children())[:-2]

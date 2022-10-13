@@ -24,31 +24,85 @@ import main_train
 if __name__ == '__main__':
     multiprocessing.set_start_method('spawn')
     fails = {}
-    grid_dict = {
-        'visual_extractor': ['vit_b_16', 'resnet101'],
-        #to be tried later
+    # grid_dict = {
+    #     'visual_extractor': ['vit_b_16', 'resnet101'],
+    #     'weights': ['IMAGENET1K_V2'],
+    #     'monitor_metric': ['CIDEr'],
+    #     'frozen': [False],
+    #     'cls': [False],
+    #     'lr_ve': [5e-5],#this is impactful?
+    #     }
+
+                #to be tried later
         # 'visual_extractor': ['vit_b_32','resnet152','swin_v2_b','wide_resnet50_2','alexnet','regnet_y_16gf','densenet121'],#these work fine on local systems
         # 'visual_extractor': ['vit_l_16','vit_h_14','regnet_y_128gf'],#OOM
         #to be tested:
         # 'visual_extractor': ['convnext_base','efficientnet_v2_l','resnext101_64x4d'],
         #also maybe read the papers
-        'weights': ['IMAGENET1K_V2'],
-        'monitor_metric': ['CIDEr'],
-        'frozen': [False],
-        'cls': [False],
-        'lr_ve': [5e-5],#this is impactful?
-        }
 
-    which_load_visual_extractor = {
-            'vit_b_16': 'bit_results_proper/vit_b_16/0.6798918645828945_0.22594534613194003_500bit.pth.tar',
-            'resnet101': 'bit_results_proper/resnet101/0.6459725471004509_0.24615514122542928_130bit.pth.tar'
-        }
+    run_list = [
+        #Resnet101	INV2	5E-05
+        {'visual_extractor': 'resnet101',
+        'weights': 'IMAGENET1K_V2',
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': False,
+        'lr_ve': 5e-5},
+
+        # Swin transformer
+        # no train?
+        {'visual_extractor': 'swin_v2_b',
+        'weights': 'IMAGENET1K_V1',
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': False,
+        'lr_ve': 5e-5},
+
+        # ViT-B-16	INV1	5E-05
+        {'visual_extractor': 'vit_b_16',
+        'weights': 'IMAGENET1K_V1',
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': False,
+        'lr_ve': 5e-5},
+
+        # ViT-B-16	INV1*	None
+        {'visual_extractor': 'vit_b_16',
+        'weights': 'IMAGENET1K_V1',
+        'monitor_metric': 'CIDEr',
+        'frozen': True,
+        'cls': True,
+        'lr_ve': 5e-5},
+
+        # ViT-B-16	Random	5E-05
+        {'visual_extractor': 'vit_b_16',
+        'weights': None,
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': True,
+        'lr_ve': 5e-5},
+
+        # ViT-B-16	INV1*	5E-05  Rerun
+        {'visual_extractor': 'vit_b_16',
+        'weights': 'IMAGENET1K_V1',
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': True,
+        'lr_ve': 5e-5},
+        
+    ]
+
+    # which_load_visual_extractor = {
+    #         'vit_b_16': 'bit_results_proper/vit_b_16/0.6798918645828945_0.22594534613194003_500bit.pth.tar',
+    #         'resnet101': 'bit_results_proper/resnet101/0.6459725471004509_0.24615514122542928_130bit.pth.tar'
+    #     }
 
 
-    grid = ParameterGrid(grid_dict)
-    print(f'running {len(grid)*runs} trials at ~6 hours each')
+    # grid = ParameterGrid(grid_dict)
+    # print(f'running {len(grid)*runs} trials at ~6 hours each')
 
-    for param in grid:
+    # for param in grid:
+    for param in run_list:
         args = main_train.parse_agrs() #default args are
 
         visfeats_gpu = {
@@ -57,7 +111,7 @@ if __name__ == '__main__':
             'vit_b_16': [768,2],
             'vit_b_32': [768,1],
             'swin_b': [1024,1],
-            'swin_v2_b': [1024,1],
+            'swin_v2_b': [1024,4],
             # 'vit_l_16': [1024,4],#better way to handle attention?
             # 'vit_h_14': [1280,4],
             'wide_resnet50_2': [2048,1],#still a big question whether the implementation of forward is correct
@@ -104,7 +158,7 @@ if __name__ == '__main__':
         args.gamma = 0.1
         args.early_stop = 100
 
-        args.load_visual_extractor = which_load_visual_extractor[args.visual_extractor]
+        # args.load_visual_extractor = which_load_visual_extractor[args.visual_extractor]
 
         repetition = 0
         potential_runs = {}
