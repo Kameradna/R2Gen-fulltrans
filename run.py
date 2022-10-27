@@ -136,7 +136,7 @@ if __name__ == '__main__':
         visfeats_gpu = {
             'resnet101': [2048,1],
             'resnet152':[2048,1],
-            'vit_b_16': [768,1],
+            'vit_b_16': [768,2],#1 if frozen
             'vit_b_32': [768,1],
             'swin_b': [1024,2],
             'swin_v2_b': [1024,4],
@@ -153,6 +153,8 @@ if __name__ == '__main__':
             }
         d_vf, n_gpu_per_model = visfeats_gpu.get(param['visual_extractor'],1)#default 1 feature
         args.d_vf = d_vf
+
+
 
         # try:
         #     getattr(models, param['visual_extractor'])(weights=param['weights'])#checking for the swag weights
@@ -185,6 +187,9 @@ if __name__ == '__main__':
         args.step_size = 50
         args.gamma = 0.1
         args.early_stop = 100
+
+        if args.visual_extractor == 'vit_b_16' and args.frozen == True: #when we freeze vit, it saves loads of memory
+            n_gpu_per_model = n_gpu_per_model//2
 
         if param['weights'] == 'chexpert':
             args.load_visual_extractor = which_load_visual_extractor[args.visual_extractor]
