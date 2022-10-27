@@ -154,19 +154,19 @@ if __name__ == '__main__':
         d_vf, n_gpu_per_model = visfeats_gpu.get(param['visual_extractor'],1)#default 1 feature
         args.d_vf = d_vf
 
-        try:
-            getattr(models, param['visual_extractor'])(weights=param['weights'])#checking for the swag weights
-            weights = param['weights']
-        except:
-            try:
-                getattr(models, param['visual_extractor'])(weights="IMAGENET1K_V2")
-                weights = "IMAGENET1K_V2"
-            except:
-                getattr(models, param['visual_extractor'])(weights="IMAGENET1K_V1")
-                weights="IMAGENET1K_V1"
+        # try:
+        #     getattr(models, param['visual_extractor'])(weights=param['weights'])#checking for the swag weights
+        #     weights = param['weights']
+        # except:
+        #     try:
+        #         getattr(models, param['visual_extractor'])(weights="IMAGENET1K_V2")
+        #         weights = "IMAGENET1K_V2"
+        #     except:
+        #         getattr(models, param['visual_extractor'])(weights="IMAGENET1K_V1")
+        #         weights="IMAGENET1K_V1"
 
         args.visual_extractor = param['visual_extractor']
-        args.weights = weights
+        args.weights = param['weights']
         args.monitor_metric = param['monitor_metric']
         # args.n_gpu = n_gpu
         args.frozen = param['frozen']
