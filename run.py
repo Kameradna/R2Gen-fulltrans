@@ -41,6 +41,29 @@ if __name__ == '__main__':
         #also maybe read the papers
 
     run_list = [
+        #Chexpert cls and frozen for vit
+        {'visual_extractor': 'vit_b_16',
+        'weights': 'chexpert',
+        'monitor_metric': 'CIDEr',
+        'frozen': True,
+        'cls': True,
+        'lr_ve': 0.0},
+        #no cls and still frozen
+        {'visual_extractor': 'vit_b_16',
+        'weights': 'chexpert',
+        'monitor_metric': 'CIDEr',
+        'frozen': True,
+        'cls': False,
+        'lr_ve': 0.0},
+        #chexpert for resnet, frozen
+        {'visual_extractor': 'resnet101',
+        'weights': 'chexpert',
+        'monitor_metric': 'CIDEr',
+        'frozen': True,
+        'cls': False,
+        'lr_ve': 0.0},
+
+
         #Swin_b instead of swin_v2
         {'visual_extractor': 'swin_b',
         'weights': 'IMAGENET1K_V1',
@@ -95,31 +118,6 @@ if __name__ == '__main__':
         'cls': False,
         'lr_ve': 0.0001},
 
-        #Chexpert cls and frozen for vit
-        {'visual_extractor': 'vit_b_16',
-        'weights': 'chexpert',
-        'monitor_metric': 'CIDEr',
-        'frozen': True,
-        'cls': True,
-        'lr_ve': 0.0},
-        #no cls and still frozen
-        {'visual_extractor': 'vit_b_16',
-        'weights': 'chexpert',
-        'monitor_metric': 'CIDEr',
-        'frozen': True,
-        'cls': False,
-        'lr_ve': 0.0},
-        #chexpert for resnet, frozen
-        {'visual_extractor': 'resnet101',
-        'weights': 'chexpert',
-        'monitor_metric': 'CIDEr',
-        'frozen': True,
-        'cls': False,
-        'lr_ve': 0.0},
-
-
-
-        
     ]
 
     which_load_visual_extractor = {
