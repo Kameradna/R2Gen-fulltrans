@@ -54,8 +54,9 @@ class VisualExtractor(nn.Module):
 
             except FileNotFoundError:
                 print("no file found")
-        print(f"Fine-tuning from {args.weights} weights")
-        model = getattr(models, args.visual_extractor)(weights=args.weights)
+        else:
+            print(f"Fine-tuning from {args.weights} weights")
+            model = getattr(models, args.visual_extractor)(weights=args.weights)
 
         if fnmatch.fnmatch(self.visual_extractor,"*resnet*"):
             modules = list(model.children())[:-2]
