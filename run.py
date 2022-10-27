@@ -140,7 +140,7 @@ if __name__ == '__main__':
             'resnet152':[2048,1],
             'vit_b_16': [768,2],
             'vit_b_32': [768,1],
-            'swin_b': [1024,1],
+            'swin_b': [1024,2],
             'swin_v2_b': [1024,4],
             # 'vit_l_16': [1024,4],#better way to handle attention?
             # 'vit_h_14': [1280,4],
