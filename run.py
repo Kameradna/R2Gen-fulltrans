@@ -41,61 +41,91 @@ if __name__ == '__main__':
         #also maybe read the papers
 
     run_list = [
-        #Resnet101	INV2	5E-05
-        {'visual_extractor': 'resnet101',
-        'weights': 'IMAGENET1K_V2',
-        'monitor_metric': 'CIDEr',
-        'frozen': False,
-        'cls': False,
-        'lr_ve': 5e-5},
-
-        # Swin transformer
-        # no train?
-        {'visual_extractor': 'swin_v2_b',
+        #Swin_b instead of swin_v2
+        {'visual_extractor': 'swin_b',
         'weights': 'IMAGENET1K_V1',
         'monitor_metric': 'CIDEr',
         'frozen': False,
         'cls': False,
         'lr_ve': 5e-5},
-
-        # ViT-B-16	INV1	5E-05
-        {'visual_extractor': 'vit_b_16',
-        'weights': 'IMAGENET1K_V1',
-        'monitor_metric': 'CIDEr',
-        'frozen': False,
-        'cls': False,
-        'lr_ve': 5e-5},
-
-        # ViT-B-16	INV1*	None
-        {'visual_extractor': 'vit_b_16',
+        #frozen
+        {'visual_extractor': 'swin_b',
         'weights': 'IMAGENET1K_V1',
         'monitor_metric': 'CIDEr',
         'frozen': True,
-        'cls': True,
-        'lr_ve': 5e-5},
+        'cls': False,
+        'lr_ve': 0.0},
 
-        # ViT-B-16	Random	5E-05
+        #Vit random inits, cls and frozen
+        {'visual_extractor': 'vit_b_16',
+        'weights': None,
+        'monitor_metric': 'CIDEr',
+        'frozen': True,
+        'cls': True,
+        'lr_ve': 0.0},
+        #and random inits, but no cls learning
         {'visual_extractor': 'vit_b_16',
         'weights': None,
         'monitor_metric': 'CIDEr',
         'frozen': False,
-        'cls': True,
+        'cls': False,
         'lr_ve': 5e-5},
 
-        # ViT-B-16	INV1*	5E-05  Rerun
+        #Vit with no cls, lr 0.0001
         {'visual_extractor': 'vit_b_16',
         'weights': 'IMAGENET1K_V1',
         'monitor_metric': 'CIDEr',
         'frozen': False,
+        'cls': False,
+        'lr_ve': 0.0001},
+
+
+        #Resnet101	INV1	0.001
+        {'visual_extractor': 'resnet101',
+        'weights': 'IMAGENET1K_V1',
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': False,
+        'lr_ve': 0.001},
+        #Resnet101	INV1	0.0001
+        {'visual_extractor': 'resnet101',
+        'weights': 'IMAGENET1K_V1',
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': False,
+        'lr_ve': 0.0001},
+
+        #Chexpert cls and frozen for vit
+        {'visual_extractor': 'vit_b_16',
+        'weights': 'chexpert',
+        'monitor_metric': 'CIDEr',
+        'frozen': True,
         'cls': True,
-        'lr_ve': 5e-5},
+        'lr_ve': 0.0},
+        #no cls and still frozen
+        {'visual_extractor': 'vit_b_16',
+        'weights': 'chexpert',
+        'monitor_metric': 'CIDEr',
+        'frozen': True,
+        'cls': False,
+        'lr_ve': 0.0},
+        #chexpert for resnet, frozen
+        {'visual_extractor': 'resnet101',
+        'weights': 'chexpert',
+        'monitor_metric': 'CIDEr',
+        'frozen': True,
+        'cls': False,
+        'lr_ve': 0.0},
+
+
+
         
     ]
 
-    # which_load_visual_extractor = {
-    #         'vit_b_16': 'bit_results_proper/vit_b_16/0.6798918645828945_0.22594534613194003_500bit.pth.tar',
-    #         'resnet101': 'bit_results_proper/resnet101/0.6459725471004509_0.24615514122542928_130bit.pth.tar'
-    #     }
+    which_load_visual_extractor = {
+            'vit_b_16': 'bit_results_proper/vit_b_16/0.6798918645828945_0.22594534613194003_500bit.pth.tar',
+            'resnet101': 'bit_results_proper/resnet101/0.6459725471004509_0.24615514122542928_130bit.pth.tar'
+        }
 
 
     # grid = ParameterGrid(grid_dict)
@@ -158,7 +188,8 @@ if __name__ == '__main__':
         args.gamma = 0.1
         args.early_stop = 100
 
-        # args.load_visual_extractor = which_load_visual_extractor[args.visual_extractor]
+        if param['weights'] == 'chexpert':
+            args.load_visual_extractor = which_load_visual_extractor[args.visual_extractor]
 
         repetition = 0
         potential_runs = {}
@@ -166,7 +197,7 @@ if __name__ == '__main__':
         potential_func = {}
         while repetition < runs:
             for potential in range(int(4/n_gpu_per_model)):#how many can we potentially run right now?
-                name = f"{param['visual_extractor']}_{args.weights}_frozen{args.frozen}_cls{args.cls}_lr{args.lr_ve}_by_{args.monitor_metric}_{repetition+offset}"
+                name = f"finalruns_{param['visual_extractor']}_{args.weights}_frozen{args.frozen}_cls{args.cls}_lr{args.lr_ve}_by_{args.monitor_metric}_{repetition+offset}"
                 repetition += 1
                 args.record_dir = f"THEENDISINSIGHT/records_{name}"
                 args.save_dir = f"THEENDISINSIGHT/results_{name}"

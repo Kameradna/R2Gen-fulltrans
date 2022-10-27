@@ -17,7 +17,7 @@ class VisualExtractor(nn.Module):
         # print(f"weights are {self.weights}")
         # print(f"d_vf is {args.d_vf}")
         
-        if args.load_visual_extractor != 'fill':
+        if args.load_visual_extractor != 'fill': #whole section just loads weights from file
             try:
                 model = getattr(models, args.visual_extractor)(weights=None)
                 #### copy from train.py to set up model the same as pretraining so weights can be loaded ####
@@ -45,7 +45,7 @@ class VisualExtractor(nn.Module):
                 try:
                     state_dict = module_model.module.state_dict()
                 except AttributeError:
-                    raise(NotImplementedError)
+                    raise(NotImplementedError, "There is some issue with the weigths, delete this stage and implement a handler.")
                     state_dict = model.state_dict()
                 
                 model.load_state_dict(state_dict)
