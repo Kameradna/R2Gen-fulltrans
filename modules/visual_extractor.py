@@ -6,6 +6,7 @@ import fnmatch
 from multiprocessing import Lock
 
 
+
 class VisualExtractor(nn.Module):
     def __init__(self, args):
         super(VisualExtractor, self).__init__()
