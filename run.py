@@ -41,21 +41,29 @@ if __name__ == '__main__':
         #also maybe read the papers
 
     run_list = [
-        #Chexpert cls final run
+        #ViT with 0.001 cls INV1
         {'visual_extractor': 'vit_b_16',
-        'weights': 'chexpert',
-        'monitor_metric': 'CIDEr',
-        'frozen': False,
-        'cls': True,
-        'lr_ve': 5e-5},
-
-        #Chexpert cls final run
-        {'visual_extractor': 'vit_b_16',
-        'weights': 'chexpert',
+        'weights': 'IMAGENET1K_V1',
         'monitor_metric': 'CIDEr',
         'frozen': False,
         'cls': True,
         'lr_ve': 0.001},
+
+        #Resnet 0.001 chexpert
+        {'visual_extractor': 'resnet101',
+        'weights': 'chexpert',
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': False,
+        'lr_ve': 0.001},
+
+        #Resnet 0.0001 chexpert
+        {'visual_extractor': 'resnet101',
+        'weights': 'chexpert',
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': False,
+        'lr_ve': 0.0001},
 
     ]
 
@@ -139,7 +147,7 @@ if __name__ == '__main__':
         potential_func = {}
         while repetition < runs:
             for potential in range(int(4/n_gpu_per_model)):#how many can we potentially run right now?
-                name = f"finalruns_{param['visual_extractor']}_{args.weights}_frozen{args.frozen}_cls{args.cls}_lr{args.lr_ve}_by_{args.monitor_metric}_{repetition+offset}"
+                name = f"finalrunsX_{param['visual_extractor']}_{args.weights}_frozen{args.frozen}_cls{args.cls}_lr{args.lr_ve}_by_{args.monitor_metric}_{repetition+offset}"
                 repetition += 1
                 args.record_dir = f"THEENDISINSIGHT/records_{name}"
                 args.save_dir = f"THEENDISINSIGHT/results_{name}"
