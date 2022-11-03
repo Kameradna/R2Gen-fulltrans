@@ -41,6 +41,30 @@ if __name__ == '__main__':
         #also maybe read the papers
 
     run_list = [
+        #Frozen swin random init
+        {'visual_extractor': 'swin_b',
+        'weights': None,
+        'monitor_metric': 'CIDEr',
+        'frozen': True,
+        'cls': False,
+        'lr_ve': 0.0},
+
+        #learnt swin random init
+        {'visual_extractor': 'swin_b',
+        'weights': None,
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': False,
+        'lr_ve': 5e-5},
+
+        #learnt swin random init
+        {'visual_extractor': 'swin_b',
+        'weights': 'IMAGENET1K_V1',
+        'monitor_metric': 'CIDEr',
+        'frozen': False,
+        'cls': False,
+        'lr_ve': 0.001},
+
         #ViT with 0.001 cls INV1
         {'visual_extractor': 'vit_b_16',
         'weights': 'IMAGENET1K_V1',

@@ -1,5 +1,9 @@
 
-"""This file chops all the lower files until there is < len(files) files left in each directory"""
+"""This file chops all the low performance pth files until there is < len(files) files left in each directory
+    USE WITH CAUTION
+    Used for pretrained section that generates many pth files
+
+"""
 
 
 import time
