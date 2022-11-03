@@ -3,8 +3,8 @@ R2Gen modified for different feature extractors
 
 Diary entries-
 ```shell
-git clone R2Gen
-cd R2Gen
+git clone R2Gen-fulltrans
+cd R2Gen-fulltrans
 gdown 'https://drive.google.com/u/0/uc?id=1c0BXEuDy8Cmm2jfN0YYGkQxFZd2ZIoLg&export=download&confirm=t&uuid=5926bb3d-ffc3-4203-b026-4e36a074734d'
 unzip -d ./data/ iu_xray.zip
 
