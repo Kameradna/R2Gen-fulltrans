@@ -1,7 +1,6 @@
 # R2Gen-fulltrans
-R2Gen modified for different feature extractors
+R2Gen modified for Transformer feature extractors, updated with CIDEr metric, and multi-gpu training.
 
-Diary entries-
 ```shell
 git clone R2Gen-fulltrans
 cd R2Gen-fulltrans
